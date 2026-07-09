@@ -1,0 +1,8 @@
+.trae/
+node_modules/
+.env
+.env.*
+backup/
+*.log
+.DS_Store
+Thumbs.db
