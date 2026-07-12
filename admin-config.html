@@ -1,0 +1,2647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>运营后台 · 美团商家AI生图配置</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --mt-yellow: #FFD100;
+            --mt-yellow-dark: #F5A623;
+            --mt-orange: #FF6B35;
+            --mt-text: #1A1A1A;
+            --mt-text-sub: #666;
+            --mt-text-light: #999;
+            --mt-bg: #F5F6F8;
+            --mt-border: #E4E7EB;
+            --mt-card: #FFFFFF;
+            --mt-radius: 10px;
+            --mt-blue: #3478F6;
+            --mt-green: #2ECC71;
+            --mt-red: #E74C3C;
+            --mt-purple: #8E5BF0;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+            --header-bg: #1A1A2E;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--mt-bg);
+            color: var(--mt-text);
+            min-height: 100vh;
+            padding-bottom: 120px;
+        }
+
+        /* ========== Header ========== */
+        .header {
+            background: var(--header-bg);
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
+        .header-left { display: flex; align-items: center; gap: 12px; }
+        .header-logo {
+            background: var(--mt-yellow);
+            color: var(--header-bg);
+            font-weight: 900;
+            font-size: 18px;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .header-title { color: #fff; font-size: 17px; font-weight: 700; }
+        .header-sub { color: rgba(255,255,255,0.5); font-size: 12px; margin-top: 1px; }
+        .header-right { display: flex; align-items: center; gap: 16px; }
+        .header-link {
+            color: rgba(255,255,255,0.75);
+            font-size: 13px;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .header-link:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.25); }
+        .header-link.primary {
+            background: var(--mt-yellow);
+            color: var(--header-bg);
+            font-weight: 700;
+            border-color: var(--mt-yellow);
+        }
+        .header-link.primary:hover { background: var(--mt-yellow-dark); border-color: var(--mt-yellow-dark); color: var(--header-bg); }
+
+        /* ========== Layout ========== */
+        .main-container { max-width: 1120px; margin: 0 auto; padding: 28px 24px; }
+        .page-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+        .page-desc { font-size: 14px; color: var(--mt-text-sub); margin-bottom: 20px; }
+
+        .config-card {
+            background: var(--mt-card);
+            border-radius: var(--mt-radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .config-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--mt-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .config-header-left { display: flex; align-items: center; gap: 10px; }
+        .config-header h2 { font-size: 15px; font-weight: 700; }
+        .config-header .badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+        .badge-on { background: rgba(46,204,113,0.12); color: var(--mt-green); }
+        .badge-off { background: rgba(231,76,60,0.12); color: var(--mt-red); }
+        .badge-active { background: var(--mt-yellow); color: var(--header-bg); }
+        .badge-info { background: rgba(52,120,246,0.12); color: var(--mt-blue); }
+        .config-body { padding: 20px 24px; }
+
+        /* ========== Status Bar ========== */
+        .status-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 10px 16px;
+            background: rgba(52,120,246,0.06);
+            border: 1px solid rgba(52,120,246,0.15);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            flex-wrap: wrap;
+        }
+        .status-bar .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--mt-green); }
+        .status-bar .status-item { color: var(--mt-text-sub); }
+        .status-bar .status-item strong { color: var(--mt-text); }
+
+        /* ========== AB Tabs ========== */
+        .ab-tabs { display: flex; gap: 0; margin-bottom: 18px; border-bottom: 2px solid var(--mt-border); }
+        .ab-tab {
+            padding: 10px 22px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--mt-text-sub);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            user-select: none;
+        }
+        .ab-tab:hover { color: var(--mt-text); }
+        .ab-tab.active { color: var(--mt-blue); border-bottom-color: var(--mt-blue); }
+        .ab-tab .tab-letter {
+            width: 22px; height: 22px; border-radius: 5px;
+            background: var(--mt-border); color: #fff;
+            font-size: 12px; display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+        }
+        .ab-tab.active .tab-letter { background: var(--mt-blue); }
+        .ab-tab.is-active-version .tab-letter { background: var(--mt-yellow); color: var(--header-bg); }
+        .ab-tab.is-active-version.active { color: var(--mt-yellow-dark); border-bottom-color: var(--mt-yellow-dark); }
+        .ab-tab .tab-state { font-size: 11px; padding: 1px 6px; border-radius: 4px; font-weight: 600; }
+        .tab-state.on { background: rgba(46,204,113,0.14); color: var(--mt-green); }
+        .tab-state.off { background: rgba(231,76,60,0.12); color: var(--mt-red); }
+
+        .ab-controls { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+        .ab-control-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .ab-control-item .lbl { color: var(--mt-text-sub); }
+        .ab-version-tag {
+            font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 5px;
+            background: var(--mt-yellow); color: var(--header-bg);
+        }
+        .btn-set-active {
+            padding: 6px 14px; border: 1.5px solid var(--mt-yellow-dark); background: #fff;
+            color: var(--mt-yellow-dark); border-radius: 7px; font-size: 12px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-set-active:hover { background: var(--mt-yellow); }
+        .btn-set-active.is-active { background: var(--mt-yellow); color: var(--header-bg); cursor: default; }
+
+        /* ========== Form Elements ========== */
+        .form-row { margin-bottom: 18px; }
+        .form-label {
+            font-size: 13px; font-weight: 600; margin-bottom: 6px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .form-label .label-hint { font-size: 11px; color: var(--mt-text-sub); font-weight: 400; }
+        .form-input, .form-textarea, .form-select {
+            width: 100%; padding: 10px 12px;
+            border: 1.5px solid var(--mt-border); border-radius: 8px;
+            font-size: 14px; font-family: inherit; transition: border-color 0.2s; background: #fff;
+        }
+        .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: var(--mt-blue); }
+        .form-textarea { resize: vertical; line-height: 1.7; }
+
+        /* ========== Prompt Editor ========== */
+        .prompt-editor-card { border: 1.5px solid var(--mt-border); border-radius: 8px; overflow: hidden; }
+        .prompt-editor-toolbar {
+            background: #f8f9fa; padding: 8px 12px;
+            border-bottom: 1px solid var(--mt-border);
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 12px; color: var(--mt-text-sub);
+        }
+        .prompt-editor-textarea {
+            width: 100%; min-height: 360px; padding: 16px; border: none;
+            font-size: 13px; font-family: "SF Mono", "Consolas", "Menlo", monospace;
+            line-height: 1.8; resize: vertical; outline: none; background: #FAFBFC; color: var(--mt-text);
+        }
+        .prompt-editor-textarea:focus { background: #fff; }
+        .toolbar-stats { display: flex; gap: 16px; }
+        .toolbar-stat { display: flex; align-items: center; gap: 4px; }
+        .toolbar-stat .stat-num { font-weight: 700; color: var(--mt-text); }
+
+        /* ========== Switch ========== */
+        .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .switch-slider {
+            position: absolute; cursor: pointer; inset: 0; background: #ccc; border-radius: 24px; transition: 0.3s;
+        }
+        .switch-slider::before {
+            content: ""; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 3px;
+            background: #fff; border-radius: 50%; transition: 0.3s;
+        }
+        .switch input:checked + .switch-slider { background: var(--mt-green); }
+        .switch input:checked + .switch-slider::before { transform: translateX(20px); }
+
+        .switch-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; }
+        .switch-info { flex: 1; }
+        .switch-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+        .switch-desc { font-size: 12px; color: var(--mt-text-sub); }
+
+        /* ========== Model Config ========== */
+        .model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .quality-grid { display: flex; gap: 10px; }
+        .quality-option {
+            flex: 1; border: 1.5px solid var(--mt-border); border-radius: 8px; padding: 12px;
+            cursor: pointer; transition: all 0.2s; text-align: center;
+        }
+        .quality-option:hover { border-color: var(--mt-blue); }
+        .quality-option.active { border-color: var(--mt-blue); background: rgba(52,120,246,0.05); }
+        .quality-option .q-label { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+        .quality-option .q-desc { font-size: 11px; color: var(--mt-text-sub); }
+
+        /* ========== Category Templates ========== */
+        .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 16px; }
+        .cat-card {
+            border: 1.5px solid var(--mt-border); border-radius: 10px; padding: 16px;
+            background: #fff; transition: all 0.2s; position: relative;
+        }
+        .cat-card:hover { border-color: var(--mt-blue); box-shadow: var(--shadow-sm); }
+        .cat-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .cat-icon-input {
+            width: 48px; height: 48px; text-align: center; font-size: 24px;
+            border: 1.5px solid var(--mt-border); border-radius: 8px; padding: 0;
+        }
+        .cat-name-input { flex: 1; font-size: 14px; font-weight: 600; }
+        .cat-id-tag { font-size: 10px; color: var(--mt-text-light); margin-top: 2px; font-family: "SF Mono", monospace; }
+        .cat-del-btn {
+            background: none; border: none; color: var(--mt-text-light); cursor: pointer;
+            font-size: 18px; padding: 4px 8px; border-radius: 6px; transition: all 0.2s;
+        }
+        .cat-del-btn:hover { color: var(--mt-red); background: rgba(231,76,60,0.08); }
+        .cat-field { margin-bottom: 10px; }
+        .cat-field .cf-label { font-size: 11px; color: var(--mt-text-sub); margin-bottom: 3px; font-weight: 600; }
+        .cat-field .cf-input { width: 100%; padding: 7px 10px; border: 1.5px solid var(--mt-border); border-radius: 6px; font-size: 12px; font-family: inherit; }
+        .cat-field .cf-input:focus { outline: none; border-color: var(--mt-blue); }
+        .cat-field .cf-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+        .cat-field .cf-tag { font-size: 10px; background: #f0f2f5; color: var(--mt-text-sub); padding: 2px 7px; border-radius: 10px; }
+        .cat-add-card {
+            border: 2px dashed var(--mt-border); border-radius: 10px; padding: 16px;
+            background: #fafbfc; cursor: pointer; transition: all 0.2s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 180px;
+            color: var(--mt-text-sub); text-align: center;
+        }
+        .cat-add-card:hover { border-color: var(--mt-blue); color: var(--mt-blue); background: rgba(52,120,246,0.03); }
+        .cat-add-card .add-icon { font-size: 30px; margin-bottom: 6px; }
+
+        /* ========== Sensitive Words ========== */
+        .sw-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; min-height: 40px; }
+        .sw-tag {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(231,76,60,0.08); color: var(--mt-red);
+            border: 1px solid rgba(231,76,60,0.2); padding: 5px 10px; border-radius: 16px; font-size: 13px;
+        }
+        .sw-tag .sw-remove { cursor: pointer; font-weight: 700; opacity: 0.6; }
+        .sw-tag .sw-remove:hover { opacity: 1; }
+        .sw-empty { color: var(--mt-text-light); font-size: 13px; padding: 8px 0; }
+        .sw-add-row { display: flex; gap: 8px; margin-bottom: 14px; }
+        .sw-add-input { flex: 1; }
+        .sw-add-btn {
+            padding: 10px 18px; background: var(--mt-red); color: #fff; border: none; border-radius: 8px;
+            font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
+        }
+        .sw-add-btn:hover { background: #c0392b; }
+        .sw-batch {
+            background: #f8f9fa; border: 1.5px solid var(--mt-border); border-radius: 8px; padding: 14px;
+        }
+        .sw-batch-label { font-size: 12px; font-weight: 600; color: var(--mt-text-sub); margin-bottom: 6px; }
+        .sw-batch textarea { width: 100%; min-height: 70px; padding: 8px 10px; border: 1px solid var(--mt-border); border-radius: 6px; font-size: 13px; font-family: inherit; resize: vertical; }
+        .sw-batch-actions { display: flex; gap: 8px; margin-top: 8px; }
+
+        /* ========== Action Buttons ========== */
+        .action-bar {
+            display: flex; gap: 12px; padding: 18px 24px;
+            background: var(--mt-card); border-radius: var(--mt-radius);
+            box-shadow: var(--shadow-md); margin-bottom: 20px;
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 50; width: calc(100% - 48px); max-width: 1072px;
+            border: 1px solid var(--mt-border);
+        }
+        .btn {
+            padding: 11px 24px; border: none; border-radius: 8px;
+            font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .btn-primary { background: var(--mt-blue); color: #fff; flex: 1; }
+        .btn-primary:hover { background: #2563eb; }
+        .btn-secondary { background: #fff; color: var(--mt-text); border: 1.5px solid var(--mt-border); }
+        .btn-secondary:hover { border-color: var(--mt-text-sub); }
+        .btn-danger { background: #fff; color: var(--mt-red); border: 1.5px solid rgba(231,76,60,0.3); }
+        .btn-danger:hover { background: rgba(231,76,60,0.05); }
+        .btn-small { padding: 7px 14px; font-size: 12px; }
+
+        /* ========== Preview Test ========== */
+        .preview-test-row { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+        .preview-test-input { flex: 1; min-width: 260px; padding: 10px 12px; border: 1.5px solid var(--mt-border); border-radius: 8px; font-size: 13px; }
+        .preview-test-input:focus { outline: none; border-color: var(--mt-blue); }
+        .preview-cat-select { width: 220px; padding: 10px 12px; border: 1.5px solid var(--mt-border); border-radius: 8px; font-size: 13px; background: #fff; }
+        .preview-result {
+            background: #f8f9fa; border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.7;
+            min-height: 70px; white-space: pre-wrap; color: var(--mt-text-sub);
+            font-family: "SF Mono", "Consolas", monospace;
+        }
+        .preview-result.has-result { color: var(--mt-text); background: rgba(52,120,246,0.04); border: 1px solid rgba(52,120,246,0.15); }
+        .preview-result.is-error { color: var(--mt-red); background: rgba(231,76,60,0.04); border: 1px solid rgba(231,76,60,0.15); }
+        .preview-result.is-loading { color: var(--mt-text-sub); }
+
+        .result-fields { display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+        .rf-row { display: flex; gap: 10px; align-items: flex-start; }
+        .rf-label { min-width: 120px; font-weight: 600; color: var(--mt-text-sub); font-size: 12px; flex-shrink: 0; padding-top: 2px; }
+        .rf-value { flex: 1; font-size: 13px; word-break: break-all; line-height: 1.6; }
+        .rf-badge { display: inline-block; padding: 2px 9px; border-radius: 5px; font-size: 11px; font-weight: 700; }
+        .rf-badge.success { background: rgba(46,204,113,0.14); color: var(--mt-green); }
+        .rf-badge.error { background: rgba(231,76,60,0.12); color: var(--mt-red); }
+        .rf-badge.ratio { background: var(--mt-yellow); color: var(--header-bg); }
+        .rf-badge.completeness-sufficient { background: rgba(46,204,113,0.14); color: var(--mt-green); }
+        .rf-badge.completeness-insufficient { background: rgba(245,166,35,0.14); color: var(--mt-yellow-dark); }
+        .rf-pill { display: inline-block; background: #eef1f5; color: var(--mt-text); padding: 2px 8px; border-radius: 10px; font-size: 11px; margin: 2px 4px 2px 0; }
+        .rf-converted-item { background: #fff; border: 1px solid var(--mt-border); border-radius: 6px; padding: 6px 10px; margin-bottom: 4px; font-size: 12px; }
+        .rf-converted-item .orig { color: var(--mt-text-light); text-decoration: line-through; }
+        .rf-converted-item .arrow { color: var(--mt-blue); margin: 0 6px; }
+        .rf-converted-item .conv { color: var(--mt-text); }
+        .rf-ambiguity { background: rgba(245,166,35,0.08); border: 1px solid rgba(245,166,35,0.3); border-radius: 8px; padding: 10px 12px; }
+        .rf-json {
+            background: #1A1A2E; color: #a5d6ff; border-radius: 8px; padding: 14px;
+            font-family: "SF Mono", "Consolas", monospace; font-size: 12px; line-height: 1.6;
+            overflow-x: auto; white-space: pre;
+        }
+
+        /* ========== Toast ========== */
+        .toast {
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--mt-text); color: #fff; padding: 12px 24px; border-radius: 8px;
+            font-size: 14px; box-shadow: var(--shadow-md); transition: transform 0.3s; z-index: 2000;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.success { background: var(--mt-green); }
+        .toast.error { background: var(--mt-red); }
+
+        /* ========== Merchant Profile ========== */
+        .mp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .mp-field .mp-label { font-size: 11px; color: var(--mt-text-sub); margin-bottom: 3px; font-weight: 600; }
+        .mp-field .mp-input { width: 100%; padding: 8px 10px; border: 1.5px solid var(--mt-border); border-radius: 6px; font-size: 13px; font-family: inherit; }
+        .mp-field .mp-input:focus { outline: none; border-color: var(--mt-blue); }
+
+        .version-info { font-size: 12px; color: var(--mt-text-sub); padding: 12px 0; text-align: center; }
+
+        /* ========== Negative Prompt ========== */
+        .negative-prompt-box { background: rgba(142,91,240,0.05); border: 1px solid rgba(142,91,240,0.2); border-radius: 8px; padding: 14px; margin-top: 16px; }
+
+        /* ========== Knowledge Base ========== */
+        .kb-toolbar { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+        .kb-search { flex: 1; min-width: 200px; padding: 9px 12px; border: 1.5px solid var(--mt-border); border-radius: 8px; font-size: 13px; font-family: inherit; background: #fff; }
+        .kb-search:focus { outline: none; border-color: var(--mt-blue); }
+        .kb-table-wrap { overflow-x: auto; border: 1px solid var(--mt-border); border-radius: 8px; background: #fff; }
+        .kb-table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 760px; }
+        .kb-table th { background: #f8f9fa; padding: 10px 12px; text-align: left; font-weight: 600; color: var(--mt-text-sub); font-size: 12px; border-bottom: 1px solid var(--mt-border); white-space: nowrap; }
+        .kb-table td { padding: 10px 12px; border-bottom: 1px solid #f0f2f5; vertical-align: top; }
+        .kb-table tr:last-child td { border-bottom: none; }
+        .kb-table tr:hover td { background: rgba(52,120,246,0.03); }
+        .kb-dish-name { font-weight: 600; color: var(--mt-text); }
+        .kb-alias { color: var(--mt-blue); font-size: 12px; }
+        .kb-region, .kb-cuisine { font-size: 12px; color: var(--mt-text-sub); white-space: nowrap; }
+        .kb-desc { color: var(--mt-text-sub); font-size: 12px; max-width: 320px; line-height: 1.5; }
+        .kb-empty { text-align: center; padding: 30px; color: var(--mt-text-light); font-size: 13px; }
+        .kb-op-btn { background: none; border: 1px solid var(--mt-border); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--mt-text-sub); margin-right: 6px; transition: all 0.2s; }
+        .kb-op-btn:hover { border-color: var(--mt-blue); color: var(--mt-blue); }
+        .kb-op-btn.del:hover { border-color: var(--mt-red); color: var(--mt-red); }
+
+        /* ========== Modal ========== */
+        .modal-mask { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+        .modal-mask.show { display: flex; }
+        .modal-card { background: #fff; border-radius: 12px; width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto; box-shadow: 0 12px 40px rgba(0,0,0,0.25); }
+        .modal-header { padding: 16px 20px; border-bottom: 1px solid var(--mt-border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: #fff; z-index: 1; }
+        .modal-header h3 { font-size: 16px; font-weight: 700; }
+        .modal-close { background: none; border: none; font-size: 22px; color: var(--mt-text-light); cursor: pointer; line-height: 1; padding: 0 4px; }
+        .modal-close:hover { color: var(--mt-text); }
+        .modal-body { padding: 18px 20px; }
+        .modal-footer { padding: 14px 20px; border-top: 1px solid var(--mt-border); display: flex; gap: 10px; justify-content: flex-end; position: sticky; bottom: 0; background: #fff; }
+
+        /* ========== Tag Config ========== */
+        .tag-config-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .tag-section .ts-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+        .tag-section .ts-desc { font-size: 12px; color: var(--mt-text-sub); margin-bottom: 12px; }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; min-height: 36px; align-items: center; }
+        .tag-list-empty { color: var(--mt-text-light); font-size: 13px; }
+        .tag-item { display: inline-flex; align-items: center; gap: 4px; background: rgba(52,120,246,0.08); color: var(--mt-blue); border: 1px solid rgba(52,120,246,0.25); padding: 4px 6px 4px 10px; border-radius: 16px; font-size: 13px; }
+        .tag-item.cuisine { background: rgba(255,209,0,0.14); color: var(--mt-yellow-dark); border-color: rgba(245,166,35,0.3); }
+        .tag-item input { border: none; background: transparent; font-size: 13px; color: inherit; font-weight: 700; width: 72px; outline: none; padding: 0; }
+        .tag-item .tag-remove { cursor: pointer; font-weight: 700; opacity: 0.6; font-size: 14px; padding: 0 4px; }
+        .tag-item .tag-remove:hover { opacity: 1; }
+        .tag-add-row { display: flex; gap: 8px; }
+        .tag-add-input { flex: 1; padding: 8px 12px; border: 1.5px solid var(--mt-border); border-radius: 8px; font-size: 13px; font-family: inherit; }
+        .tag-add-input:focus { outline: none; border-color: var(--mt-blue); }
+        .tag-add-btn { padding: 8px 16px; background: var(--mt-blue); color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+        .tag-add-btn:hover { background: #2563eb; }
+
+        /* ========== Config Cards (image types / scenes) ========== */
+        .cfg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+        .cfg-card { border: 1.5px solid var(--mt-border); border-radius: 10px; padding: 16px; background: #fff; transition: all 0.2s; }
+        .cfg-card:hover { border-color: var(--mt-blue); box-shadow: var(--shadow-sm); }
+        .cfg-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+        .cfg-icon-input { width: 44px; height: 44px; text-align: center; font-size: 22px; border: 1.5px solid var(--mt-border); border-radius: 8px; padding: 0; }
+        .cfg-name-input { flex: 1; font-size: 14px; font-weight: 600; }
+        .cfg-id-tag { font-size: 10px; color: var(--mt-text-light); margin-top: 2px; font-family: "SF Mono", monospace; }
+        .cfg-field { margin-bottom: 10px; }
+        .cfg-field .cf-label { font-size: 11px; color: var(--mt-text-sub); margin-bottom: 3px; font-weight: 600; }
+        .cfg-field .cf-input, .cfg-field .cf-select { width: 100%; padding: 7px 10px; border: 1.5px solid var(--mt-border); border-radius: 6px; font-size: 12px; font-family: inherit; background: #fff; }
+        .cfg-field .cf-input:focus, .cfg-field .cf-select:focus { outline: none; border-color: var(--mt-blue); }
+        .cfg-field .cf-textarea { width: 100%; padding: 7px 10px; border: 1.5px solid var(--mt-border); border-radius: 6px; font-size: 12px; font-family: inherit; resize: vertical; min-height: 56px; line-height: 1.6; }
+        .cfg-field .cf-textarea:focus { outline: none; border-color: var(--mt-blue); }
+
+        /* ========== Combo Fields ========== */
+        .combo-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+        .combo-row { display: flex; align-items: center; gap: 8px; }
+        .combo-row .combo-input { flex: 1; padding: 9px 12px; border: 1.5px solid var(--mt-border); border-radius: 8px; font-size: 13px; font-family: inherit; }
+        .combo-row .combo-input:focus { outline: none; border-color: var(--mt-blue); }
+        .combo-row .combo-ord { display: flex; gap: 4px; }
+        .combo-ord-btn { width: 34px; height: 38px; border: 1px solid var(--mt-border); background: #fff; border-radius: 6px; cursor: pointer; font-size: 14px; color: var(--mt-text-sub); display: flex; align-items: center; justify-content: center; }
+        .combo-ord-btn:hover { border-color: var(--mt-blue); color: var(--mt-blue); }
+        .combo-ord-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+        .combo-ord-btn:disabled:hover { border-color: var(--mt-border); color: var(--mt-text-sub); }
+        .combo-del-btn { background: none; border: none; color: var(--mt-text-light); cursor: pointer; font-size: 20px; padding: 4px 8px; border-radius: 6px; }
+        .combo-del-btn:hover { color: var(--mt-red); background: rgba(231,76,60,0.08); }
+
+        /* ========== Preview Image ========== */
+        .preview-img-wrap { margin-top: 14px; text-align: center; }
+        .preview-img-wrap img { max-width: 100%; max-height: 360px; border-radius: 8px; box-shadow: var(--shadow-sm); }
+        .preview-img-wrap .img-meta { display: block; font-size: 12px; color: var(--mt-text-sub); margin-top: 8px; word-break: break-all; }
+
+        @media (max-width: 720px) {
+            .model-grid { grid-template-columns: 1fr; }
+            .mp-grid { grid-template-columns: 1fr; }
+            .tag-config-grid { grid-template-columns: 1fr; }
+            .action-bar { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="header-logo">运</div>
+            <div>
+                <div class="header-title">运营后台</div>
+                <div class="header-sub">美团商家AI生图 · 运营配置中心</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="meituan-ai-image-demo.html" class="header-link primary" target="_blank">
+                🖥️ 打开用户端
+            </a>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <div class="page-title">运营配置中心</div>
+        <div class="page-desc">管理AB测试提示词、品类模板、菜名知识库、品牌词库、风险词库、标签、图片类型/展示场景、套餐字段、敏感词与生图参数。保存后写入 localStorage，用户端将自动读取最新配置生效。</div>
+
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <span class="status-dot"></span>
+            <span class="status-item">配置状态：<strong id="configStatus">已加载默认配置</strong></span>
+            <span class="status-item">|</span>
+            <span class="status-item">当前生效方案：<strong id="activeVersionText">A</strong></span>
+            <span class="status-item">|</span>
+            <span class="status-item">最后保存：<strong id="lastSaved">从未保存</strong></span>
+        </div>
+
+        <!-- ========== 1. AB Test Management ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>🅰️🅱️ AB测试 · 系统提示词管理</h2>
+                    <span class="badge badge-info">两套方案对比</span>
+                </div>
+            </div>
+            <div class="config-body">
+                <!-- AB Tabs -->
+                <div class="ab-tabs">
+                    <div class="ab-tab active" id="tab-A" onclick="switchPromptTab('A')">
+                        <span class="tab-letter">A</span>
+                        方案A
+                        <span class="tab-state on" id="state-A">已启用</span>
+                    </div>
+                    <div class="ab-tab" id="tab-B" onclick="switchPromptTab('B')">
+                        <span class="tab-letter">B</span>
+                        方案B
+                        <span class="tab-state off" id="state-B">已禁用</span>
+                    </div>
+                </div>
+
+                <!-- AB Controls -->
+                <div class="ab-controls">
+                    <div class="ab-control-item">
+                        <span class="lbl">当前编辑：</span>
+                        <span class="ab-version-tag" id="editingVersionTag">方案 A</span>
+                    </div>
+                    <div class="ab-control-item">
+                        <span class="lbl">启用此方案：</span>
+                        <label class="switch">
+                            <input type="checkbox" id="promptEnabled" checked onchange="togglePromptEnabled()">
+                            <span class="switch-slider"></span>
+                        </label>
+                    </div>
+                    <button class="btn-set-active" id="setActiveBtn" onclick="setActiveVersion()">⭐ 设为当前生效版本</button>
+                </div>
+
+                <!-- Prompt Editor -->
+                <div class="form-row" style="margin-bottom:0;">
+                    <div class="form-label">
+                        <span>系统提示词内容</span>
+                        <span class="label-hint">指导LLM解析用户输入、校验合规、优化画面描述</span>
+                    </div>
+                    <div class="prompt-editor-card">
+                        <div class="prompt-editor-toolbar">
+                            <span id="editorTitle">方案 A · 系统提示词编辑器</span>
+                            <div class="toolbar-stats">
+                                <div class="toolbar-stat">行数: <span class="stat-num" id="lineCount">0</span></div>
+                                <div class="toolbar-stat">字符: <span class="stat-num" id="charCount">0</span></div>
+                            </div>
+                        </div>
+                        <textarea
+                            class="prompt-editor-textarea"
+                            id="systemPromptEditor"
+                            placeholder="在此编辑系统提示词..."
+                        ></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 2. Category Templates ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>🏷️ 品类模板管理</h2>
+                    <span class="badge badge-info" id="catCountBadge">0 个</span>
+                </div>
+            </div>
+            <div class="config-body">
+                <div class="form-row" style="margin-bottom:14px;">
+                    <span class="label-hint" style="font-size:12px;color:var(--mt-text-sub);">预置6个品类模板，支持内联编辑、新增与删除。场景标签用逗号分隔输入。</span>
+                </div>
+                <div class="cat-grid" id="catGrid"></div>
+            </div>
+        </div>
+
+        <!-- ========== 2.5 Dish Knowledge Base ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>📚 菜名知识库</h2>
+                    <span class="badge badge-info" id="kbCountBadge">0 条</span>
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn btn-secondary btn-small" onclick="openDishBatchModal()">📥 批量导入</button>
+                    <button class="btn btn-small" onclick="openDishModal(-1)" style="background:var(--mt-yellow);color:var(--header-bg);">+ 新增菜品</button>
+                </div>
+            </div>
+            <div class="config-body">
+                <div class="form-row" style="margin-bottom:14px;">
+                    <span class="label-hint" style="font-size:12px;color:var(--mt-text-sub);">维护菜名、别名、地域、菜系和标准描述映射。用户端解析时自动匹配。</span>
+                </div>
+                <div class="kb-toolbar">
+                    <input type="text" class="kb-search" id="kbSearch" placeholder="按菜名 / 别名搜索..." oninput="renderDishKnowledge()">
+                </div>
+                <div class="kb-table-wrap" id="kbTableWrap"></div>
+            </div>
+        </div>
+
+        <!-- ========== 2.55 Brand Word Library ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>🏷️ 品牌词库</h2>
+                    <span class="badge badge-info" id="bwCountBadge">0 条</span>
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn btn-small" onclick="openBrandModal(-1)" style="background:var(--mt-yellow);color:var(--header-bg);">+ 新增品牌词</button>
+                </div>
+            </div>
+            <div class="config-body">
+                <div class="form-row" style="margin-bottom:14px;">
+                    <span class="label-hint" style="font-size:12px;color:var(--mt-text-sub);">维护知名品牌词与安全风格描述的映射。用户输入品牌名时自动替换为安全描述。</span>
+                </div>
+                <div class="kb-toolbar">
+                    <input type="text" class="kb-search" id="bwSearch" placeholder="按品牌词 / 安全描述搜索..." oninput="renderBrandWordLibrary()">
+                </div>
+                <div class="kb-table-wrap" id="bwTableWrap"></div>
+            </div>
+        </div>
+
+        <!-- ========== 2.56 Risk Word Library ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>⚠️ 风险词库（功效宣传）</h2>
+                    <span class="badge badge-off" id="rwCountBadge">0 条</span>
+                </div>
+                <div style="display:flex;gap:8px;">
+                    <button class="btn btn-small" onclick="openRiskModal(-1)" style="background:var(--mt-yellow);color:var(--header-bg);">+ 新增风险词</button>
+                </div>
+            </div>
+            <div class="config-body">
+                <div class="form-row" style="margin-bottom:14px;">
+                    <span class="label-hint" style="font-size:12px;color:var(--mt-text-sub);">维护功效宣传词与安全替换表述的映射。检测到功效词时自动清洗替换。safeReplacement为空表示直接删除。</span>
+                </div>
+                <div class="kb-toolbar">
+                    <input type="text" class="kb-search" id="rwSearch" placeholder="按风险词 / 安全替换搜索..." oninput="renderRiskWordLibrary()">
+                </div>
+                <div class="kb-table-wrap" id="rwTableWrap"></div>
+            </div>
+        </div>
+
+        <!-- ========== 2.6 Tag Config ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>🏷️ 标签配置</h2>
+                </div>
+            </div>
+            <div class="config-body">
+                <div class="tag-config-grid">
+                    <div class="tag-section">
+                        <div class="ts-title">🍜 菜系标签</div>
+                        <div class="ts-desc">用户端可选择的菜系分类</div>
+                        <div class="tag-list" id="cuisineTagList"></div>
+                        <div class="tag-add-row">
+                            <input type="text" class="tag-add-input" id="cuisineTagAddInput" placeholder="输入菜系名称，回车添加" onkeydown="if(event.key==='Enter'){addCuisineTag();}">
+                            <button class="tag-add-btn" onclick="addCuisineTag()">+ 添加</button>
+                        </div>
+                    </div>
+                    <div class="tag-section">
+                        <div class="ts-title">🍳 烹饪方式标签</div>
+                        <div class="ts-desc">用户端可选择的烹饪方式</div>
+                        <div class="tag-list" id="cookingTagList"></div>
+                        <div class="tag-add-row">
+                            <input type="text" class="tag-add-input" id="cookingTagAddInput" placeholder="输入烹饪方式，回车添加" onkeydown="if(event.key==='Enter'){addCookingTag();}">
+                            <button class="tag-add-btn" onclick="addCookingTag()">+ 添加</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 2.7 Image Types Config ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>🖼️ 图片类型配置</h2>
+                    <span class="badge badge-info" id="imgTypeCountBadge">0 个</span>
+                </div>
+            </div>
+            <div class="config-body">
+                <div class="form-row" style="margin-bottom:14px;">
+                    <span class="label-hint" style="font-size:12px;color:var(--mt-text-sub);">预设图片类型，可配置名称、图标、默认比例与风格后缀。</span>
+                </div>
+                <div class="cfg-grid" id="imgTypeGrid"></div>
+            </div>
+        </div>
+
+        <!-- ========== 2.8 Display Scenes Config ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>🍽️ 展示场景配置</h2>
+                    <span class="badge badge-info" id="sceneCountBadge">0 个</span>
+                </div>
+            </div>
+            <div class="config-body">
+                <div class="form-row" style="margin-bottom:14px;">
+                    <span class="label-hint" style="font-size:12px;color:var(--mt-text-sub);">预设展示场景，可配置名称、图标与描述。</span>
+                </div>
+                <div class="cfg-grid" id="sceneGrid"></div>
+            </div>
+        </div>
+
+        <!-- ========== 2.9 Combo Fields Config ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>🍱 套餐字段配置</h2>
+                    <span class="badge badge-info" id="comboCountBadge">0 个</span>
+                </div>
+            </div>
+            <div class="config-body">
+                <div class="form-row" style="margin-bottom:14px;">
+                    <span class="label-hint" style="font-size:12px;color:var(--mt-text-sub);">套餐表单字段，支持上下移动排序与增删。</span>
+                </div>
+                <div class="combo-list" id="comboList"></div>
+                <button class="btn btn-secondary btn-small" onclick="addComboField()">+ 新增字段</button>
+            </div>
+        </div>
+
+        <!-- ========== 3. Sensitive Words ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>🚫 敏感词管理</h2>
+                    <span class="badge badge-off" id="swCountBadge">0 个</span>
+                </div>
+            </div>
+            <div class="config-body">
+                <div class="form-row">
+                    <div class="form-label"><span>敏感词列表</span><span class="label-hint">命中敏感词的内容将被拦截</span></div>
+                    <div class="sw-tags" id="swTags"></div>
+                </div>
+                <div class="sw-add-row">
+                    <input type="text" class="form-input sw-add-input" id="swAddInput" placeholder="输入单个敏感词，回车或点击添加" onkeydown="if(event.key==='Enter'){addSensitiveWord();}">
+                    <button class="sw-add-btn" onclick="addSensitiveWord()">+ 添加</button>
+                </div>
+                <div class="sw-batch">
+                    <div class="sw-batch-label">批量导入（用逗号分隔，如：毒品,赌博,色情）</div>
+                    <textarea id="swBatchInput" placeholder="粘贴多个敏感词，用逗号分隔..."></textarea>
+                    <div class="sw-batch-actions">
+                        <button class="btn btn-secondary btn-small" onclick="batchImportSensitive()">📥 批量导入</button>
+                        <button class="btn btn-danger btn-small" onclick="clearAllSensitive()">🗑 清空全部</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 4. Model & Params ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>⚙️ 解析模型与参数</h2>
+                </div>
+            </div>
+            <div class="config-body">
+                <div class="model-grid">
+                    <div class="form-row" style="margin-bottom:0;">
+                        <div class="form-label"><span>解析模型</span><span class="label-hint">执行系统提示词的LLM</span></div>
+                        <select class="form-select" id="parseModel">
+                            <option value="glm-4-air">glm-4-air（推荐 · 均衡）</option>
+                            <option value="glm-4-flash">glm-4-flash（快速 · 轻量）</option>
+                            <option value="glm-4-plus">glm-4-plus（强力 · 高质量）</option>
+                            <option value="glm-4">glm-4（标准）</option>
+                        </select>
+                    </div>
+                    <div class="form-row" style="margin-bottom:0;">
+                        <div class="form-label"><span>生图模型</span><span class="label-hint">Wan2.7 图片生成</span></div>
+                        <select class="form-select" id="imageModel">
+                            <option value="wan2.7-image">wan2.7-image（速度快 · 0.2元/张 · 推荐）</option>
+                            <option value="wan2.7-image-pro">wan2.7-image-pro（4K高清 · 0.5元/张）</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="negative-prompt-box">
+                    <div class="form-row" style="margin-bottom:0;">
+                        <div class="form-label"><span>🎨 反向提示词（Negative Prompt）</span><span class="label-hint">描述不希望在图像中出现的内容</span></div>
+                        <textarea class="form-textarea" id="negativePrompt" rows="2" placeholder="低分辨率，低画质，AI感...">低分辨率，低画质，AI感，画面过饱和，蜡像感，过度光滑</textarea>
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top:16px;">
+                    <div class="form-label"><span>生图质量</span><span class="label-hint">wan2.7-image-pro 支持 4K 高清</span></div>
+                    <div class="quality-grid" id="qualityGrid">
+                        <div class="quality-option active" data-quality="hd" onclick="selectQuality('hd', this)">
+                            <div class="q-label">HD 高清</div>
+                            <div class="q-desc">更精细、细节更丰富，约20秒</div>
+                        </div>
+                        <div class="quality-option" data-quality="standard" onclick="selectQuality('standard', this)">
+                            <div class="q-label">Standard 标准</div>
+                            <div class="q-desc">快速生成，约5-10秒</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row" style="margin-top:16px;margin-bottom:0;">
+                    <div class="form-label"><span>Temperature</span><span class="label-hint">越低越稳定</span></div>
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <input type="range" id="temperatureSlider" min="0" max="1" step="0.1" value="0.1" style="flex:1;">
+                        <span id="temperatureValue" style="font-weight:700;min-width:30px;text-align:center;">0.1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 5. Feature Toggles ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>🔧 功能开关</h2>
+                </div>
+            </div>
+            <div class="config-body">
+                <div class="switch-row">
+                    <div class="switch-info">
+                        <div class="switch-title">比例自动提取</div>
+                        <div class="switch-desc">从用户输入文本中自动识别比例（1:1 / 16:9 / 9:16），支持"横版""竖版"等描述性表达</div>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="ratioExtractEnabled" checked><span class="switch-slider"></span></label>
+                </div>
+                <div class="switch-row">
+                    <div class="switch-info">
+                        <div class="switch-title">非食品内容拦截</div>
+                        <div class="switch-desc">自动检测并拒绝非食品类生图需求，输出固定拒接话术</div>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="foodCheckEnabled" checked><span class="switch-slider"></span></label>
+                </div>
+                <div class="switch-row">
+                    <div class="switch-info">
+                        <div class="switch-title">品牌商标词清洗</div>
+                        <div class="switch-desc">自动识别并删除品牌商标词，保留纯食品画面描述</div>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="brandCleanEnabled" checked><span class="switch-slider"></span></label>
+                </div>
+                <div class="switch-row">
+                    <div class="switch-info">
+                        <div class="switch-title">强制白色背景</div>
+                        <div class="switch-desc">在解析后的提示词中自动追加"白色背景"描述</div>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="whiteBgEnabled" checked><span class="switch-slider"></span></label>
+                </div>
+                <div class="switch-row">
+                    <div class="switch-info">
+                        <div class="switch-title">AI水印</div>
+                        <div class="switch-desc">Wan2.7 默认无水印，无需签署免责声明</div>
+                    </div>
+                    <label class="switch"><input type="checkbox" id="watermarkEnabled"><span class="switch-slider"></span></label>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== Merchant Profile (view / simulate) ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>👤 商家画像（查看/模拟）</h2>
+                    <span class="badge badge-info" id="mpBadge">无画像</span>
+                </div>
+                <button class="btn btn-secondary btn-small" onclick="saveMerchantProfile()">💾 保存模拟画像</button>
+            </div>
+            <div class="config-body">
+                <div class="mp-grid">
+                    <div class="mp-field">
+                        <div class="mp-label">商家品类ID</div>
+                        <select class="mp-input" id="mpCategory"></select>
+                    </div>
+                    <div class="mp-field">
+                        <div class="mp-label">品类名称</div>
+                        <input type="text" class="mp-input" id="mpCategoryName" placeholder="如：饮品">
+                    </div>
+                    <div class="mp-field">
+                        <div class="mp-label">主营菜品</div>
+                        <input type="text" class="mp-input" id="mpMainDishes" placeholder="如：珍珠奶茶, 柠檬茶">
+                    </div>
+                    <div class="mp-field">
+                        <div class="mp-label">风格偏好</div>
+                        <input type="text" class="mp-input" id="mpStylePref" placeholder="如：日式清新">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== 6. Enhanced Preview Test ========== -->
+        <div class="config-card">
+            <div class="config-header">
+                <div class="config-header-left">
+                    <h2>🧪 配置预览测试</h2>
+                </div>
+                <span style="font-size:12px;color:var(--mt-text-sub);">使用当前生效方案解析</span>
+            </div>
+            <div class="config-body">
+                <div class="preview-test-row">
+                    <input type="text" class="preview-test-input" id="testInput" placeholder="输入测试文本，如：巨好吃的螺蛳粉，香一点，16:9">
+                    <select class="preview-cat-select" id="testCategory" title="模拟商家品类"></select>
+                </div>
+                <div class="preview-test-row">
+                    <select class="preview-cat-select" id="testImageType" title="图片类型"></select>
+                    <select class="preview-cat-select" id="testScene" title="展示场景"></select>
+                    <span class="label-hint" style="font-size:12px;align-self:center;">图片类型 / 展示场景将叠加到生图提示词</span>
+                </div>
+                <div class="preview-test-row" style="margin-bottom:14px;">
+                    <button class="btn btn-primary btn-small" style="flex:0 0 auto;padding:8px 18px;" onclick="testParse()">▶ 运行测试</button>
+                    <button class="btn btn-secondary btn-small" style="flex:0 0 auto;padding:8px 16px;" onclick="fillTestExample()">填充示例</button>
+                    <span class="label-hint" style="font-size:12px;align-self:center;">当前生效方案：<strong id="testActiveVersion" style="color:var(--mt-text);">A</strong></span>
+                </div>
+                <div class="preview-result" id="previewResult">点击「运行测试」查看解析结果（LLM 解析 + Wan2.7 生图）</div>
+            </div>
+        </div>
+
+        <div class="version-info">运营后台 v3.0 · Wan2.7 生图 · 配置存储于浏览器本地 localStorage，用户端自动读取</div>
+
+    </div>
+
+    <!-- ========== Action Bar ========== -->
+    <div class="action-bar">
+        <button class="btn btn-primary" onclick="saveConfig()">💾 保存配置</button>
+        <button class="btn btn-secondary" onclick="resetToDefault()">↩ 恢复默认</button>
+        <button class="btn btn-danger" onclick="clearConfig()">🗑 清空配置</button>
+    </div>
+
+    <!-- ========== Dish Modal ========== -->
+    <div class="modal-mask" id="dishModal" onclick="if(event.target===this)closeDishModal()">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="dishModalTitle">新增菜品</h3>
+                <button class="modal-close" onclick="closeDishModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-label"><span>菜名（dishName）</span></div>
+                    <input type="text" class="form-input" id="dishNameInput" placeholder="如：宫保鸡丁">
+                </div>
+                <div class="form-row">
+                    <div class="form-label"><span>别名 / 术语（alias）</span><span class="label-hint">如：蚂蚁上树的别名"肉末粉条"，无则留空</span></div>
+                    <input type="text" class="form-input" id="dishAliasInput" placeholder="如：肉末粉条">
+                </div>
+                <div class="form-row">
+                    <div class="form-label"><span>地域（region）</span><span class="label-hint">如：四川 / 武汉</span></div>
+                    <input type="text" class="form-input" id="dishRegionInput" placeholder="如：四川">
+                </div>
+                <div class="form-row">
+                    <div class="form-label"><span>菜系（cuisine）</span></div>
+                    <input type="text" class="form-input" id="dishCuisineInput" placeholder="如：川菜">
+                </div>
+                <div class="form-row" style="margin-bottom:0;">
+                    <div class="form-label"><span>标准描述（standardDesc）</span><span class="label-hint">给 AI 的画面描述</span></div>
+                    <textarea class="form-textarea" id="dishDescInput" rows="3" placeholder="如：鸡丁花生干辣椒爆炒，红油亮泽"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-small" onclick="closeDishModal()">取消</button>
+                <button class="btn btn-primary btn-small" onclick="saveDishModal()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== Dish Batch Import Modal ========== -->
+    <div class="modal-mask" id="dishBatchModal" onclick="if(event.target===this)closeDishBatchModal()">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>批量导入菜品（JSON）</h3>
+                <button class="modal-close" onclick="closeDishBatchModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row" style="margin-bottom:8px;">
+                    <span class="label-hint" style="font-size:12px;color:var(--mt-text-sub);">粘贴 JSON 数组，每项含 dishName / alias / region / cuisine / standardDesc 字段。将追加到现有知识库。</span>
+                </div>
+                <textarea class="form-textarea" id="dishBatchInput" rows="10" placeholder='[{"dishName":"宫保鸡丁","alias":"","region":"四川","cuisine":"川菜","standardDesc":"鸡丁花生干辣椒爆炒，红油亮泽"}]'></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-small" onclick="closeDishBatchModal()">取消</button>
+                <button class="btn btn-primary btn-small" onclick="importDishesFromJson()">导入</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== Brand Word Modal ========== -->
+    <div class="modal-mask" id="brandModal" onclick="if(event.target===this)closeBrandModal()">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="brandModalTitle">新增品牌词</h3>
+                <button class="modal-close" onclick="closeBrandModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-label"><span>品牌词（brandWord）</span><span class="label-hint">如：麦当劳</span></div>
+                    <input type="text" class="form-input" id="brandWordInput" placeholder="如：麦当劳">
+                </div>
+                <div class="form-row" style="margin-bottom:0;">
+                    <div class="form-label"><span>安全描述（safeDescription）</span><span class="label-hint">如：美式快餐风格，红黄配色</span></div>
+                    <textarea class="form-textarea" id="brandDescInput" rows="3" placeholder="如：美式快餐风格，红黄配色"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-small" onclick="closeBrandModal()">取消</button>
+                <button class="btn btn-primary btn-small" onclick="saveBrandModal()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== Risk Word Modal ========== -->
+    <div class="modal-mask" id="riskModal" onclick="if(event.target===this)closeRiskModal()">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="riskModalTitle">新增风险词</h3>
+                <button class="modal-close" onclick="closeRiskModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-label"><span>风险词（riskWord）</span><span class="label-hint">如：改善睡眠</span></div>
+                    <input type="text" class="form-input" id="riskWordInput" placeholder="如：改善睡眠">
+                </div>
+                <div class="form-row" style="margin-bottom:0;">
+                    <div class="form-label"><span>安全替换（safeReplacement）</span><span class="label-hint">如：安神暖胃（留空表示直接删除）</span></div>
+                    <textarea class="form-textarea" id="riskReplaceInput" rows="3" placeholder="如：安神暖胃（留空表示直接删除）"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary btn-small" onclick="closeRiskModal()">取消</button>
+                <button class="btn btn-primary btn-small" onclick="saveRiskModal()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ========== API Config ==========
+        // LLM 解析（智谱 GLM-4-air）
+        const API_KEY = "b1ae57755145402cae10cf0fdf998435.isLNl8ntbg85z77r";
+        const CHAT_API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
+
+        // 图片生成（阿里云 DashScope · Wan2.7）
+        const IMAGE_API_KEY = "sk-ws-H.EMRXRML.DHeo.MEUCIQCwBifOKH6grw_aZxYRTewgTb0ao8Sa0RBLUan78H-6tQIgKAPoo309lU3XmKVoHKaTtxKvj4NZ2HWJxNr3-18mZI8";
+        const IMAGE_API_URL = "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation";
+
+        // ========== Storage Keys (与用户端共享) ==========
+        const STORAGE_KEY = "meituan_ai_config";
+        const MERCHANT_PROFILE_KEY = "meituan_merchant_profile";
+
+        // ========== Default System Prompt (增强版) ==========
+        const DEFAULT_SYSTEM_PROMPT = `你是一款智能的食品生图解析模型，负责理解用户需求、优化生图提示词、校验内容合规性。
+
+## 角色定位
+从用户的食品生图需求中，结合商家上下文信息，提取并优化画面描述，进行内容合规校验，评估信息完整度，检测潜在歧义。
+
+## 能力边界
+只能处理食品相关生图需求，背景必须是统一的白色。其他敏感、非食品内容直接拒绝。
+
+## 内容约束
+1. 严格提取画面元素，不增删用户需求里的食品物体、数量、位置
+2. 禁止出现品牌侵权文字
+3. 比例严格匹配用户描述，支持的比例为：1:1、16:9、9:16
+4. 保留食品的关键特征不丢失（如螺蛳粉的酸笋、红油、米粉）
+
+## 口语化转换
+识别用户输入中的口语化描述词，转换为可执行的专业画面要求：
+- "巨好吃"/"超好吃" → "食材色泽饱满，有诱人的光泽和热气"
+- "香一点"/"很香" → "食物表面有光泽，热气升腾，散发诱人香气"
+- "别太丑"/"好看点" → "构图精美，光线柔和，整体协调美观"
+- "新鲜" → "食材色泽鲜亮，水珠晶莹，呈现新鲜质感"
+
+## 套餐/组合处理
+当用户输入包含"套餐""组合""招牌"等词时，不要将其视为品牌词删除，而是理解为多菜品组合展示场景，补充"多菜品组合展示"的描述。
+
+## 歧义检测
+检测以下类型的歧义并返回ambiguity字段：
+1. 食材状态歧义：如"牛肉"可能是生鲜或成品 → type: "food_state", options: ["生鲜食材", "成品菜品"]
+2. 温度歧义：如"咖啡"可能是热饮或冷饮 → type: "temperature", options: ["热饮", "冷饮"]
+3. 场景歧义：如"展示"可能是堂食或外带 → type: "scene", options: ["堂食场景", "外带包装"]
+
+## 信息完整度评估
+评估用户输入的信息是否足够生成高质量图片：
+- sufficient：信息充足，可直接生成
+- insufficient：信息不足，需追问。返回followup_questions数组，如["请补充具体商品名称","请选择是成品还是生鲜"]
+
+## 兜底规则
+1. 比例不合规：说明用户指定比例不在1:1/16:9/9:16范围内
+2. 非食品违规内容：输出"用户需求为非食品类内容，不符合模型处理边界，无有效食品画面描述"
+3. 含侵权品牌文字：删除全部品牌商标词，保留纯食品画面；若删后无食品则输出"需求含侵权品牌文字，清洗后无有效食品画面元素"
+
+## 解析流程
+1. 判断用户需求是否为食品相关内容
+2. 结合商家上下文（品类、主营菜品、风格偏好）理解需求
+3. 检查品牌商标词并清洗
+4. 将口语化描述转为专业画面要求
+5. 保留食品关键特征
+6. 检测歧义（生/熟、冷/热等）
+7. 评估信息完整度
+8. 画面比例已由系统预处理，直接使用
+9. 输出标准化JSON结果
+
+## 输出要求
+严格按以下JSON格式输出，不要输出其他内容：
+成功时：
+{"status":"success","prompt":"优化后的专业食品画面描述（含白色背景）","ratio":"1:1或16:9或9:16","message":"","brand_removed":"被删除的品牌商标词","completeness":"sufficient或insufficient","followup_questions":[],"ambiguity":null,"colloquial_converted":[{"original":"巨好吃","converted":"食材色泽饱满，有诱人的光泽和热气"}],"key_features":["保留的关键食品特征"]}
+
+信息不足时：
+{"status":"success","prompt":"","ratio":"","message":"","brand_removed":"","completeness":"insufficient","followup_questions":["需要追问的问题1","需要追问的问题2"],"ambiguity":null,"colloquial_converted":[],"key_features":[]}
+
+有歧义时：
+{"status":"success","prompt":"基础描述","ratio":"1:1","message":"","brand_removed":"","completeness":"sufficient","followup_questions":[],"ambiguity":{"type":"food_state","question":"您需要哪种状态的画面？","options":["生鲜食材","成品菜品"]},"colloquial_converted":[],"key_features":[]}
+
+失败时：
+{"status":"error","prompt":"","ratio":"","message":"错误信息","brand_removed":"","completeness":"","followup_questions":[],"ambiguity":null,"colloquial_converted":[],"key_features":[]}
+
+## 示例
+用户输入："巨好吃的螺蛳粉，香一点，16:9"
+商家上下文：快餐品类
+输出：{"status":"success","prompt":"一碗螺蛳粉，酸笋、花生、腐竹、木耳等配料丰富，红油汤底色泽浓郁，米粉洁白劲道，食材色泽饱满有诱人的光泽和热气，食物表面有光泽热气升腾散发诱人香气，白色背景","ratio":"16:9","message":"","brand_removed":"","completeness":"sufficient","followup_questions":[],"ambiguity":null,"colloquial_converted":[{"original":"巨好吃","converted":"食材色泽饱满，有诱人的光泽和热气"},{"original":"香一点","converted":"食物表面有光泽，热气升腾，散发诱人香气"}],"key_features":["螺蛳粉的酸笋","红油汤底","米粉"]}
+
+用户输入："牛肉"
+商家上下文：生鲜品类
+输出：{"status":"success","prompt":"","ratio":"1:1","message":"","brand_removed":"","completeness":"insufficient","followup_questions":["请补充具体部位（如牛腱、牛腩、肥牛等）"],"ambiguity":{"type":"food_state","question":"您需要哪种状态的画面？","options":["生鲜食材","成品菜品"]},"colloquial_converted":[],"key_features":[]}
+
+用户输入："帮我画一只小猫"
+输出：{"status":"error","prompt":"","ratio":"","message":"用户需求为非食品类内容，不符合模型处理边界，无有效食品画面描述","brand_removed":"","completeness":"","followup_questions":[],"ambiguity":null,"colloquial_converted":[],"key_features":[]}`;
+
+        // ========== Default Category Templates ==========
+        const DEFAULT_CATEGORIES = [
+            {
+                id: 'drinks', name: '饮品', icon: '🧋',
+                defaultStyle: '清新明亮风格，自然光线',
+                sceneTags: ['成品杯装', '原料展示', '制作过程', '门店氛围'],
+                promptSuffix: '饮品特写，杯身细节清晰，冷凝水珠自然呈现'
+            },
+            {
+                id: 'fastfood', name: '快餐', icon: '🍔',
+                defaultStyle: '诱人食欲风格，暖色调光线',
+                sceneTags: ['成品展示', '套餐组合', '包装外带', '配料特写'],
+                promptSuffix: '快餐特写，食物层次分明，色泽饱满有光泽'
+            },
+            {
+                id: 'dinner', name: '正餐', icon: '🍱',
+                defaultStyle: '精致典雅风格，柔和光线',
+                sceneTags: ['成品摆盘', '多菜组合', '餐具搭配', '堂食场景'],
+                promptSuffix: '正餐摆盘特写，器皿与菜品搭配协调，蒸汽自然'
+            },
+            {
+                id: 'fresh', name: '生鲜', icon: '🥩',
+                defaultStyle: '新鲜质感风格，明亮冷光',
+                sceneTags: ['原料展示', '切割断面', '新鲜细节', '产地氛围'],
+                promptSuffix: '生鲜食材特写，纹理清晰，水珠晶莹呈现新鲜质感'
+            },
+            {
+                id: 'dessert', name: '甜品', icon: '🍰',
+                defaultStyle: '甜美温馨风格，柔暖光线',
+                sceneTags: ['成品展示', '切面层次', '配料点缀', '精致摆盘'],
+                promptSuffix: '甜品特写，质地细腻，光泽诱人，装饰精致'
+            },
+            {
+                id: 'bakery', name: '烘焙', icon: '🥐',
+                defaultStyle: '温暖治愈风格，金黄光线',
+                sceneTags: ['成品展示', '酥脆质感', '内馅层次', '出炉氛围'],
+                promptSuffix: '烘焙食品特写，表皮金黄酥脆，质感层次分明'
+            }
+        ];
+
+        // ========== Default Sensitive Words ==========
+        const DEFAULT_SENSITIVE = ['毒品', '赌博', '色情', '暴力', '枪支', '刀具', '血液', '尸体', '武器', '爆炸'];
+
+        // ========== Default Dish Knowledge Base ==========
+        const DEFAULT_DISHES = [
+            // 川菜
+            { dishName: '宫保鸡丁', alias: '', region: '四川', cuisine: '川菜', standardDesc: '鸡丁花生干辣椒爆炒，红油亮泽' },
+            { dishName: '麻婆豆腐', alias: '', region: '四川', cuisine: '川菜', standardDesc: '嫩豆腐配肉末，麻辣红油酱汁' },
+            { dishName: '回锅肉', alias: '', region: '四川', cuisine: '川菜', standardDesc: '五花肉片配青蒜苗，酱香浓郁' },
+            { dishName: '蚂蚁上树', alias: '肉末粉条', region: '四川', cuisine: '川菜', standardDesc: '红薯粉丝配肉末，麻辣酱汁' },
+            { dishName: '水煮鱼', alias: '', region: '四川', cuisine: '川菜', standardDesc: '鱼片配豆芽，红油辣椒覆盖' },
+            { dishName: '夫妻肺片', alias: '', region: '四川', cuisine: '川菜', standardDesc: '牛杂薄片，红油花椒拌制' },
+            { dishName: '麻辣火锅', alias: '', region: '重庆', cuisine: '川菜', standardDesc: '红油锅底涮各类食材，麻辣鲜香' },
+            { dishName: '担担面', alias: '', region: '四川', cuisine: '川菜', standardDesc: '细面配肉末麻辣酱汁，撒葱花花生碎' },
+            { dishName: '酸辣粉', alias: '', region: '四川', cuisine: '川菜', standardDesc: '红薯粉条配酸辣汤底，花生香菜' },
+            { dishName: '重庆小面', alias: '', region: '重庆', cuisine: '川菜', standardDesc: '碱水面配红油辣椒，花椒面，葱花' },
+            { dishName: '麻辣香锅', alias: '', region: '四川', cuisine: '川菜', standardDesc: '多种食材麻辣干炒，红油辣椒' },
+            // 粤菜
+            { dishName: '白切鸡', alias: '', region: '广东', cuisine: '粤菜', standardDesc: '整鸡白斩，皮黄肉嫩，配姜葱蘸料' },
+            { dishName: '烧鹅', alias: '', region: '广东', cuisine: '粤菜', standardDesc: '炭烤整鹅，皮脆肉嫩，配酸梅酱' },
+            { dishName: '虾饺', alias: '', region: '广东', cuisine: '粤菜', standardDesc: '半透明虾饺皮，整虾馅料' },
+            { dishName: '肠粉', alias: '', region: '广东', cuisine: '粤菜', standardDesc: '米浆蒸制，滑嫩薄皮，酱油淋汁' },
+            { dishName: '煲仔饭', alias: '', region: '广东', cuisine: '粤菜', standardDesc: '砂锅米饭配腊味，锅巴焦香' },
+            // 湘菜
+            { dishName: '剁椒鱼头', alias: '', region: '湖南', cuisine: '湘菜', standardDesc: '鱼头配红剁椒，蒸制，鲜辣' },
+            { dishName: '小炒肉', alias: '', region: '湖南', cuisine: '湘菜', standardDesc: '五花肉配青椒爆炒' },
+            { dishName: '毛氏红烧肉', alias: '', region: '湖南', cuisine: '湘菜', standardDesc: '五花肉块，浓油赤酱，甜咸口' },
+            // 鲁菜
+            { dishName: '糖醋鲤鱼', alias: '', region: '山东', cuisine: '鲁菜', standardDesc: '整鱼炸制，糖醋浇汁' },
+            { dishName: '九转大肠', alias: '', region: '山东', cuisine: '鲁菜', standardDesc: '猪肠套叠，酸甜苦辣咸五味' },
+            { dishName: '葱烧海参', alias: '', region: '山东', cuisine: '鲁菜', standardDesc: '海参配大葱，浓汁亮芡' },
+            // 苏菜
+            { dishName: '松鼠桂鱼', alias: '', region: '江苏', cuisine: '苏菜', standardDesc: '鱼身切花刀炸制，形似松鼠，糖醋浇汁' },
+            { dishName: '清炖狮子头', alias: '大肉丸', region: '江苏', cuisine: '苏菜', standardDesc: '猪肉大丸，清炖，配白菜' },
+            { dishName: '蟹粉狮子头', alias: '', region: '江苏', cuisine: '苏菜', standardDesc: '猪肉丸配蟹粉，清炖' },
+            // 浙菜
+            { dishName: '西湖醋鱼', alias: '', region: '浙江', cuisine: '浙菜', standardDesc: '草鱼烹制，糖醋浇汁' },
+            { dishName: '东坡肉', alias: '', region: '浙江', cuisine: '浙菜', standardDesc: '方形五花肉，酱红色，酥烂' },
+            { dishName: '龙井虾仁', alias: '', region: '浙江', cuisine: '浙菜', standardDesc: '河虾仁配龙井茶叶' },
+            // 闽菜
+            { dishName: '佛跳墙', alias: '多种食材炖盅', region: '福建', cuisine: '闽菜', standardDesc: '多种海鲜山珍炖盅，浓汤' },
+            { dishName: '沙茶面', alias: '', region: '福建', cuisine: '闽菜', standardDesc: '碱水面配沙茶浓汤' },
+            // 徽菜
+            { dishName: '臭鳜鱼', alias: '', region: '安徽', cuisine: '徽菜', standardDesc: '发酵鳜鱼红烧，闻臭食香' },
+            { dishName: '毛豆腐', alias: '', region: '安徽', cuisine: '徽菜', standardDesc: '发酵长毛豆腐煎制' },
+            // 日式
+            { dishName: '豚骨拉面', alias: '', region: '日本', cuisine: '日式', standardDesc: '猪骨浓汤底，叉烧肉，溏心蛋，葱花海苔' },
+            { dishName: '寿司', alias: '', region: '日本', cuisine: '日式', standardDesc: '醋饭配生鱼片，小巧精致' },
+            { dishName: '天妇罗', alias: '', region: '日本', cuisine: '日式', standardDesc: '海鲜蔬菜裹面衣炸制，金黄酥脆' },
+            { dishName: '照烧鸡', alias: '', region: '日本', cuisine: '日式', standardDesc: '鸡腿肉照烧酱煎制，油亮光泽' },
+            // 韩式
+            { dishName: '石锅拌饭', alias: '', region: '韩国', cuisine: '韩式', standardDesc: '石锅米饭配蔬菜和肉，拌饭酱，锅巴' },
+            { dishName: '炸鸡', alias: '', region: '韩国', cuisine: '韩式', standardDesc: '双炸鸡块，甜辣酱或酱油' },
+            { dishName: '部队锅', alias: '', region: '韩国', cuisine: '韩式', standardDesc: '泡菜汤底配午餐肉香肠豆腐' },
+            // 西式
+            { dishName: '牛排', alias: '', region: '西方', cuisine: '西式', standardDesc: '煎牛排，焦香外壳，粉嫩切面' },
+            { dishName: '意面', alias: '', region: '意大利', cuisine: '西式', standardDesc: '面条配番茄或奶油酱汁' },
+            { dishName: '披萨', alias: '', region: '意大利', cuisine: '西式', standardDesc: '圆形面饼配芝士和配料，拉丝' },
+            // 地方小吃
+            { dishName: '热干面', alias: '', region: '武汉', cuisine: '鄂菜', standardDesc: '碱水面条，芝麻酱拌匀，配酸豆角葱花' },
+            { dishName: '肉夹馍', alias: '', region: '陕西', cuisine: '陕菜', standardDesc: '白吉馍夹卤肉，肉汁浸透' },
+            { dishName: '煎饼果子', alias: '', region: '天津', cuisine: '津菜', standardDesc: '绿豆面薄饼，裹薄脆和鸡蛋，刷酱' },
+            { dishName: '螺蛳粉', alias: '', region: '广西', cuisine: '桂菜', standardDesc: '米粉配酸笋花生腐竹，酸辣汤底' },
+            // 家常 / 补充
+            { dishName: '蛋炒饭', alias: '', region: '全国', cuisine: '家常', standardDesc: '米饭配鸡蛋翻炒，粒粒分明，金黄' },
+            { dishName: '西红柿炒鸡蛋', alias: '番茄炒蛋', region: '全国', cuisine: '家常', standardDesc: '番茄与鸡蛋同炒，红黄相间，酸甜' },
+            { dishName: '小笼包', alias: '', region: '上海', cuisine: '沪菜', standardDesc: '薄皮小笼，内含汤汁，鲜香' },
+            { dishName: '生煎包', alias: '', region: '上海', cuisine: '沪菜', standardDesc: '平底锅煎制，底脆顶嫩，撒芝麻葱花' }
+        ];
+
+        // ========== Default Brand Words ==========
+        const DEFAULT_BRAND_WORDS = [
+            { brandWord: '麦当劳', safeDescription: '美式快餐风格，红黄配色' },
+            { brandWord: '肯德基', safeDescription: '美式快餐风格，红白色调' },
+            { brandWord: '星巴克', safeDescription: '现代简约风格，绿色系' },
+            { brandWord: '海底捞', safeDescription: '火锅餐饮风格，红色暖调' },
+            { brandWord: '必胜客', safeDescription: '西式餐饮风格，红色系' },
+            { brandWord: '蜜雪冰城', safeDescription: '亲民饮品风格，红白色调' },
+            { brandWord: '喜茶', safeDescription: '新茶饮风格，简约时尚' },
+            { brandWord: '瑞幸', safeDescription: '现代咖啡风格，蓝白色调' },
+            { brandWord: '华莱士', safeDescription: '美式快餐风格，橙色系' },
+            { brandWord: '德克士', safeDescription: '美式快餐风格，橙红色调' },
+            { brandWord: '塔斯汀', safeDescription: '国潮快餐风格，中国风元素' },
+            { brandWord: '正新鸡排', safeDescription: '街头小吃风格，红黄色调' },
+            { brandWord: '巴比馒头', safeDescription: '中式早餐风格，温馨色调' },
+            { brandWord: '张亮麻辣烫', safeDescription: '麻辣烫风格，红色暖调' },
+            { brandWord: '杨国福麻辣烫', safeDescription: '麻辣烫风格，红色暖调' }
+        ];
+
+        // ========== Default Risk Words ==========
+        const DEFAULT_RISK_WORDS = [
+            { riskWord: '调理身体', safeReplacement: '温润暖胃' },
+            { riskWord: '改善睡眠', safeReplacement: '安神暖胃' },
+            { riskWord: '美容养颜', safeReplacement: '滋养润肤' },
+            { riskWord: '减肥瘦身', safeReplacement: '轻食低卡' },
+            { riskWord: '壮阳补肾', safeReplacement: '滋补养生' },
+            { riskWord: '治愈', safeReplacement: '舒缓' },
+            { riskWord: '疗效', safeReplacement: '口感' },
+            { riskWord: '降血压', safeReplacement: '清淡健康' },
+            { riskWord: '降血糖', safeReplacement: '低糖轻食' },
+            { riskWord: '排毒养颜', safeReplacement: '清爽健康' },
+            { riskWord: '增强免疫力', safeReplacement: '营养丰富' },
+            { riskWord: '抗癌', safeReplacement: '' },
+            { riskWord: '补血', safeReplacement: '滋补' },
+            { riskWord: '暖宫', safeReplacement: '温补' },
+            { riskWord: '催乳', safeReplacement: '营养滋补' }
+        ];
+
+        // ========== Default Tags ==========
+        const DEFAULT_CUISINE_TAGS = ['川菜', '粤菜', '湘菜', '鲁菜', '苏菜', '浙菜', '闽菜', '徽菜', '日式', '韩式', '西式'];
+        const DEFAULT_COOKING_TAGS = ['蒸', '炒', '炸', '卤', '烤', '炖', '煮', '煎', '凉拌'];
+
+        // ========== Default Image Types ==========
+        const DEFAULT_IMAGE_TYPES = [
+            { id: 'product', name: '商品图', icon: '📸', defaultRatio: '1:1', styleSuffix: '纯白背景，居中构图，特写，高亮度打光，突出食物质感' },
+            { id: 'header', name: '店铺头图', icon: '🏪', defaultRatio: '16:9', styleSuffix: '场景化构图，自然光线，带桌面餐具氛围' },
+            { id: 'poster', name: '活动海报', icon: '🎯', defaultRatio: '9:16', styleSuffix: '留出顶部空间用于文字排版，场景化氛围，暖色调' }
+        ];
+
+        // ========== Default Display Scenes ==========
+        const DEFAULT_DISPLAY_SCENES = [
+            { id: 'dinein', name: '堂食', icon: '🍽️', desc: '盘装/碗装，堂食餐具搭配' },
+            { id: 'takeout', name: '外卖', icon: '🥡', desc: '餐盒装/打包盒，外卖包装展示' },
+            { id: 'branded', name: '品牌包装', icon: '🎁', desc: '定制包装，品牌Logo位预留' }
+        ];
+
+        // ========== Default Combo Fields ==========
+        const DEFAULT_COMBO_FIELDS = ['主菜', '配菜', '主食', '饮品/汤品'];
+
+        // ========== Default Negative Prompt ==========
+        const DEFAULT_NEGATIVE_PROMPT = '低分辨率，低画质，AI感，画面过饱和，蜡像感，过度光滑';
+
+        // ========== Default Config ==========
+        function buildDefaultConfig() {
+            return {
+                activePromptVersion: 'A',
+                promptA: { systemPrompt: DEFAULT_SYSTEM_PROMPT, enabled: true },
+                promptB: { systemPrompt: DEFAULT_SYSTEM_PROMPT, enabled: false },
+                categoryTemplates: JSON.parse(JSON.stringify(DEFAULT_CATEGORIES)),
+                parseModel: 'glm-4-air',
+                imageModel: 'wan2.7-image',
+                quality: 'hd',
+                temperature: 0.1,
+                ratioExtractEnabled: true,
+                foodCheckEnabled: true,
+                brandCleanEnabled: true,
+                whiteBgEnabled: true,
+                watermarkEnabled: false,
+                negativePrompt: DEFAULT_NEGATIVE_PROMPT,
+                sensitiveWords: [...DEFAULT_SENSITIVE],
+                dishKnowledgeBase: JSON.parse(JSON.stringify(DEFAULT_DISHES)),
+                brandWordLibrary: JSON.parse(JSON.stringify(DEFAULT_BRAND_WORDS)),
+                riskWordLibrary: JSON.parse(JSON.stringify(DEFAULT_RISK_WORDS)),
+                cuisineTags: [...DEFAULT_CUISINE_TAGS],
+                cookingMethodTags: [...DEFAULT_COOKING_TAGS],
+                imageTypes: JSON.parse(JSON.stringify(DEFAULT_IMAGE_TYPES)),
+                displayScenes: JSON.parse(JSON.stringify(DEFAULT_DISPLAY_SCENES)),
+                comboFields: [...DEFAULT_COMBO_FIELDS],
+                lastSaved: null
+            };
+        }
+
+        // ========== State ==========
+        let state = buildDefaultConfig();
+        let currentEditingVersion = 'A'; // 当前编辑的方案 Tab
+        let selectedQuality = 'hd';
+
+        // ========== Init ==========
+        function init() {
+            loadConfig();
+            applyConfigToUI();
+            renderCategories();
+            renderDishKnowledge();
+            renderBrandWordLibrary();
+            renderRiskWordLibrary();
+            renderCuisineTags();
+            renderCookingTags();
+            renderImageTypes();
+            renderDisplayScenes();
+            renderComboFields();
+            renderSensitiveWords();
+            renderMerchantProfileUI();
+            updatePromptStats();
+            updateABUI();
+        }
+
+        // ========== Load Config ==========
+        function loadConfig() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    const parsed = JSON.parse(stored);
+                    state = mergeConfig(buildDefaultConfig(), parsed);
+                    document.getElementById('configStatus').textContent = '已加载运营配置';
+                } catch (e) {
+                    state = buildDefaultConfig();
+                }
+            }
+            updateLastSaved();
+        }
+
+        // 深度合并：保证新字段补全默认值
+        function mergeConfig(base, override) {
+            const result = { ...base };
+            for (const key in override) {
+                if (key === 'promptA' || key === 'promptB') {
+                    result[key] = { ...(base[key] || {}), ...(override[key] || {}) };
+                } else if (key === 'categoryTemplates' && Array.isArray(override[key])) {
+                    result[key] = override[key];
+                } else {
+                    result[key] = override[key];
+                }
+            }
+            // 兜底保证关键字段存在
+            if (!result.promptA) result.promptA = { systemPrompt: DEFAULT_SYSTEM_PROMPT, enabled: true };
+            if (!result.promptB) result.promptB = { systemPrompt: DEFAULT_SYSTEM_PROMPT, enabled: false };
+            if (!Array.isArray(result.categoryTemplates)) result.categoryTemplates = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
+            if (!Array.isArray(result.sensitiveWords)) result.sensitiveWords = [...DEFAULT_SENSITIVE];
+            if (!Array.isArray(result.dishKnowledgeBase)) result.dishKnowledgeBase = JSON.parse(JSON.stringify(DEFAULT_DISHES));
+            if (!Array.isArray(result.brandWordLibrary) || result.brandWordLibrary.length === 0) result.brandWordLibrary = JSON.parse(JSON.stringify(DEFAULT_BRAND_WORDS));
+            if (!Array.isArray(result.riskWordLibrary) || result.riskWordLibrary.length === 0) result.riskWordLibrary = JSON.parse(JSON.stringify(DEFAULT_RISK_WORDS));
+            if (!Array.isArray(result.cuisineTags)) result.cuisineTags = [...DEFAULT_CUISINE_TAGS];
+            if (!Array.isArray(result.cookingMethodTags)) result.cookingMethodTags = [...DEFAULT_COOKING_TAGS];
+            if (!Array.isArray(result.imageTypes)) result.imageTypes = JSON.parse(JSON.stringify(DEFAULT_IMAGE_TYPES));
+            if (!Array.isArray(result.displayScenes)) result.displayScenes = JSON.parse(JSON.stringify(DEFAULT_DISPLAY_SCENES));
+            if (!Array.isArray(result.comboFields)) result.comboFields = [...DEFAULT_COMBO_FIELDS];
+            if (typeof result.negativePrompt !== 'string') result.negativePrompt = DEFAULT_NEGATIVE_PROMPT;
+            if (!result.imageModel) result.imageModel = 'wan2.7-image';
+            if (typeof result.watermarkEnabled !== 'boolean') result.watermarkEnabled = false;
+            return result;
+        }
+
+        function updateLastSaved() {
+            const el = document.getElementById('lastSaved');
+            if (state.lastSaved) {
+                el.textContent = new Date(state.lastSaved).toLocaleString('zh-CN');
+            } else {
+                el.textContent = '从未保存';
+            }
+        }
+
+        // ========== Apply Config to UI ==========
+        function applyConfigToUI() {
+            document.getElementById('parseModel').value = state.parseModel;
+            document.getElementById('imageModel').value = state.imageModel;
+            document.getElementById('negativePrompt').value = state.negativePrompt || DEFAULT_NEGATIVE_PROMPT;
+            document.getElementById('temperatureSlider').value = state.temperature;
+            document.getElementById('temperatureValue').textContent = state.temperature;
+            document.getElementById('ratioExtractEnabled').checked = state.ratioExtractEnabled;
+            document.getElementById('foodCheckEnabled').checked = state.foodCheckEnabled;
+            document.getElementById('brandCleanEnabled').checked = state.brandCleanEnabled;
+            document.getElementById('whiteBgEnabled').checked = state.whiteBgEnabled;
+            document.getElementById('watermarkEnabled').checked = state.watermarkEnabled;
+            selectedQuality = state.quality || 'hd';
+            selectQuality(selectedQuality, document.querySelector(`[data-quality="${selectedQuality}"]`));
+            renderBrandWordLibrary();
+            renderRiskWordLibrary();
+        }
+
+        // ========== AB Tab Management ==========
+        function syncEditorToState() {
+            // 把当前编辑器内容写回 state（在切换 Tab 或保存前调用）
+            const editor = document.getElementById('systemPromptEditor');
+            if (currentEditingVersion === 'A') {
+                state.promptA.systemPrompt = editor.value;
+            } else {
+                state.promptB.systemPrompt = editor.value;
+            }
+        }
+
+        function switchPromptTab(version) {
+            if (version === currentEditingVersion) return;
+            syncEditorToState();
+            currentEditingVersion = version;
+            loadPromptToEditor();
+            updateABUI();
+            updatePromptStats();
+        }
+
+        function loadPromptToEditor() {
+            const data = currentEditingVersion === 'A' ? state.promptA : state.promptB;
+            document.getElementById('systemPromptEditor').value = data.systemPrompt || '';
+        }
+
+        function updateABUI() {
+            // Tab 状态
+            ['A', 'B'].forEach(v => {
+                const tab = document.getElementById('tab-' + v);
+                const stateEl = document.getElementById('state-' + v);
+                const data = v === 'A' ? state.promptA : state.promptB;
+                tab.classList.toggle('active', currentEditingVersion === v);
+                tab.classList.toggle('is-active-version', state.activePromptVersion === v);
+                if (data.enabled) {
+                    stateEl.textContent = '已启用';
+                    stateEl.className = 'tab-state on';
+                } else {
+                    stateEl.textContent = '已禁用';
+                    stateEl.className = 'tab-state off';
+                }
+            });
+
+            // 编辑器标题 & 开关
+            document.getElementById('editorTitle').textContent = `方案 ${currentEditingVersion} · 系统提示词编辑器`;
+            document.getElementById('editingVersionTag').textContent = `方案 ${currentEditingVersion}`;
+            const curData = currentEditingVersion === 'A' ? state.promptA : state.promptB;
+            document.getElementById('promptEnabled').checked = !!curData.enabled;
+
+            // 设为生效按钮
+            const setActiveBtn = document.getElementById('setActiveBtn');
+            if (state.activePromptVersion === currentEditingVersion) {
+                setActiveBtn.textContent = '✅ 当前生效版本';
+                setActiveBtn.classList.add('is-active');
+                setActiveBtn.disabled = true;
+            } else {
+                setActiveBtn.textContent = '⭐ 设为当前生效版本';
+                setActiveBtn.classList.remove('is-active');
+                setActiveBtn.disabled = false;
+            }
+
+            // 顶部状态
+            document.getElementById('activeVersionText').textContent = state.activePromptVersion || 'A';
+            document.getElementById('testActiveVersion').textContent = state.activePromptVersion || 'A';
+        }
+
+        function togglePromptEnabled() {
+            const enabled = document.getElementById('promptEnabled').checked;
+            if (currentEditingVersion === 'A') {
+                state.promptA.enabled = enabled;
+            } else {
+                state.promptB.enabled = enabled;
+            }
+            updateABUI();
+        }
+
+        function setActiveVersion() {
+            state.activePromptVersion = currentEditingVersion;
+            updateABUI();
+            showToast(`方案 ${currentEditingVersion} 已设为当前生效版本（保存后生效）`, 'success');
+        }
+
+        // ========== Category Templates ==========
+        function renderCategories() {
+            const grid = document.getElementById('catGrid');
+            const cats = state.categoryTemplates || [];
+            document.getElementById('catCountBadge').textContent = cats.length + ' 个';
+
+            const cards = cats.map((c, i) => `
+                <div class="cat-card" data-index="${i}">
+                    <div class="cat-card-head">
+                        <input class="cat-icon-input" data-field="icon" value="${escapeAttr(c.icon)}" maxlength="2">
+                        <div style="flex:1;">
+                            <input class="form-input cat-name-input" data-field="name" value="${escapeAttr(c.name)}" placeholder="品类名称">
+                            <div class="cat-id-tag">id: ${escapeHtml(c.id)}</div>
+                        </div>
+                        <button class="cat-del-btn" onclick="deleteCategory(${i})" title="删除品类">×</button>
+                    </div>
+                    <div class="cat-field">
+                        <div class="cf-label">默认风格</div>
+                        <input class="cf-input" data-field="defaultStyle" value="${escapeAttr(c.defaultStyle || '')}" placeholder="如：清新明亮风格">
+                    </div>
+                    <div class="cat-field">
+                        <div class="cf-label">场景标签（逗号分隔）</div>
+                        <input class="cf-input" data-field="sceneTagsInput" value="${escapeAttr((c.sceneTags || []).join(', '))}" placeholder="如：成品杯装, 原料展示">
+                        <div class="cf-tags">${(c.sceneTags || []).map(t => `<span class="cf-tag">${escapeHtml(t)}</span>`).join('')}</div>
+                    </div>
+                    <div class="cat-field" style="margin-bottom:0;">
+                        <div class="cf-label">提示词后缀</div>
+                        <input class="cf-input" data-field="promptSuffix" value="${escapeAttr(c.promptSuffix || '')}" placeholder="如：饮品特写，杯身细节清晰">
+                    </div>
+                </div>
+            `).join('');
+
+            grid.innerHTML = cards + `
+                <div class="cat-add-card" onclick="addCategory()">
+                    <div class="add-icon">+</div>
+                    <div style="font-weight:600;font-size:14px;">新增自定义品类</div>
+                    <div style="font-size:11px;margin-top:4px;">点击添加</div>
+                </div>
+            `;
+        }
+
+        function collectCategories() {
+            const cards = document.querySelectorAll('.cat-card');
+            const result = [];
+            cards.forEach(card => {
+                const idx = parseInt(card.dataset.index);
+                const old = state.categoryTemplates[idx] || {};
+                const name = card.querySelector('[data-field="name"]').value.trim() || '未命名品类';
+                const sceneTagsInput = card.querySelector('[data-field="sceneTagsInput"]').value;
+                const sceneTags = sceneTagsInput.split(/[,，]/).map(s => s.trim()).filter(Boolean);
+                result.push({
+                    id: old.id || ('custom_' + Date.now()),
+                    name: name,
+                    icon: card.querySelector('[data-field="icon"]').value.trim() || '🏷️',
+                    defaultStyle: card.querySelector('[data-field="defaultStyle"]').value.trim(),
+                    sceneTags: sceneTags,
+                    promptSuffix: card.querySelector('[data-field="promptSuffix"]').value.trim()
+                });
+            });
+            return result;
+        }
+
+        function addCategory() {
+            // 先把当前编辑收集回 state，再加新项
+            state.categoryTemplates = collectCategories();
+            state.categoryTemplates.push({
+                id: 'custom_' + Date.now(),
+                name: '新品类',
+                icon: '🏷️',
+                defaultStyle: '',
+                sceneTags: [],
+                promptSuffix: ''
+            });
+            renderCategories();
+            showToast('已新增品类，请编辑详情', 'success');
+        }
+
+        function deleteCategory(index) {
+            if (!confirm('确定删除该品类模板？')) return;
+            state.categoryTemplates = collectCategories();
+            state.categoryTemplates.splice(index, 1);
+            renderCategories();
+            showToast('已删除品类', 'success');
+        }
+
+        // ========== Dish Knowledge Base ==========
+        let dishEditingIndex = -1; // -1 表示新增
+
+        function renderDishKnowledge() {
+            const wrap = document.getElementById('kbTableWrap');
+            const dishes = state.dishKnowledgeBase || [];
+            document.getElementById('kbCountBadge').textContent = dishes.length + ' 条';
+
+            const q = (document.getElementById('kbSearch').value || '').trim().toLowerCase();
+            const filtered = q
+                ? dishes.map((d, i) => ({ d, i })).filter(({ d }) =>
+                    (d.dishName || '').toLowerCase().includes(q) ||
+                    (d.alias || '').toLowerCase().includes(q))
+                : dishes.map((d, i) => ({ d, i }));
+
+            if (filtered.length === 0) {
+                wrap.innerHTML = '<div class="kb-empty">' + (q ? '未匹配到菜品' : '暂无菜品，点击"新增菜品"或"批量导入"') + '</div>';
+                return;
+            }
+
+            const rows = filtered.map(({ d, i }) => `
+                <tr>
+                    <td class="kb-dish-name">${escapeHtml(d.dishName || '')}</td>
+                    <td class="kb-alias">${d.alias ? escapeHtml(d.alias) : '<span style="color:var(--mt-text-light);">—</span>'}</td>
+                    <td class="kb-region">${escapeHtml(d.region || '')}</td>
+                    <td class="kb-cuisine">${escapeHtml(d.cuisine || '')}</td>
+                    <td class="kb-desc">${escapeHtml(d.standardDesc || '')}</td>
+                    <td style="white-space:nowrap;">
+                        <button class="kb-op-btn" onclick="openDishModal(${i})">编辑</button>
+                        <button class="kb-op-btn del" onclick="deleteDish(${i})">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            wrap.innerHTML = `<table class="kb-table">
+                <thead><tr>
+                    <th>菜名</th><th>别名 / 术语</th><th>地域</th><th>菜系</th><th>标准描述</th><th style="width:130px;">操作</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+        }
+
+        function openDishModal(index) {
+            dishEditingIndex = index;
+            const isEdit = index >= 0;
+            document.getElementById('dishModalTitle').textContent = isEdit ? '编辑菜品' : '新增菜品';
+            const d = isEdit ? (state.dishKnowledgeBase[index] || {}) : { dishName: '', alias: '', region: '', cuisine: '', standardDesc: '' };
+            document.getElementById('dishNameInput').value = d.dishName || '';
+            document.getElementById('dishAliasInput').value = d.alias || '';
+            document.getElementById('dishRegionInput').value = d.region || '';
+            document.getElementById('dishCuisineInput').value = d.cuisine || '';
+            document.getElementById('dishDescInput').value = d.standardDesc || '';
+            document.getElementById('dishModal').classList.add('show');
+            setTimeout(() => document.getElementById('dishNameInput').focus(), 50);
+        }
+
+        function closeDishModal() {
+            document.getElementById('dishModal').classList.remove('show');
+            dishEditingIndex = -1;
+        }
+
+        function saveDishModal() {
+            const dish = {
+                dishName: document.getElementById('dishNameInput').value.trim(),
+                alias: document.getElementById('dishAliasInput').value.trim(),
+                region: document.getElementById('dishRegionInput').value.trim(),
+                cuisine: document.getElementById('dishCuisineInput').value.trim(),
+                standardDesc: document.getElementById('dishDescInput').value.trim()
+            };
+            if (!dish.dishName) { showToast('请填写菜名', 'error'); return; }
+            if (dishEditingIndex >= 0) {
+                state.dishKnowledgeBase[dishEditingIndex] = dish;
+            } else {
+                state.dishKnowledgeBase.push(dish);
+            }
+            closeDishModal();
+            renderDishKnowledge();
+            showToast('菜品已保存', 'success');
+        }
+
+        function deleteDish(index) {
+            if (!confirm('确定删除该菜品？')) return;
+            state.dishKnowledgeBase.splice(index, 1);
+            renderDishKnowledge();
+            showToast('已删除菜品', 'success');
+        }
+
+        function openDishBatchModal() {
+            document.getElementById('dishBatchInput').value = '';
+            document.getElementById('dishBatchModal').classList.add('show');
+        }
+
+        function closeDishBatchModal() {
+            document.getElementById('dishBatchModal').classList.remove('show');
+        }
+
+        function importDishesFromJson() {
+            const text = document.getElementById('dishBatchInput').value;
+            if (!text.trim()) { showToast('请粘贴 JSON 内容', 'error'); return; }
+            let arr;
+            try {
+                arr = JSON.parse(text);
+            } catch (e) {
+                showToast('JSON 格式错误：' + e.message, 'error');
+                return;
+            }
+            if (!Array.isArray(arr)) { showToast('需要 JSON 数组', 'error'); return; }
+            let added = 0;
+            arr.forEach(item => {
+                if (item && item.dishName) {
+                    state.dishKnowledgeBase.push({
+                        dishName: String(item.dishName).trim(),
+                        alias: String(item.alias || '').trim(),
+                        region: String(item.region || '').trim(),
+                        cuisine: String(item.cuisine || '').trim(),
+                        standardDesc: String(item.standardDesc || '').trim()
+                    });
+                    added++;
+                }
+            });
+            closeDishBatchModal();
+            renderDishKnowledge();
+            showToast(`成功导入 ${added} 条菜品`, 'success');
+        }
+
+        // ========== Brand Word Library ==========
+        let brandEditingIndex = -1; // -1 表示新增
+
+        function renderBrandWordLibrary() {
+            const wrap = document.getElementById('bwTableWrap');
+            const list = state.brandWordLibrary || [];
+            document.getElementById('bwCountBadge').textContent = list.length + ' 条';
+
+            const q = (document.getElementById('bwSearch').value || '').trim().toLowerCase();
+            const filtered = q
+                ? list.map((d, i) => ({ d, i })).filter(({ d }) =>
+                    (d.brandWord || '').toLowerCase().includes(q) ||
+                    (d.safeDescription || '').toLowerCase().includes(q))
+                : list.map((d, i) => ({ d, i }));
+
+            if (filtered.length === 0) {
+                wrap.innerHTML = '<div class="kb-empty">' + (q ? '未匹配到品牌词' : '暂无品牌词，点击"新增品牌词"添加') + '</div>';
+                return;
+            }
+
+            const rows = filtered.map(({ d, i }) => `
+                <tr>
+                    <td class="kb-dish-name">${escapeHtml(d.brandWord || '')}</td>
+                    <td class="kb-desc">${escapeHtml(d.safeDescription || '')}</td>
+                    <td style="white-space:nowrap;">
+                        <button class="kb-op-btn" onclick="openBrandModal(${i})">编辑</button>
+                        <button class="kb-op-btn del" onclick="deleteBrandWord(${i})">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            wrap.innerHTML = `<table class="kb-table">
+                <thead><tr>
+                    <th>品牌词</th><th>安全描述</th><th style="width:130px;">操作</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+        }
+
+        function openBrandModal(index) {
+            brandEditingIndex = index;
+            const isEdit = index >= 0;
+            document.getElementById('brandModalTitle').textContent = isEdit ? '编辑品牌词' : '新增品牌词';
+            const d = isEdit ? (state.brandWordLibrary[index] || {}) : { brandWord: '', safeDescription: '' };
+            document.getElementById('brandWordInput').value = d.brandWord || '';
+            document.getElementById('brandDescInput').value = d.safeDescription || '';
+            document.getElementById('brandModal').classList.add('show');
+            setTimeout(() => document.getElementById('brandWordInput').focus(), 50);
+        }
+
+        function closeBrandModal() {
+            document.getElementById('brandModal').classList.remove('show');
+            brandEditingIndex = -1;
+        }
+
+        function saveBrandModal() {
+            const item = {
+                brandWord: document.getElementById('brandWordInput').value.trim(),
+                safeDescription: document.getElementById('brandDescInput').value.trim()
+            };
+            if (!item.brandWord) { showToast('请填写品牌词', 'error'); return; }
+            if (brandEditingIndex >= 0) {
+                state.brandWordLibrary[brandEditingIndex] = item;
+            } else {
+                state.brandWordLibrary.push(item);
+            }
+            closeBrandModal();
+            renderBrandWordLibrary();
+            showToast('品牌词已保存', 'success');
+        }
+
+        function deleteBrandWord(index) {
+            if (!confirm('确定删除该品牌词？')) return;
+            state.brandWordLibrary.splice(index, 1);
+            renderBrandWordLibrary();
+            showToast('已删除品牌词', 'success');
+        }
+
+        // ========== Risk Word Library ==========
+        let riskEditingIndex = -1; // -1 表示新增
+
+        function renderRiskWordLibrary() {
+            const wrap = document.getElementById('rwTableWrap');
+            const list = state.riskWordLibrary || [];
+            document.getElementById('rwCountBadge').textContent = list.length + ' 条';
+
+            const q = (document.getElementById('rwSearch').value || '').trim().toLowerCase();
+            const filtered = q
+                ? list.map((d, i) => ({ d, i })).filter(({ d }) =>
+                    (d.riskWord || '').toLowerCase().includes(q) ||
+                    (d.safeReplacement || '').toLowerCase().includes(q))
+                : list.map((d, i) => ({ d, i }));
+
+            if (filtered.length === 0) {
+                wrap.innerHTML = '<div class="kb-empty">' + (q ? '未匹配到风险词' : '暂无风险词，点击"新增风险词"添加') + '</div>';
+                return;
+            }
+
+            const rows = filtered.map(({ d, i }) => `
+                <tr>
+                    <td class="kb-dish-name">${escapeHtml(d.riskWord || '')}</td>
+                    <td class="kb-desc">${d.safeReplacement ? escapeHtml(d.safeReplacement) : '<span style="color:var(--mt-text-light);">（空，直接删除）</span>'}</td>
+                    <td style="white-space:nowrap;">
+                        <button class="kb-op-btn" onclick="openRiskModal(${i})">编辑</button>
+                        <button class="kb-op-btn del" onclick="deleteRiskWord(${i})">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            wrap.innerHTML = `<table class="kb-table">
+                <thead><tr>
+                    <th>风险词</th><th>安全替换</th><th style="width:130px;">操作</th>
+                </tr></thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+        }
+
+        function openRiskModal(index) {
+            riskEditingIndex = index;
+            const isEdit = index >= 0;
+            document.getElementById('riskModalTitle').textContent = isEdit ? '编辑风险词' : '新增风险词';
+            const d = isEdit ? (state.riskWordLibrary[index] || {}) : { riskWord: '', safeReplacement: '' };
+            document.getElementById('riskWordInput').value = d.riskWord || '';
+            document.getElementById('riskReplaceInput').value = d.safeReplacement || '';
+            document.getElementById('riskModal').classList.add('show');
+            setTimeout(() => document.getElementById('riskWordInput').focus(), 50);
+        }
+
+        function closeRiskModal() {
+            document.getElementById('riskModal').classList.remove('show');
+            riskEditingIndex = -1;
+        }
+
+        function saveRiskModal() {
+            const item = {
+                riskWord: document.getElementById('riskWordInput').value.trim(),
+                safeReplacement: document.getElementById('riskReplaceInput').value.trim()
+            };
+            if (!item.riskWord) { showToast('请填写风险词', 'error'); return; }
+            if (riskEditingIndex >= 0) {
+                state.riskWordLibrary[riskEditingIndex] = item;
+            } else {
+                state.riskWordLibrary.push(item);
+            }
+            closeRiskModal();
+            renderRiskWordLibrary();
+            showToast('风险词已保存', 'success');
+        }
+
+        function deleteRiskWord(index) {
+            if (!confirm('确定删除该风险词？')) return;
+            state.riskWordLibrary.splice(index, 1);
+            renderRiskWordLibrary();
+            showToast('已删除风险词', 'success');
+        }
+
+        // ========== Tag Config ==========
+        function renderCuisineTags() {
+            renderTagList('cuisineTagList', state.cuisineTags, 'cuisine');
+        }
+        function renderCookingTags() {
+            renderTagList('cookingTagList', state.cookingMethodTags, 'cooking');
+        }
+        function renderTagList(elId, tags, type) {
+            const container = document.getElementById(elId);
+            if (!tags || tags.length === 0) {
+                container.innerHTML = '<span class="tag-list-empty">暂无标签</span>';
+                return;
+            }
+            container.innerHTML = tags.map((t, i) => `
+                <span class="tag-item ${type}">
+                    <input value="${escapeAttr(t)}" oninput="editTag('${type}', ${i}, this.value)" onkeydown="if(event.key==='Enter')this.blur()">
+                    <span class="tag-remove" onclick="deleteTag('${type}', ${i})">×</span>
+                </span>
+            `).join('');
+        }
+        function editTag(type, i, value) {
+            if (type === 'cuisine') state.cuisineTags[i] = value;
+            else state.cookingMethodTags[i] = value;
+        }
+        function deleteTag(type, i) {
+            if (type === 'cuisine') state.cuisineTags.splice(i, 1);
+            else state.cookingMethodTags.splice(i, 1);
+            renderCuisineTags();
+            renderCookingTags();
+        }
+        function addCuisineTag() {
+            const input = document.getElementById('cuisineTagAddInput');
+            const v = input.value.trim();
+            if (!v) { showToast('请输入菜系名称', 'error'); return; }
+            if (state.cuisineTags.includes(v)) { showToast('该标签已存在', 'error'); return; }
+            state.cuisineTags.push(v);
+            input.value = '';
+            renderCuisineTags();
+            showToast('已添加菜系标签', 'success');
+        }
+        function addCookingTag() {
+            const input = document.getElementById('cookingTagAddInput');
+            const v = input.value.trim();
+            if (!v) { showToast('请输入烹饪方式', 'error'); return; }
+            if (state.cookingMethodTags.includes(v)) { showToast('该标签已存在', 'error'); return; }
+            state.cookingMethodTags.push(v);
+            input.value = '';
+            renderCookingTags();
+            showToast('已添加烹饪方式标签', 'success');
+        }
+
+        // ========== Image Types ==========
+        function renderImageTypes() {
+            const grid = document.getElementById('imgTypeGrid');
+            const list = state.imageTypes || [];
+            document.getElementById('imgTypeCountBadge').textContent = list.length + ' 个';
+            grid.innerHTML = list.map((c, i) => `
+                <div class="cfg-card" data-index="${i}">
+                    <div class="cfg-card-head">
+                        <input class="cfg-icon-input" data-field="icon" value="${escapeAttr(c.icon)}" maxlength="2">
+                        <div style="flex:1;">
+                            <input class="form-input cfg-name-input" data-field="name" value="${escapeAttr(c.name)}" placeholder="类型名称">
+                            <div class="cfg-id-tag">id: ${escapeHtml(c.id)}</div>
+                        </div>
+                    </div>
+                    <div class="cfg-field">
+                        <div class="cf-label">默认比例</div>
+                        <select class="cf-select" data-field="defaultRatio">
+                            ${['1:1','16:9','9:16'].map(r => `<option value="${r}" ${c.defaultRatio===r?'selected':''}>${r}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="cfg-field" style="margin-bottom:0;">
+                        <div class="cf-label">风格后缀</div>
+                        <textarea class="cf-textarea" data-field="styleSuffix">${escapeHtml(c.styleSuffix || '')}</textarea>
+                    </div>
+                </div>
+            `).join('');
+        }
+        function collectImageTypes() {
+            const cards = document.querySelectorAll('#imgTypeGrid .cfg-card');
+            const result = [];
+            cards.forEach(card => {
+                const idx = parseInt(card.dataset.index);
+                const old = state.imageTypes[idx] || {};
+                result.push({
+                    id: old.id || ('type_' + Date.now()),
+                    name: card.querySelector('[data-field="name"]').value.trim() || '未命名',
+                    icon: card.querySelector('[data-field="icon"]').value.trim() || '🖼️',
+                    defaultRatio: card.querySelector('[data-field="defaultRatio"]').value,
+                    styleSuffix: card.querySelector('[data-field="styleSuffix"]').value.trim()
+                });
+            });
+            return result;
+        }
+
+        // ========== Display Scenes ==========
+        function renderDisplayScenes() {
+            const grid = document.getElementById('sceneGrid');
+            const list = state.displayScenes || [];
+            document.getElementById('sceneCountBadge').textContent = list.length + ' 个';
+            grid.innerHTML = list.map((c, i) => `
+                <div class="cfg-card" data-index="${i}">
+                    <div class="cfg-card-head">
+                        <input class="cfg-icon-input" data-field="icon" value="${escapeAttr(c.icon)}" maxlength="2">
+                        <div style="flex:1;">
+                            <input class="form-input cfg-name-input" data-field="name" value="${escapeAttr(c.name)}" placeholder="场景名称">
+                            <div class="cfg-id-tag">id: ${escapeHtml(c.id)}</div>
+                        </div>
+                    </div>
+                    <div class="cfg-field" style="margin-bottom:0;">
+                        <div class="cf-label">描述</div>
+                        <textarea class="cf-textarea" data-field="desc">${escapeHtml(c.desc || '')}</textarea>
+                    </div>
+                </div>
+            `).join('');
+        }
+        function collectDisplayScenes() {
+            const cards = document.querySelectorAll('#sceneGrid .cfg-card');
+            const result = [];
+            cards.forEach(card => {
+                const idx = parseInt(card.dataset.index);
+                const old = state.displayScenes[idx] || {};
+                result.push({
+                    id: old.id || ('scene_' + Date.now()),
+                    name: card.querySelector('[data-field="name"]').value.trim() || '未命名',
+                    icon: card.querySelector('[data-field="icon"]').value.trim() || '🍽️',
+                    desc: card.querySelector('[data-field="desc"]').value.trim()
+                });
+            });
+            return result;
+        }
+
+        // ========== Combo Fields ==========
+        function renderComboFields() {
+            const list = document.getElementById('comboList');
+            const fields = state.comboFields || [];
+            document.getElementById('comboCountBadge').textContent = fields.length + ' 个';
+            list.innerHTML = fields.map((f, i) => `
+                <div class="combo-row" data-index="${i}">
+                    <div class="combo-ord">
+                        <button class="combo-ord-btn" onclick="moveComboField(${i},-1)" ${i===0?'disabled':''}>↑</button>
+                        <button class="combo-ord-btn" onclick="moveComboField(${i},1)" ${i===fields.length-1?'disabled':''}>↓</button>
+                    </div>
+                    <input class="combo-input" data-field="name" value="${escapeAttr(f)}" placeholder="字段名称，如：主菜">
+                    <button class="combo-del-btn" onclick="deleteComboField(${i})">×</button>
+                </div>
+            `).join('');
+        }
+        function collectComboFields() {
+            const rows = document.querySelectorAll('#comboList .combo-row');
+            const result = [];
+            rows.forEach(row => {
+                const v = row.querySelector('[data-field="name"]').value.trim();
+                if (v) result.push(v);
+            });
+            return result;
+        }
+        function addComboField() {
+            state.comboFields = collectComboFields();
+            state.comboFields.push('新字段');
+            renderComboFields();
+        }
+        function deleteComboField(i) {
+            state.comboFields = collectComboFields();
+            state.comboFields.splice(i, 1);
+            renderComboFields();
+            showToast('已删除字段', 'success');
+        }
+        function moveComboField(i, dir) {
+            state.comboFields = collectComboFields();
+            const j = i + dir;
+            if (j < 0 || j >= state.comboFields.length) return;
+            const tmp = state.comboFields[i];
+            state.comboFields[i] = state.comboFields[j];
+            state.comboFields[j] = tmp;
+            renderComboFields();
+        }
+
+        // ========== Sensitive Words ==========
+        function renderSensitiveWords() {
+            const container = document.getElementById('swTags');
+            const words = state.sensitiveWords || [];
+            document.getElementById('swCountBadge').textContent = words.length + ' 个';
+            if (words.length === 0) {
+                container.innerHTML = '<div class="sw-empty">暂无敏感词</div>';
+                return;
+            }
+            container.innerHTML = words.map((w, i) => `
+                <span class="sw-tag">${escapeHtml(w)}<span class="sw-remove" onclick="deleteSensitiveWord(${i})">×</span></span>
+            `).join('');
+        }
+
+        function addSensitiveWord() {
+            const input = document.getElementById('swAddInput');
+            const word = input.value.trim();
+            if (!word) { showToast('请输入敏感词', 'error'); return; }
+            if (state.sensitiveWords.includes(word)) { showToast('该敏感词已存在', 'error'); return; }
+            state.sensitiveWords.push(word);
+            input.value = '';
+            renderSensitiveWords();
+            showToast('已添加敏感词', 'success');
+        }
+
+        function deleteSensitiveWord(index) {
+            state.sensitiveWords.splice(index, 1);
+            renderSensitiveWords();
+        }
+
+        function batchImportSensitive() {
+            const text = document.getElementById('swBatchInput').value;
+            if (!text.trim()) { showToast('请粘贴要导入的敏感词', 'error'); return; }
+            const words = text.split(/[,，\n\s]+/).map(s => s.trim()).filter(Boolean);
+            let added = 0;
+            words.forEach(w => {
+                if (w && !state.sensitiveWords.includes(w)) {
+                    state.sensitiveWords.push(w);
+                    added++;
+                }
+            });
+            document.getElementById('swBatchInput').value = '';
+            renderSensitiveWords();
+            showToast(`成功导入 ${added} 个敏感词${words.length - added > 0 ? '，' + (words.length - added) + ' 个重复已忽略' : ''}`, 'success');
+        }
+
+        function clearAllSensitive() {
+            if (!confirm('确定清空全部敏感词？')) return;
+            state.sensitiveWords = [];
+            renderSensitiveWords();
+            showToast('已清空敏感词', 'success');
+        }
+
+        // ========== Quality Selector ==========
+        function selectQuality(quality, el) {
+            document.querySelectorAll('.quality-option').forEach(o => o.classList.remove('active'));
+            if (el) el.classList.add('active');
+            selectedQuality = quality;
+        }
+
+        // ========== Temperature Slider ==========
+        document.getElementById('temperatureSlider').addEventListener('input', function(e) {
+            document.getElementById('temperatureValue').textContent = e.target.value;
+        });
+
+        // ========== Prompt Stats ==========
+        function updatePromptStats() {
+            const editor = document.getElementById('systemPromptEditor');
+            const text = editor.value;
+            document.getElementById('lineCount').textContent = text.split('\n').length;
+            document.getElementById('charCount').textContent = text.length;
+        }
+        document.getElementById('systemPromptEditor').addEventListener('input', updatePromptStats);
+
+        // ========== Collect Config from UI ==========
+        function collectConfigFromUI() {
+            syncEditorToState(); // 把编辑器内容写回当前方案
+            state.categoryTemplates = collectCategories();
+            state.imageTypes = collectImageTypes();
+            state.displayScenes = collectDisplayScenes();
+            state.comboFields = collectComboFields();
+            state.parseModel = document.getElementById('parseModel').value;
+            state.imageModel = document.getElementById('imageModel').value;
+            state.negativePrompt = document.getElementById('negativePrompt').value.trim();
+            state.quality = selectedQuality;
+            state.temperature = parseFloat(document.getElementById('temperatureSlider').value);
+            state.ratioExtractEnabled = document.getElementById('ratioExtractEnabled').checked;
+            state.foodCheckEnabled = document.getElementById('foodCheckEnabled').checked;
+            state.brandCleanEnabled = document.getElementById('brandCleanEnabled').checked;
+            state.whiteBgEnabled = document.getElementById('whiteBgEnabled').checked;
+            state.watermarkEnabled = document.getElementById('watermarkEnabled').checked;
+            // 品牌词库与风险词库通过弹窗直接维护到 state，此处确保字段存在
+            if (!Array.isArray(state.brandWordLibrary)) state.brandWordLibrary = [];
+            if (!Array.isArray(state.riskWordLibrary)) state.riskWordLibrary = [];
+            return state;
+        }
+
+        // ========== Save / Reset / Clear ==========
+        function saveConfig() {
+            const config = collectConfigFromUI();
+            config.lastSaved = new Date().toISOString();
+            // 深拷贝确保数据一致性
+            const snapshot = JSON.parse(JSON.stringify(config));
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+
+            document.getElementById('configStatus').textContent = '运营配置已生效';
+            updateLastSaved();
+            updateABUI();
+            renderCategories(); // 刷新 id 显示
+            renderDishKnowledge();
+            renderBrandWordLibrary();
+            renderRiskWordLibrary();
+            renderCuisineTags();
+            renderCookingTags();
+            renderImageTypes();
+            renderDisplayScenes();
+            renderComboFields();
+            renderSensitiveWords();
+            renderMerchantProfileUI();
+            showToast('配置已保存，用户端将自动生效', 'success');
+        }
+
+        function resetToDefault() {
+            if (!confirm('确定恢复为默认配置？当前未保存的修改将丢失。')) return;
+            state = buildDefaultConfig();
+            currentEditingVersion = 'A';
+            localStorage.removeItem(STORAGE_KEY);
+            applyConfigToUI();
+            loadPromptToEditor();
+            renderCategories();
+            renderDishKnowledge();
+            renderBrandWordLibrary();
+            renderRiskWordLibrary();
+            renderCuisineTags();
+            renderCookingTags();
+            renderImageTypes();
+            renderDisplayScenes();
+            renderComboFields();
+            renderSensitiveWords();
+            updateABUI();
+            updatePromptStats();
+            document.getElementById('configStatus').textContent = '已恢复默认配置';
+            updateLastSaved();
+            showToast('已恢复默认配置', 'success');
+        }
+
+        function clearConfig() {
+            if (!confirm('确定清空所有配置？这将重置为空白状态（需重新保存生效）。')) return;
+            state = {
+                activePromptVersion: 'A',
+                promptA: { systemPrompt: '', enabled: true },
+                promptB: { systemPrompt: '', enabled: false },
+                categoryTemplates: [],
+                parseModel: 'glm-4-air',
+                imageModel: 'wan2.7-image',
+                quality: 'hd',
+                temperature: 0.1,
+                ratioExtractEnabled: false,
+                foodCheckEnabled: false,
+                brandCleanEnabled: false,
+                whiteBgEnabled: false,
+                watermarkEnabled: false,
+                negativePrompt: '',
+                sensitiveWords: [],
+                dishKnowledgeBase: [],
+                brandWordLibrary: [],
+                riskWordLibrary: [],
+                cuisineTags: [],
+                cookingMethodTags: [],
+                imageTypes: [],
+                displayScenes: [],
+                comboFields: [],
+                lastSaved: null
+            };
+            currentEditingVersion = 'A';
+            localStorage.removeItem(STORAGE_KEY);
+            applyConfigToUI();
+            loadPromptToEditor();
+            renderCategories();
+            renderDishKnowledge();
+            renderBrandWordLibrary();
+            renderRiskWordLibrary();
+            renderCuisineTags();
+            renderCookingTags();
+            renderImageTypes();
+            renderDisplayScenes();
+            renderComboFields();
+            renderSensitiveWords();
+            updateABUI();
+            updatePromptStats();
+            document.getElementById('configStatus').textContent = '配置已清空';
+            updateLastSaved();
+            showToast('配置已清空', 'success');
+        }
+
+        // ========== Merchant Profile ==========
+        function renderMerchantProfileUI() {
+            // 填充品类下拉
+            const mpCat = document.getElementById('mpCategory');
+            const testCat = document.getElementById('testCategory');
+            const cats = state.categoryTemplates || [];
+            const optionsHtml = '<option value="">无（不模拟品类）</option>' + cats.map(c =>
+                `<option value="${escapeAttr(c.id)}">${escapeHtml(c.icon)} ${escapeHtml(c.name)}</option>`
+            ).join('');
+            mpCat.innerHTML = optionsHtml;
+            testCat.innerHTML = optionsHtml;
+
+            // 填充图片类型 / 展示场景下拉
+            const testImgType = document.getElementById('testImageType');
+            const testScene = document.getElementById('testScene');
+            const imgTypes = state.imageTypes || [];
+            const scenes = state.displayScenes || [];
+            const prevImgType = testImgType.value || (imgTypes[0] && imgTypes[0].id) || '';
+            const prevScene = testScene.value || (scenes[0] && scenes[0].id) || '';
+            testImgType.innerHTML = imgTypes.map(t =>
+                `<option value="${escapeAttr(t.id)}">${escapeHtml(t.icon)} ${escapeHtml(t.name)}（${escapeHtml(t.defaultRatio || '')}）</option>`
+            ).join('');
+            testScene.innerHTML = scenes.map(s =>
+                `<option value="${escapeAttr(s.id)}">${escapeHtml(s.icon)} ${escapeHtml(s.name)}</option>`
+            ).join('');
+            if (imgTypes.some(t => t.id === prevImgType)) testImgType.value = prevImgType;
+            else if (imgTypes[0]) testImgType.value = imgTypes[0].id;
+            if (scenes.some(s => s.id === prevScene)) testScene.value = prevScene;
+            else if (scenes[0]) testScene.value = scenes[0].id;
+
+            // 读取商家画像
+            const stored = localStorage.getItem(MERCHANT_PROFILE_KEY);
+            let profile = null;
+            if (stored) {
+                try { profile = JSON.parse(stored); } catch (e) { profile = null; }
+            }
+            const badge = document.getElementById('mpBadge');
+            if (profile && profile.hasProfile) {
+                document.getElementById('mpCategory').value = profile.shopCategory || '';
+                document.getElementById('mpCategoryName').value = profile.shopCategoryName || '';
+                document.getElementById('mpMainDishes').value = profile.mainDishes || '';
+                document.getElementById('mpStylePref').value = profile.stylePreference || '';
+                badge.textContent = '已有画像';
+                badge.className = 'badge badge-on';
+                // 测试下拉默认选中商家品类
+                if (profile.shopCategory) testCat.value = profile.shopCategory;
+            } else {
+                document.getElementById('mpCategoryName').value = '';
+                document.getElementById('mpMainDishes').value = '';
+                document.getElementById('mpStylePref').value = '';
+                badge.textContent = '无画像';
+                badge.className = 'badge badge-off';
+            }
+        }
+
+        function saveMerchantProfile() {
+            const catId = document.getElementById('mpCategory').value;
+            const cat = (state.categoryTemplates || []).find(c => c.id === catId);
+            const profile = {
+                hasProfile: true,
+                shopCategory: catId,
+                shopCategoryName: cat ? cat.name : document.getElementById('mpCategoryName').value,
+                mainDishes: document.getElementById('mpMainDishes').value,
+                stylePreference: document.getElementById('mpStylePref').value,
+                createdAt: new Date().toISOString()
+            };
+            localStorage.setItem(MERCHANT_PROFILE_KEY, JSON.stringify(profile));
+            renderMerchantProfileUI();
+            showToast('商家画像已保存（模拟）', 'success');
+        }
+
+        // ========== Get Active Prompt ==========
+        function getActivePrompt() {
+            const v = state.activePromptVersion || 'A';
+            const data = v === 'A' ? state.promptA : state.promptB;
+            if (data && data.enabled && data.systemPrompt && data.systemPrompt.trim()) {
+                return data.systemPrompt;
+            }
+            // 兜底：用另一套或默认
+            return DEFAULT_SYSTEM_PROMPT;
+        }
+
+        // ========== Ratio Extraction (与用户端一致) ==========
+        function extractRatioFromText(text) {
+            const directMatch = text.match(/(\d+:\d+)/);
+            if (directMatch) {
+                const ratio = directMatch[1];
+                if (['1:1', '16:9', '9:16'].includes(ratio)) {
+                    return { ratio, hasRatio: true, valid: true };
+                } else {
+                    return { ratio, hasRatio: true, valid: false };
+                }
+            }
+            if (/横版|宽屏|横屏|宽幅/.test(text)) return { ratio: '16:9', hasRatio: true, valid: true };
+            if (/竖版|竖屏|手机屏|长图/.test(text)) return { ratio: '9:16', hasRatio: true, valid: true };
+            if (/正方形|方形|正方/.test(text)) return { ratio: '1:1', hasRatio: true, valid: true };
+            return { ratio: '1:1', hasRatio: false, valid: true };
+        }
+
+        // ========== Test Parse ==========
+        async function testParse() {
+            const testInput = document.getElementById('testInput').value.trim();
+            if (!testInput) { showToast('请输入测试文本', 'error'); return; }
+
+            const resultEl = document.getElementById('previewResult');
+            resultEl.className = 'preview-result is-loading';
+            resultEl.textContent = '正在调用解析模型（方案 ' + (state.activePromptVersion || 'A') + '）...';
+
+            // 同步当前编辑器内容到 state
+            syncEditorToState();
+
+            const systemPrompt = getActivePrompt();
+            const parseModel = document.getElementById('parseModel').value;
+            const temperature = parseFloat(document.getElementById('temperatureSlider').value);
+            const ratioExtract = document.getElementById('ratioExtractEnabled').checked;
+
+            // 构建商家上下文
+            const catId = document.getElementById('testCategory').value;
+            const cat = (state.categoryTemplates || []).find(c => c.id === catId);
+            const profileStored = localStorage.getItem(MERCHANT_PROFILE_KEY);
+            let profile = null;
+            if (profileStored) { try { profile = JSON.parse(profileStored); } catch (e) {} }
+            const mainDishes = profile?.mainDishes || '';
+            const stylePref = profile?.stylePreference || '';
+
+            let merchantCtx = '';
+            if (cat) {
+                merchantCtx = `商家上下文：${cat.name}品类`;
+                if (mainDishes) merchantCtx += `，主营菜品：${mainDishes}`;
+                if (stylePref) merchantCtx += `，风格偏好：${stylePref}`;
+            }
+
+            // 比例预处理
+            let ratio = '1:1';
+            if (ratioExtract) {
+                const ratioResult = extractRatioFromText(testInput);
+                if (!ratioResult.valid) {
+                    resultEl.className = 'preview-result is-error';
+                    resultEl.textContent = JSON.stringify({
+                        status: 'error',
+                        prompt: '',
+                        ratio: '',
+                        message: `比例不合规：用户指定比例 ${ratioResult.ratio} 不在1:1/16:9/9:16范围内`,
+                        brand_removed: '',
+                        completeness: '',
+                        followup_questions: [],
+                        ambiguity: null,
+                        colloquial_converted: [],
+                        key_features: []
+                    }, null, 2);
+                    return;
+                }
+                ratio = ratioResult.ratio;
+            }
+
+            try {
+                const userContent = `用户需求：${testInput}\n已确定比例：${ratio}（系统已预处理，请直接使用此比例）${merchantCtx ? '\n' + merchantCtx : ''}`;
+
+                const response = await fetch(CHAT_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: parseModel,
+                        messages: [
+                            { role: 'system', content: systemPrompt },
+                            { role: 'user', content: userContent }
+                        ],
+                        temperature: temperature
+                    })
+                });
+
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`API错误 (${response.status}): ${errText}`);
+                }
+
+                const data = await response.json();
+                let content = data.choices[0].message.content.trim();
+
+                let jsonStr = content;
+                const jsonMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
+                if (jsonMatch) jsonStr = jsonMatch[1].trim();
+
+                const parsed = JSON.parse(jsonStr);
+                if (parsed.status === 'success') parsed.ratio = ratio;
+
+                // 渲染解析结果
+                renderTestResult(parsed, testInput, cat);
+
+                // 解析成功且有画面描述 → 调用 Wan2.7 生图
+                if (parsed.status === 'success' && parsed.prompt && parsed.prompt.trim()) {
+                    await generateAndShowImage(parsed, ratio, resultEl);
+                } else {
+                    resultEl.innerHTML += '<div style="margin-top:14px;font-size:12px;color:var(--mt-text-sub);">未生成图片：解析结果无有效画面描述。</div>';
+                }
+            } catch (error) {
+                resultEl.className = 'preview-result is-error';
+                resultEl.textContent = '解析失败: ' + error.message;
+            }
+        }
+
+        // ========== Generate Image via Wan2.7 ==========
+        async function generateAndShowImage(parsed, ratio, resultEl) {
+            const imgId = 'wanGenImg_' + Date.now();
+            const imageModel = state.imageModel || 'wan2.7-image';
+            resultEl.innerHTML += `
+                <div style="margin-top:16px;border-top:1px dashed var(--mt-border);padding-top:14px;">
+                    <div style="font-size:13px;font-weight:700;margin-bottom:8px;">🎨 Wan2.7 生图（模型：<strong style="color:var(--mt-blue);">${escapeHtml(imageModel)}</strong>）</div>
+                    <div id="${imgId}" class="preview-img-wrap" style="color:var(--mt-text-sub);font-size:13px;min-height:60px;display:flex;align-items:center;justify-content:center;">正在调用 Wan2.7 生成图片，约需 10-20 秒...</div>
+                </div>
+            `;
+            const target = document.getElementById(imgId);
+
+            // 读取图片类型 / 展示场景配置
+            const imgTypeId = document.getElementById('testImageType').value;
+            const imgType = (state.imageTypes || []).find(t => t.id === imgTypeId);
+            const sceneId = document.getElementById('testScene').value;
+            const scene = (state.displayScenes || []).find(s => s.id === sceneId);
+
+            // 构造生图提示词：解析画面 + 风格后缀 + 场景描述
+            let prompt = parsed.prompt || '';
+            if (imgType && imgType.styleSuffix) prompt += '，' + imgType.styleSuffix;
+            if (scene && scene.desc) prompt += '，' + scene.desc;
+            const negativePrompt = (state.negativePrompt || '').trim();
+
+            // 比例转尺寸（DashScope Wan2.7 使用 "宽*高" 格式）
+            const sizeMap = { '1:1': '1024*1024', '16:9': '1280*720', '9:16': '720*1280' };
+            const finalRatio = parsed.ratio || ratio || (imgType && imgType.defaultRatio) || '1:1';
+            const size = sizeMap[finalRatio] || '1024*1024';
+
+            try {
+                // Wan2.7 multimodal-generation 请求体（messages 格式）
+                const body = {
+                    model: imageModel,
+                    input: {
+                        messages: [
+                            { role: 'user', content: [{ text: prompt }] }
+                        ]
+                    },
+                    parameters: { size: size, n: 1 }
+                };
+                if (negativePrompt) body.parameters.negative_prompt = negativePrompt;
+
+                const resp = await fetch(IMAGE_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${IMAGE_API_KEY}`
+                    },
+                    body: JSON.stringify(body)
+                });
+
+                if (!resp.ok) {
+                    const errText = await resp.text();
+                    throw new Error(`生图API错误 (${resp.status}): ${errText}`);
+                }
+
+                const data = await resp.json();
+
+                // 从 data.output.choices[0].message.content 提取图片
+                let imageUrl = '';
+                const choices = data && data.output && data.output.choices;
+                if (choices && choices.length) {
+                    const content = choices[0].message && choices[0].message.content;
+                    if (Array.isArray(content)) {
+                        const imgObj = content.find(c => c && c.image);
+                        if (imgObj) imageUrl = imgObj.image;
+                    } else if (typeof content === 'string') {
+                        const m = content.match(/https?:\/\/\S+/);
+                        imageUrl = m ? m[0] : content;
+                    }
+                }
+                if (!imageUrl) throw new Error('未从响应中解析到图片地址');
+
+                target.style.minHeight = 'auto';
+                target.innerHTML = `<img src="${escapeAttr(imageUrl)}" alt="生成图片" /><span class="img-meta">尺寸：${escapeHtml(size)} ｜ 比例：${escapeHtml(finalRatio)} ｜ 模型：${escapeHtml(imageModel)}${negativePrompt ? ' ｜ 含反向提示词' : ''}</span>`;
+                showToast('图片生成成功', 'success');
+            } catch (err) {
+                target.style.minHeight = 'auto';
+                target.innerHTML = '<span style="color:var(--mt-red);font-size:13px;">生图失败: ' + escapeHtml(err.message) + '</span>';
+            }
+        }
+
+        // ========== Render Test Result (结构化) ==========
+        function renderTestResult(parsed, originalInput, cat) {
+            const resultEl = document.getElementById('previewResult');
+            const statusOk = parsed.status === 'success';
+            resultEl.className = 'preview-result has-result';
+
+            const statusBadge = statusOk
+                ? '<span class="rf-badge success">success</span>'
+                : '<span class="rf-badge error">error</span>';
+
+            const ratioBadge = parsed.ratio
+                ? `<span class="rf-badge ratio">${escapeHtml(parsed.ratio)}</span>`
+                : '<span style="color:var(--mt-text-light);">—</span>';
+
+            const completeness = parsed.completeness
+                ? `<span class="rf-badge completeness-${escapeHtml(parsed.completeness)}">${escapeHtml(parsed.completeness)}</span>`
+                : '<span style="color:var(--mt-text-light);">—</span>';
+
+            // 口语化转换
+            let convertedHtml = '<span style="color:var(--mt-text-light);">无</span>';
+            if (Array.isArray(parsed.colloquial_converted) && parsed.colloquial_converted.length) {
+                convertedHtml = parsed.colloquial_converted.map(c =>
+                    `<div class="rf-converted-item"><span class="orig">${escapeHtml(c.original)}</span><span class="arrow">→</span><span class="conv">${escapeHtml(c.converted)}</span></div>`
+                ).join('');
+            }
+
+            // 关键特征
+            let keyFeaturesHtml = '<span style="color:var(--mt-text-light);">无</span>';
+            if (Array.isArray(parsed.key_features) && parsed.key_features.length) {
+                keyFeaturesHtml = parsed.key_features.map(k => `<span class="rf-pill">${escapeHtml(k)}</span>`).join('');
+            }
+
+            // 追问问题
+            let followupHtml = '<span style="color:var(--mt-text-light);">无</span>';
+            if (Array.isArray(parsed.followup_questions) && parsed.followup_questions.length) {
+                followupHtml = parsed.followup_questions.map(q => `<span class="rf-pill">❓ ${escapeHtml(q)}</span>`).join('');
+            }
+
+            // 歧义
+            let ambiguityHtml = '<span style="color:var(--mt-text-light);">无</span>';
+            if (parsed.ambiguity) {
+                const a = parsed.ambiguity;
+                const opts = Array.isArray(a.options) ? a.options.map(o => `<span class="rf-pill">${escapeHtml(o)}</span>`).join('') : '';
+                ambiguityHtml = `<div class="rf-ambiguity">
+                    <div style="font-size:12px;font-weight:600;color:var(--mt-yellow-dark);margin-bottom:4px;">歧义类型：${escapeHtml(a.type || 'unknown')}</div>
+                    <div style="font-size:12px;margin-bottom:4px;">${escapeHtml(a.question || '')}</div>
+                    <div>${opts}</div>
+                </div>`;
+            }
+
+            const fieldsHtml = `
+                <div class="result-fields">
+                    <div class="rf-row"><span class="rf-label">status</span><span class="rf-value">${statusBadge}</span></div>
+                    <div class="rf-row"><span class="rf-label">prompt</span><span class="rf-value">${parsed.prompt ? escapeHtml(parsed.prompt) : '<span style="color:var(--mt-text-light);">（空）</span>'}</span></div>
+                    <div class="rf-row"><span class="rf-label">ratio</span><span class="rf-value">${ratioBadge}</span></div>
+                    <div class="rf-row"><span class="rf-label">completeness</span><span class="rf-value">${completeness}</span></div>
+                    <div class="rf-row"><span class="rf-label">brand_removed</span><span class="rf-value">${parsed.brand_removed ? `<span style="color:var(--mt-red);font-weight:600;">${escapeHtml(parsed.brand_removed)}</span>` : '<span style="color:var(--mt-text-light);">无</span>'}</span></div>
+                    <div class="rf-row"><span class="rf-label">message</span><span class="rf-value">${parsed.message ? escapeHtml(parsed.message) : '<span style="color:var(--mt-text-light);">无</span>'}</span></div>
+                    <div class="rf-row"><span class="rf-label">colloquial_converted</span><span class="rf-value">${convertedHtml}</span></div>
+                    <div class="rf-row"><span class="rf-label">key_features</span><span class="rf-value">${keyFeaturesHtml}</span></div>
+                    <div class="rf-row"><span class="rf-label">followup_questions</span><span class="rf-value">${followupHtml}</span></div>
+                    <div class="rf-row"><span class="rf-label">ambiguity</span><span class="rf-value">${ambiguityHtml}</span></div>
+                </div>
+                <div style="font-size:11px;color:var(--mt-text-sub);margin-bottom:6px;font-weight:600;">完整 JSON 返回：</div>
+                <div class="rf-json">${escapeHtml(JSON.stringify(parsed, null, 2))}</div>
+            `;
+
+            resultEl.innerHTML = `
+                <div style="font-size:12px;color:var(--mt-text-sub);margin-bottom:10px;">
+                    原始输入：<strong style="color:var(--mt-text);">${escapeHtml(originalInput)}</strong>
+                    ${cat ? `｜模拟品类：<strong style="color:var(--mt-text);">${escapeHtml(cat.icon)} ${escapeHtml(cat.name)}</strong>` : '｜无品类上下文'}
+                    ｜生效方案：<strong style="color:var(--mt-yellow-dark);">${escapeHtml(state.activePromptVersion || 'A')}</strong>
+                </div>
+                ${fieldsHtml}
+            `;
+        }
+
+        // ========== Fill Test Example ==========
+        function fillTestExample() {
+            const examples = [
+                '巨好吃的螺蛳粉，香一点，16:9',
+                '一杯星巴克拿铁咖啡，拉花精美',
+                '帮我画一只小猫',
+                '牛肉',
+                '一份招牌披萨，芝士拉丝，竖版',
+                '精致甜品，草莓蛋糕一块，搭配一杯红茶，白色盘子'
+            ];
+            const random = examples[Math.floor(Math.random() * examples.length)];
+            document.getElementById('testInput').value = random;
+        }
+
+        // ========== Toast ==========
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type + ' show';
+            setTimeout(() => { toast.classList.remove('show'); }, 2500);
+        }
+
+        // ========== Utils ==========
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            const div = document.createElement('div');
+            div.textContent = String(str);
+            return div.innerHTML;
+        }
+        function escapeAttr(str) {
+            if (str === null || str === undefined) return '';
+            return String(str).replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // ========== Init ==========
+        init();
+    </script>
+
+</body>
+</html>
