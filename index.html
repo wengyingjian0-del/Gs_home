@@ -4,126 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>产品展示</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    :root {
-      --bg: #f5f6f8;
-      --card: #fff;
-      --text: #1a1a1a;
-      --text-sub: #666;
-      --border: #eaeaea;
-      --accent: #1677ff;
-      --accent-hover: #0958d9;
-      --radius: 12px;
-      --shadow: 0 2px 12px rgba(0,0,0,0.06);
-    }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-    header {
-      text-align: center;
-      padding: 60px 20px 40px;
-    }
-    header h1 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    header p {
-      color: var(--text-sub);
-      font-size: 15px;
-    }
-    main {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 0 20px 60px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-    }
-    .card-cover {
-      height: 140px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      color: #fff;
-    }
-    .card-body {
-      padding: 20px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    .card-body h3 {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-    .card-body p {
-      color: var(--text-sub);
-      font-size: 14px;
-      line-height: 1.5;
-      flex: 1;
-    }
-    .card-tag {
-      display: inline-block;
-      margin-top: 14px;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 500;
-      width: fit-content;
-    }
-    .tag-demo { background: #e6f4ff; color: #1677ff; }
-    .tag-admin { background: #f6ffed; color: #52c41a; }
-    .tag-more { background: #f0f0f0; color: #999; }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>产品展示</h1>
-    <p>点击卡片查看产品详情</p>
-  </header>
-  <main>
-    <a class="card" href="meituan.html">
-      <div class="card-cover" style="background:linear-gradient(135deg,#FFD100,#FF6B35);">
-        <span>📷</span>
-      </div>
-      <div class="card-body">
-        <h3>美团商家 AI 生图</h3>
-        <p>让每一张图都为生意加分，AI 驱动的商家图片生成工具。</p>
-        <span class="card-tag tag-demo">产品 Demo</span>
-      </div>
-    </a>
-    <a class="card" href="admin-config.html">
-      <div class="card-cover" style="background:linear-gradient(135deg,#1A1A2E,#3478F6);">
-        <span>⚙️</span>
-      </div>
-      <div class="card-body">
-        <h3>运营后台 · 配置管理</h3>
-        <p>AI 生图运营后台，管理提示词模板、风格配置与生成参数。</p>
-        <span class="card-tag tag-admin">管理后台</span>
-      </div>
-    </a>
+  <main class="page">
+    <section class="hero">
+      <p class="eyebrow">Product Showcase</p>
+      <h1>我的产品</h1>
+      <p class="subtitle">
+        点击下方卡片，进入对应产品的完整 Demo。
+      </p>
+    </section>
+
+    <section class="cards" aria-label="产品列表">
+      <a class="card" href="meituan.html">
+        <span class="icon">01</span>
+        <h2>美团商家 AI 生图</h2>
+        <p>让每一张图都为生意加分。AI 驱动的商家图片生成工具，覆盖美食、美业、酒店等多个行业场景。</p>
+      </a>
+      <a class="card" href="admin-config.html">
+        <span class="icon">02</span>
+        <h2>运营后台 · 配置管理</h2>
+        <p>AI 生图运营后台，管理提示词模板、风格配置与生成参数，为商家提供灵活的定制能力。</p>
+      </a>
+    </section>
+
+    <section class="status">
+      <h2>持续更新中</h2>
+      <p id="deploy-status">更多产品即将上线，敬请期待。</p>
+    </section>
   </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
