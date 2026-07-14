@@ -1,0 +1,1166 @@
+/* ============================================
+   🌸 画芽乐园 - 迪士尼风格主题样式表 🌸
+   童趣天真 · 多彩梦幻 · 可爱温馨
+   ============================================ */
+
+/* ========== 色彩系统 ========== */
+:root {
+  /* 🎨 主色调 - 温暖粉橙色系 */
+  --color-primary: #FF6B9D;
+  --color-primary-light: #FF9A8B;
+  --color-primary-dark: #E8527F;
+  
+  /* 🌈 辅助色 - 多彩糖果色 */
+  --color-coral: #FF9A8B;
+  --color-sunshine: #FFD93D;
+  --color-sky: #74B9FF;
+  --color-mint: #A8E6CF;
+  --color-grass: #6BCF7F;
+  --color-sakura: #FFB6C1;
+  --color-lavender: #DDA0DD;
+  --color-peach: #FFA07A;
+  
+  /* 🎪 渐变色 */
+  --gradient-primary: linear-gradient(135deg, #FF9A8B 0%, #FF6B9D 50%, #FFA07A 100%);
+  --gradient-sunshine: linear-gradient(135deg, #FFD93D 0%, #FFA07A 100%);
+  --gradient-sky: linear-gradient(135deg, #74B9FF 0%, #A8E6CF 100%);
+  --gradient-mint: linear-gradient(135deg, #A8E6CF 0%, #6BCF7F 100%);
+  --gradient-rainbow: linear-gradient(135deg, #FFD93D 0%, #FF6B9D 25%, #74B9FF 50%, #A8E6CF 75%, #DDA0DD 100%);
+  
+  /* 🌸 背景色系 */
+  --bg-base: #FFF9F5;
+  --bg-soft: #FFF3EB;
+  --bg-card: #FFFFFF;
+  --bg-warm: linear-gradient(135deg, #FFF5F7 0%, #FFE5EC 50%, #E8F4FD 100%);
+  
+  /* 📝 文字色系 */
+  --text-primary: #4A3728;
+  --text-secondary: #8B6F5C;
+  --text-muted: #B89A85;
+  --text-on-brand: #FFFFFF;
+  
+  /* 🎯 功能色 */
+  --color-success: #6BCF7F;
+  --color-warning: #FFD93D;
+  --color-error: #FF6B6B;
+  --color-info: #74B9FF;
+  
+  /* 📐 圆角 */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-full: 999px;
+  
+  /* 📏 间距 */
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  
+  /* 🎭 阴影 */
+  --shadow-sm: 0 2px 8px rgba(255, 107, 157, 0.1);
+  --shadow-md: 0 4px 16px rgba(255, 107, 157, 0.15);
+  --shadow-lg: 0 8px 32px rgba(255, 107, 157, 0.2);
+  --shadow-xl: 0 12px 48px rgba(255, 107, 157, 0.25);
+  --shadow-inner: inset 0 2px 8px rgba(255, 107, 157, 0.1);
+  
+  /* ✨ 字体 */
+  --font-family: 'Nunito', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-size-xs: 13px;
+  --font-size-sm: 15px;
+  --font-size-md: 17px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
+  --font-size-hero: 32px;
+  
+  /* 🌟 动画时长 */
+  --duration-fast: 0.2s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.5s;
+}
+
+/* ========== 全局重置 ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-warm);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ========== 📱 手机端外壳 ========== */
+.phone-shell {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg-warm);
+  position: relative;
+  overflow: hidden;
+}
+
+.phone-shell::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(255, 217, 61, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(116, 185, 255, 0.1) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ========== 🎀 顶部导航栏 ========== */
+.topbar {
+  background: var(--gradient-primary);
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--text-on-brand);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.brand-mark {
+  background: white;
+  color: var(--color-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-5px) scale(1.05); }
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  border: 3px solid var(--color-sunshine);
+}
+
+.avatar:hover {
+  transform: scale(1.1) rotate(-5deg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ========== 🌈 内容区域 ========== */
+.content {
+  padding: var(--space-lg);
+  position: relative;
+  z-index: 1;
+}
+
+/* ========== 🌟 Hero 区域 ========== */
+.hero {
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 217, 61, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  left: -30px;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(168, 230, 207, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: twinkle 4s ease-in-out infinite 2s;
+}
+
+@keyframes twinkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+  50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+}
+
+.eyebrow {
+  color: var(--color-coral);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+}
+
+.eyebrow::before,
+.eyebrow::after {
+  content: '✨';
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hero h1 {
+  font-size: var(--font-size-hero);
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+  line-height: 1.3;
+  position: relative;
+  display: inline-block;
+}
+
+.hero h1::after {
+  content: '🌟';
+  position: absolute;
+  right: -35px;
+  top: -5px;
+  font-size: 20px;
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(10deg); }
+}
+
+.hero p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-md);
+  margin-bottom: var(--space-lg);
+}
+
+/* ========== 🎀 按钮系统 ========== */
+.primary {
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-md);
+  transition: all var(--duration-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.primary::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.primary:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+.secondary {
+  background: white;
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  padding: var(--space-md) var(--space-xl);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.secondary:hover {
+  background: var(--color-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ========== 📊 Section 标题 ========== */
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: var(--space-lg) 0 var(--space-md);
+}
+
+.section-title h2 {
+  font-size: var(--font-size-lg);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.section-title h2::before {
+  content: '💫';
+}
+
+.text-link {
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  position: relative;
+}
+
+.text-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--color-primary);
+  transition: width var(--duration-normal);
+}
+
+.text-link:hover::after {
+  width: 100%;
+}
+
+/* ========== 🎭 角色卡片 ========== */
+.character-row {
+  display: flex;
+  gap: var(--space-md);
+  overflow-x: auto;
+  padding-bottom: var(--space-sm);
+  scrollbar-width: none;
+}
+
+.character-row::-webkit-scrollbar {
+  display: none;
+}
+
+.character-card {
+  flex-shrink: 0;
+  width: 120px;
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  border: 3px solid transparent;
+  position: relative;
+}
+
+.character-card::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: var(--gradient-rainbow);
+  border-radius: var(--radius-lg);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--duration-normal);
+}
+
+.character-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+
+.character-card:hover::before {
+  opacity: 1;
+}
+
+.character-card.active {
+  border-color: var(--color-primary);
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.character-art {
+  font-size: 48px;
+  margin-bottom: var(--space-xs);
+  animation: float 3s ease-in-out infinite;
+}
+
+.character-card strong {
+  font-size: var(--font-size-sm);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.character-card small {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  display: block;
+}
+
+.character-card.active small {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.add-card {
+  border: 2px dashed var(--color-primary);
+  background: rgba(255, 107, 157, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-card span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-primary);
+}
+
+.add-card .plus {
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* ========== 🖼️ 作品卡片 ========== */
+.work-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  display: flex;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  margin-bottom: var(--space-md);
+}
+
+.work-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.work-thumb {
+  width: 80px;
+  height: 80px;
+  background: var(--gradient-mint);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  flex-shrink: 0;
+}
+
+.work-info {
+  flex: 1;
+}
+
+.work-info h3 {
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.work-info p {
+  font-size: var(--font-size-xs);
+  color: var(--text-secondary);
+}
+
+/* ========== 📝 底部导航 ========== */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  display: flex;
+  justify-content: space-around;
+  padding: var(--space-sm) var(--space-md);
+  box-shadow: 0 -4px 16px rgba(255, 107, 157, 0.1);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  z-index: 1000;
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-sm);
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  border-radius: var(--radius-md);
+}
+
+.nav-item span {
+  font-size: 24px;
+  transition: transform var(--duration-normal);
+}
+
+.nav-item:hover {
+  color: var(--color-primary);
+}
+
+.nav-item:hover span {
+  transform: scale(1.2) rotate(-5deg);
+}
+
+.nav-item.active {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-item.active span {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+/* ========== 🎨 引导式创建界面 ========== */
+.wizard {
+  background: var(--bg-warm);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+.wizard-main {
+  padding: var(--space-lg);
+}
+
+.wizard-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.wizard-top .back {
+  width: 48px;
+  height: 48px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 28px;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.wizard-top .back:hover {
+  background: var(--color-primary);
+  color: white;
+  transform: rotate(-10deg);
+}
+
+.progress {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 107, 157, 0.2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress i {
+  display: block;
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-full);
+  transition: width var(--duration-slow);
+}
+
+.step-count {
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+/* ========== 🌟 引导气泡 ========== */
+.guide {
+  background: white;
+  border-radius: var(--radius-xl);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+.guide::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 30px;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid white;
+}
+
+.guide-face {
+  width: 80px;
+  height: 80px;
+  background: var(--gradient-mint);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  margin: 0 auto var(--space-md);
+  box-shadow: var(--shadow-md);
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.bubble h1 {
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+  text-align: center;
+}
+
+.bubble p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+/* ========== 🎯 选项网格 ========== */
+.option-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.option {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  border: 3px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.option::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 217, 61, 0.3) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--duration-normal);
+  animation: spin 10s linear infinite;
+}
+
+.option:hover::before {
+  opacity: 1;
+}
+
+.option:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.option.selected {
+  border-color: var(--color-primary);
+  background: var(--gradient-primary);
+  color: white;
+}
+
+.option.selected::before {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  opacity: 1;
+}
+
+.option-emoji {
+  font-size: 48px;
+  display: block;
+  margin-bottom: var(--space-sm);
+  position: relative;
+  z-index: 1;
+  animation: float 3s ease-in-out infinite;
+}
+
+.option strong {
+  font-size: var(--font-size-md);
+  display: block;
+  margin-bottom: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.option small {
+  font-size: var(--font-size-xs);
+  display: block;
+  opacity: 0.8;
+  position: relative;
+  z-index: 1;
+}
+
+/* ========== 📝 输入区域 ========== */
+.free-input {
+  width: 100%;
+  min-height: 100px;
+  background: white;
+  border: 2px solid rgba(255, 107, 157, 0.2);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  resize: none;
+  transition: all var(--duration-normal);
+  font-family: var(--font-family);
+}
+
+.free-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.voice-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.voice-row button {
+  background: var(--gradient-sky);
+  color: white;
+  border: none;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.voice-row button:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.voice-row span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+/* ========== ❌ 错误提示 ========== */
+.error-box {
+  background: linear-gradient(135deg, #FFE5E5, #FFF0F0);
+  border-left: 4px solid var(--color-error);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin: var(--space-md) 0;
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.error-box::before {
+  content: '⚠️';
+  font-size: 20px;
+}
+
+/* ========== 🎬 生成中动画 ========== */
+.generating {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--space-lg);
+  text-align: center;
+}
+
+.magic-orb {
+  width: 120px;
+  height: 120px;
+  background: var(--gradient-rainbow);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-xl);
+  animation: pulse 2s ease-in-out infinite, rotate 10s linear infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); box-shadow: var(--shadow-lg); }
+  50% { transform: scale(1.1); box-shadow: var(--shadow-xl); }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.generating h1 {
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.generating p {
+  color: var(--text-secondary);
+  font-size: var(--font-size-md);
+  margin-bottom: var(--space-lg);
+  max-width: 300px;
+}
+
+.dots {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.dots i {
+  width: 12px;
+  height: 12px;
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  animation: bounce 1.5s ease-in-out infinite;
+}
+
+.dots i:nth-child(1) { animation-delay: 0s; }
+.dots i:nth-child(2) { animation-delay: 0.2s; }
+.dots i:nth-child(3) { animation-delay: 0.4s; }
+.dots i:nth-child(4) { animation-delay: 0.6s; }
+
+.generating small {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+}
+
+/* ========== 🖼️ 结果页 ========== */
+.result-page {
+  min-height: 100vh;
+  background: var(--bg-warm);
+}
+
+.result-top {
+  background: var(--gradient-primary);
+  padding: var(--space-md) var(--space-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.result-top button {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  transition: all var(--duration-normal);
+}
+
+.result-top button:hover {
+  background: white;
+  color: var(--color-primary);
+  transform: rotate(-10deg);
+}
+
+.result-top strong {
+  font-size: var(--font-size-lg);
+}
+
+.scene-image {
+  width: 100%;
+  height: 60vh;
+  background: white;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.scene-image img {
+  object-fit: contain;
+}
+
+.demo-scene {
+  width: 100%;
+  height: 100%;
+  background: var(--gradient-mint);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 120px;
+  position: relative;
+}
+
+.scene-caption {
+  position: absolute;
+  bottom: var(--space-lg);
+  left: var(--space-lg);
+  right: var(--space-lg);
+  background: rgba(255, 255, 255, 0.95);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+  text-align: center;
+  box-shadow: var(--shadow-md);
+}
+
+.result-actions {
+  padding: var(--space-lg);
+}
+
+.action-row {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.action {
+  flex: 1;
+  min-width: 80px;
+  background: white;
+  border: 2px solid rgba(255, 107, 157, 0.2);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.action:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.action span {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.result-primary-row {
+  display: flex;
+  gap: var(--space-md);
+}
+
+.result-primary-row button {
+  flex: 1;
+}
+
+/* ========== 📋 作品中心 ========== */
+.notice {
+  background: linear-gradient(135deg, #E8F8F0, #F0FFF4);
+  border-left: 4px solid var(--color-success);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin: var(--space-lg) 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-primary);
+}
+
+/* ========== 👨‍👩‍👧 家长管理 ========== */
+.parent-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.toggle {
+  width: 56px;
+  height: 32px;
+  background: rgba(255, 107, 157, 0.2);
+  border-radius: var(--radius-full);
+  position: relative;
+  cursor: pointer;
+  transition: all var(--duration-normal);
+  border: none;
+  padding: 0;
+}
+
+.toggle i {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  transition: all var(--duration-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.toggle.on {
+  background: var(--gradient-primary);
+}
+
+.toggle.on i {
+  left: 28px;
+}
+
+.parent-card h3 {
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+
+.parent-card p {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+/* ========== 🎪 动画工具类 ========== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.slide-in {
+  animation: slideIn 0.5s ease-out;
+}
+
+/* ========== 📱 响应式优化 ========== */
+@media (max-width: 380px) {
+  .option-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero h1 {
+    font-size: var(--font-size-xl);
+  }
+  
+  .action-row {
+    flex-direction: column;
+  }
+  
+  .action {
+    width: 100%;
+  }
+}
+
+/* ========== 🌟 特殊效果 ========== */
+.sparkle {
+  position: absolute;
+  font-size: 24px;
+  animation: twinkle 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.sparkle:nth-child(odd) {
+  animation-delay: 0.5s;
+}
+
+/* ========== 💫 悬浮装饰 ========== */
+.float-decor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.float-decor.star {
+  font-size: 20px;
+  animation: float 4s ease-in-out infinite;
+}
+
+.float-decor.heart {
+  font-size: 24px;
+  animation: float 5s ease-in-out infinite reverse;
+}
