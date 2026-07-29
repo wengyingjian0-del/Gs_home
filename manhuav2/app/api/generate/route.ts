@@ -1,4 +1,4 @@
-import { env } from "cloudflare:workers";
+import { env } from "@/lib/runtime-env";
 import { Buffer } from "node:buffer";
 import { buildGenerationPrompt, buildQueryContext, buildRefinementPrompt, buildVisualDescription, callWan, decodeGenerationContext, encodeGenerationContext, evaluateCandidates, GenerateInput, getRuntimeConfig, inferCharacterKind, inferEditIntent, rewriteQueryWithContext, validateChildSafeInput } from "@/lib/generation";
 import { GenerationTimeoutError, isTimeoutLikeError, remainingGenerationMs, runTimedStage } from "@/lib/generation-timeout";

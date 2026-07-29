@@ -3,37 +3,127 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>产品展示</title>
+  <meta name="description" content="GS 产品作品集：探索 AI 驱动的产品体验。">
+  <title>GS 产品作品集</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="page">
-    <section class="hero">
-      <p class="eyebrow">Product Showcase</p>
-      <h1>我的产品</h1>
-      <p class="subtitle">
-        点击下方卡片，进入对应产品的完整 Demo。
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="返回首页">
+      <span class="brand-mark">GS</span>
+      <span>产品作品集</span>
+    </a>
+    <a class="header-link" href="#products">查看产品 <span aria-hidden="true">↓</span></a>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="page-title">
+      <p class="eyebrow"><span></span> Product portfolio</p>
+      <h1 id="page-title">把想法，做成<br><em>真正可用的产品。</em></h1>
+      <p class="hero-copy">
+        这里收录了我正在设计与打磨的 AI 产品。了解产品解决的问题、核心能力与使用场景，然后直接进入完整体验。
       </p>
-    </section>
-
-    <section class="cards" aria-label="产品列表">
-      <a class="card" href="meituan.html">
-        <span class="icon">01</span>
-        <h2>美团商家 AI 生图</h2>
-        <p>让每一张图都为生意加分。AI 驱动的商家图片生成工具，覆盖美食、美业、酒店等多个行业场景。</p>
-      </a>
-      <a class="card" href="admin-config.html">
-        <span class="icon">02</span>
-        <h2>运营后台 · 配置管理</h2>
-        <p>AI 生图运营后台，管理提示词模板、风格配置与生成参数，为商家提供灵活的定制能力。</p>
+      <a class="hero-action" href="#products">
+        探索我的产品
+        <span aria-hidden="true">↘</span>
       </a>
     </section>
 
-    <section class="status">
-      <h2>持续更新中</h2>
-      <p id="deploy-status">更多产品即将上线，敬请期待。</p>
+    <section class="products" id="products" aria-labelledby="products-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Selected work · 02</p>
+          <h2 id="products-title">我的产品</h2>
+        </div>
+        <p>从真实业务场景出发，让 AI 能力变得清晰、简单，并且可以直接上手使用。</p>
+      </div>
+
+      <article class="product-card">
+        <a class="product-main" href="meituan.html" aria-label="进入美团商家 AI 生图产品">
+          <div class="product-topline">
+            <span class="product-index">01</span>
+            <span class="product-status"><i></i> 可体验</span>
+          </div>
+
+          <div class="product-content">
+            <div>
+              <p class="product-label">AI IMAGE STUDIO · 商家经营工具</p>
+              <h3>美团商家<br>AI 生图</h3>
+            </div>
+            <div class="product-description">
+              <p>
+                面向餐饮、美业与酒店等本地生活商家，通过 AI 快速生成符合经营场景的高质量图片，让商品展示、营销活动与门店内容制作更高效。
+              </p>
+              <ul aria-label="产品核心能力">
+                <li>多行业场景模板</li>
+                <li>品牌风格与画面参数配置</li>
+                <li>从需求输入到图片结果的完整体验</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="product-footer">
+            <span class="enter-product">进入产品 <b aria-hidden="true">↗</b></span>
+            <span class="product-meta">Web Demo · 2026</span>
+          </div>
+        </a>
+
+        <aside class="admin-entry">
+          <div>
+            <span class="admin-label">配套管理端</span>
+            <h4>运营后台 · 配置管理</h4>
+            <p>管理提示词模板、风格配置和生成参数，支撑商家端灵活、稳定地生成内容。</p>
+          </div>
+          <a href="admin-config.html">进入管理后台 <span aria-hidden="true">→</span></a>
+        </aside>
+      </article>
+
+      <article class="product-card comic-card">
+        <a class="product-main comic-main" href="http://101.37.91.201:3000/" aria-label="进入漫小星漫画创作工坊">
+          <div class="product-topline">
+            <span class="product-index">02</span>
+            <span class="product-status"><i></i> 可体验</span>
+          </div>
+
+          <div class="product-content">
+            <div>
+              <p class="product-label">AI COMIC STUDIO · 儿童创作工具</p>
+              <h3>漫小星<br>漫画创作工坊</h3>
+            </div>
+            <div class="product-description">
+              <p>
+                面向 8—12 岁儿童与家长的 AI 漫画创作产品。孩子可以创建固定角色、选择故事场景，让自己的想法一步步变成风格统一的漫画作品。
+              </p>
+              <ul aria-label="产品核心能力">
+                <li>引导式角色与场景创作</li>
+                <li>AI 四格漫画与连续故事生成</li>
+                <li>作品历史、角色复用与家长管理</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="product-footer">
+            <span class="enter-product">进入产品 <b aria-hidden="true">↗</b></span>
+            <span class="product-meta">H5 / PWA · 2026</span>
+          </div>
+        </a>
+
+        <aside class="admin-entry comic-admin-entry">
+          <div>
+            <span class="admin-label">配套管理端</span>
+            <h4>漫小星 · 内容审核后台</h4>
+            <p>查看漫画生成候选、模型评分、入选结果与优化过程，支持对儿童创作内容进行质量复核。</p>
+          </div>
+          <a href="http://101.37.91.201:3000/admin">进入审核后台 <span aria-hidden="true">→</span></a>
+        </aside>
+      </article>
     </section>
   </main>
+
+  <footer>
+    <p>持续探索 AI 与真实需求之间的更多可能。</p>
+    <p>GS PRODUCT PORTFOLIO · <span id="year">2026</span></p>
+  </footer>
 
   <script src="script.js"></script>
 </body>
