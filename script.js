@@ -1,6 +1,5 @@
-const statusEl = document.querySelector("#deploy-status");
+const year = document.querySelector("#year");
 
-if (statusEl) {
-  const now = new Date();
-  statusEl.textContent = `更多产品正在打磨中 · 最后更新：${now.toLocaleString("zh-CN")}`;
+if (year) {
+  year.textContent = new Date().getFullYear();
 }

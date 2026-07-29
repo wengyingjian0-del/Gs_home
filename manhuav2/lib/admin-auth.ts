@@ -1,4 +1,4 @@
-import { env } from "cloudflare:workers";
+import { env } from "@/lib/runtime-env";
 
 export const ADMIN_COOKIE = "huaya_admin_session";
 

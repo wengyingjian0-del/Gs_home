@@ -14,6 +14,17 @@ type ChatMessage = { id: string; role: "user" | "assistant"; text?: string; imag
 type PendingIncomplete = { text: string; chatTurn: boolean };
 type FailedGeneration = { text: string; chatTurn: boolean };
 
+function createClientId() {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, character => {
+    const random = Math.floor(Math.random() * 16);
+    const value = character === "x" ? random : (random & 0x3) | 0x8;
+    return value.toString(16);
+  });
+}
+
 const characterSteps: Step[] = [
   { key: "type", title: "想创造谁？", hint: "先选一个你喜欢的主角类型", choices: [{ label: "勇敢男孩", emoji: "🧒", note: "爱探索" }, { label: "聪明女孩", emoji: "👧", note: "点子多" }, { label: "机器伙伴", emoji: "🤖", note: "未来感" }, { label: "动物朋友", emoji: "🐰", note: "毛茸茸" }] },
   { key: "hair", title: "角色是什么发型？", hint: "这个特征会一直保留", choices: [{ label: "蓬松短发", emoji: "☁️" }, { label: "俏皮双辫", emoji: "🎀" }, { label: "酷酷卷发", emoji: "🌀" }, { label: "戴着帽子", emoji: "🧢" }] },
@@ -186,7 +197,7 @@ export function CreatorApp() {
   }
 
   function saveCharacter() {
-    const id = activeCharacterId || crypto.randomUUID();
+    const id = activeCharacterId || createClientId();
     setCharacters(previous => {
       const existingIndex = previous.findIndex(item => item.id === id);
       const fallbackName = existingIndex >= 0 ? previous[existingIndex].name : `小芽${previous.length ? previous.length + 1 : ""}`;
@@ -277,7 +288,7 @@ export function CreatorApp() {
     if (chatTurn && !requestText) return;
     if (!allowIncomplete) setPendingIncomplete(undefined);
     if (chatTurn && !reusePending) {
-      setChatMessages(previous => [...previous, { id: crypto.randomUUID(), role: "user", text: requestText, createdAt: new Date().toISOString() }]);
+      setChatMessages(previous => [...previous, { id: createClientId(), role: "user", text: requestText, createdAt: new Date().toISOString() }]);
       setChatInput("");
       setFreeText(requestText);
       setEditIntent("extra");
@@ -286,7 +297,7 @@ export function CreatorApp() {
     setError("");
     setCanRetryGeneration(false);
     setGenerationStage("正在理解故事和角色设定");
-    const jobId = crypto.randomUUID();
+    const jobId = createClientId();
     const controller = new AbortController();
     const timeout = window.setTimeout(() => controller.abort(), 180_000);
     const poll = window.setInterval(async () => {
@@ -321,9 +332,9 @@ export function CreatorApp() {
       setImageUrl(data.imageUrl);
       setReferenceKey(data.referenceKey);
       if (data.referenceKey) {
-        const item: ArtworkHistory = { id: crypto.randomUUID(), imageUrl: data.imageUrl, referenceKey: data.referenceKey, summary: requestText || summary, createdAt: new Date().toISOString(), character: { ...character }, scene: { ...scene }, compositionMode, extraDescription: requestText };
+        const item: ArtworkHistory = { id: createClientId(), imageUrl: data.imageUrl, referenceKey: data.referenceKey, summary: requestText || summary, createdAt: new Date().toISOString(), character: { ...character }, scene: { ...scene }, compositionMode, extraDescription: requestText };
         setArtworks(previous => [item, ...previous.filter(old => old.referenceKey !== item.referenceKey)]);
-        setChatMessages(previous => [...previous, { id: crypto.randomUUID(), role: "assistant", text: chatTurn ? "已经按照你的新要求画好了。" : "基础场景画好了，可以继续告诉我怎么修改。", imageUrl: data.imageUrl, referenceKey: data.referenceKey, createdAt: new Date().toISOString() }]);
+        setChatMessages(previous => [...previous, { id: createClientId(), role: "assistant", text: chatTurn ? "已经按照你的新要求画好了。" : "基础场景画好了，可以继续告诉我怎么修改。", imageUrl: data.imageUrl, referenceKey: data.referenceKey, createdAt: new Date().toISOString() }]);
       }
       setView("chat");
     } catch (cause) {

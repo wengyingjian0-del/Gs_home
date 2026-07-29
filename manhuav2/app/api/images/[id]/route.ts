@@ -1,4 +1,4 @@
-import { env } from "cloudflare:workers";
+import { env } from "@/lib/runtime-env";
 
 type StoredObject = { body: ReadableStream; httpMetadata?: { contentType?: string }; writeHttpMetadata?(headers: Headers): void };
 type Bucket = { get(key: string): Promise<StoredObject | null> };

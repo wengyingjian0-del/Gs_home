@@ -1,4 +1,4 @@
-import { env } from "cloudflare:workers";
+import { env } from "@/lib/runtime-env";
 import { validateChildSafeInput } from "@/lib/generation";
 
 type Panel = { title: string; scene: string; action: string; emotion: string; background: string; dialogue: string; narration: string };
