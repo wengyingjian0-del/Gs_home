@@ -476,7 +476,7 @@
             </div>
         </div>
         <div class="header-right">
-            <a href="meituan-ai-image-demo.html" class="header-link primary" target="_blank">
+            <a href="/" class="header-link primary">
                 🖥️ 打开用户端
             </a>
         </div>
@@ -1034,12 +1034,9 @@
     <script>
         // ========== API Config ==========
         // LLM 解析（智谱 GLM-4-air）
-        const API_KEY = "b1ae57755145402cae10cf0fdf998435.isLNl8ntbg85z77r";
-        const CHAT_API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
-
-        // 图片生成（阿里云 DashScope · Wan2.7）
-        const IMAGE_API_KEY = "sk-ws-H.EMRXRML.DHeo.MEUCIQCwBifOKH6grw_aZxYRTewgTb0ao8Sa0RBLUan78H-6tQIgKAPoo309lU3XmKVoHKaTtxKvj4NZ2HWJxNr3-18mZI8";
-        const IMAGE_API_URL = "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation";
+        // API 请求统一通过同源服务端转发，密钥仅保存在服务器环境变量中。
+        const CHAT_API_URL = "/api/chat";
+        const IMAGE_API_URL = "/api/generate";
 
         // ========== Storage Keys (与用户端共享) ==========
         const STORAGE_KEY = "meituan_ai_config";
@@ -2403,8 +2400,7 @@
                 const response = await fetch(CHAT_API_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${API_KEY}`
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         model: parseModel,
@@ -2491,8 +2487,7 @@
                 const resp = await fetch(IMAGE_API_URL, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${IMAGE_API_KEY}`
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(body)
                 });

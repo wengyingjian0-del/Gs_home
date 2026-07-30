@@ -1,0 +1,25 @@
+[Unit]
+Description=Meituan AI Image Studio
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/Gs_home
+Environment=NODE_ENV=production
+Environment=PORT=3001
+EnvironmentFile=/etc/meituan-ai.env
+ExecStart=/usr/bin/node /opt/Gs_home/meituan-server/server.js
+Restart=always
+RestartSec=3
+User=www-data
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+[Install]
+WantedBy=multi-user.target
