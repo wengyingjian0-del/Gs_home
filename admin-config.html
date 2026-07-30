@@ -763,7 +763,9 @@
                     <div class="form-row" style="margin-bottom:0;">
                         <div class="form-label"><span>解析模型</span><span class="label-hint">执行系统提示词的LLM</span></div>
                         <select class="form-select" id="parseModel">
-                            <option value="glm-4-air">glm-4-air（推荐 · 均衡）</option>
+                            <option value="qwen-plus">qwen-plus（推荐 · 均衡）</option>
+                            <option value="qwen-turbo">qwen-turbo（快速 · 经济）</option>
+                            <option value="qwen-max">qwen-max（更强 · 成本较高）</option>
                             <option value="glm-4-flash">glm-4-flash（快速 · 轻量）</option>
                             <option value="glm-4-plus">glm-4-plus（强力 · 高质量）</option>
                             <option value="glm-4">glm-4（标准）</option>
@@ -1299,7 +1301,7 @@
                 promptA: { systemPrompt: DEFAULT_SYSTEM_PROMPT, enabled: true },
                 promptB: { systemPrompt: DEFAULT_SYSTEM_PROMPT, enabled: false },
                 categoryTemplates: JSON.parse(JSON.stringify(DEFAULT_CATEGORIES)),
-                parseModel: 'glm-4-air',
+                parseModel: 'qwen-plus',
                 imageModel: 'wan2.7-image',
                 quality: 'hd',
                 temperature: 0.1,
@@ -2197,7 +2199,7 @@
                 promptA: { systemPrompt: '', enabled: true },
                 promptB: { systemPrompt: '', enabled: false },
                 categoryTemplates: [],
-                parseModel: 'glm-4-air',
+                parseModel: 'qwen-plus',
                 imageModel: 'wan2.7-image',
                 quality: 'hd',
                 temperature: 0.1,

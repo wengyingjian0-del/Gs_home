@@ -1500,7 +1500,7 @@
             promptA: { systemPrompt: DEFAULT_SYSTEM_PROMPT, enabled: true },
             promptB: { systemPrompt: '', enabled: false },
             categoryTemplates: DEFAULT_CATEGORY_TEMPLATES,
-            parseModel: 'glm-4-air',
+            parseModel: 'qwen-plus',
             imageModel: 'wan2.7-image',
             quality: 'hd',
             temperature: 0.1,
@@ -2110,7 +2110,7 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    model: config.parseModel || 'glm-4-air',
+                    model: config.parseModel || 'qwen-plus',
                     messages: [
                         { role: 'system', content: getActiveSystemPrompt() },
                         { role: 'user', content: userMessage }
