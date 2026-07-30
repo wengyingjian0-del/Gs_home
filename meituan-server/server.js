@@ -52,8 +52,7 @@ async function readBody(request) {
     chunks.push(chunk);
   }
   const text = Buffer.concat(chunks).toString("utf8");
-  JSON.parse(text);
-  return text;
+  return JSON.parse(text);
 }
 
 async function proxyApi(request, response, configuration) {
@@ -95,7 +94,7 @@ async function proxyApi(request, response, configuration) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
-      body,
+      body: JSON.stringify(configuration.transformBody ? configuration.transformBody(body) : body),
       signal: AbortSignal.timeout(configuration.timeoutMs),
     });
     const contentType = upstream.headers.get("content-type") || "application/json; charset=utf-8";
@@ -135,19 +134,25 @@ const server = createServer(async (request, response) => {
   if (url.pathname === "/health") {
     sendJson(response, 200, {
       status: "ok",
-      chatConfigured: Boolean(process.env.ZHIPU_API_KEY),
+      chatConfigured: Boolean(process.env.DASHSCOPE_API_KEY),
       imageConfigured: Boolean(process.env.DASHSCOPE_API_KEY),
     });
     return;
   }
   if (url.pathname === "/api/chat") {
     await proxyApi(request, response, {
-      keyName: "ZHIPU_API_KEY",
-      url: process.env.ZHIPU_API_URL || "https://open.bigmodel.cn/api/paas/v4/chat/completions",
+      keyName: "DASHSCOPE_API_KEY",
+      url:
+        process.env.DASHSCOPE_CHAT_API_URL ||
+        "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
       timeoutMs: 45_000,
       bucketName: "chat",
       maximumRequests: 30,
       windowMs: 60 * 60_000,
+      transformBody: (body) => ({
+        ...body,
+        model: process.env.DASHSCOPE_CHAT_MODEL || "qwen-plus",
+      }),
     });
     return;
   }
