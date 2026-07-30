@@ -1306,12 +1306,9 @@
 
     <script>
         // ========== API Configuration ==========
-        // 生图API（阿里Wan2.7-Image）
-        const API_KEY = "sk-ws-H.EMRXRML.DHeo.MEUCIQCwBifOKH6grw_aZxYRTewgTb0ao8Sa0RBLUan78H-6tQIgKAPoo309lU3XmKVoHKaTtxKvj4NZ2HWJxNr3-18mZI8";
-        const API_URL = "https://dashscope.aliyuncs.com/api/v1/services/aigc/multimodal-generation/generation";
-        // LLM解析API（智谱GLM-4-air，保持不变）
-        const CHAT_API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
-        const CHAT_API_KEY = "b1ae57755145402cae10cf0fdf998435.isLNl8ntbg85z77r";
+        // API 请求统一通过同源服务端转发，密钥仅保存在服务器环境变量中。
+        const API_URL = "/api/generate";
+        const CHAT_API_URL = "/api/chat";
 
         // ========== Storage Keys ==========
         const CONFIG_STORAGE_KEY = "meituan_ai_config";
@@ -2110,8 +2107,7 @@
             const response = await fetch(CHAT_API_URL, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${CHAT_API_KEY}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     model: config.parseModel || 'glm-4-air',
@@ -2272,8 +2268,7 @@
             const response = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${API_KEY}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(requestBody)
             });
