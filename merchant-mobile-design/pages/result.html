@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成结果</title>
+    <style id="theme-vars">
+/* ========================================
+   商图 Mobile — Dark Luxury Brand CSS
+   ======================================== */
+
+:root {
+  /* --- Surface System (Dark) --- */
+  --mt-bg-base: #0a0a0c;
+  --mt-bg-elevated: #121216;
+  --mt-bg-card: rgba(255, 255, 255, 0.035);
+  --mt-bg-card-hover: rgba(255, 255, 255, 0.06);
+  --mt-bg-glass: rgba(255, 255, 255, 0.045);
+  --mt-bg-input: rgba(255, 255, 255, 0.025);
+  --mt-bg-overlay: rgba(0, 0, 0, 0.72);
+
+  /* --- Text System --- */
+  --mt-text-primary: #f5f0e8;
+  --mt-text-secondary: #9a958d;
+  --mt-text-tertiary: #5c5a54;
+  --mt-text-inverse: #0a0a0c;
+
+  /* --- Brand Accent (Warm Gold) --- */
+  --mt-gold: #d4a356;
+  --mt-gold-bright: #e8bd6e;
+  --mt-gold-deep: #b88638;
+  --mt-gold-glow: rgba(212, 163, 86, 0.15);
+  --mt-gold-glow-strong: rgba(212, 163, 86, 0.28);
+
+  /* --- Status Colors --- */
+  --mt-success: #5b9b6e;
+  --mt-error: #c75c5c;
+  --mt-warning: #d4a356;
+  --mt-info: #6b8db5;
+
+  /* --- Border System --- */
+  --mt-border-subtle: rgba(255, 255, 255, 0.06);
+  --mt-border-default: rgba(255, 255, 255, 0.09);
+  --mt-border-strong: rgba(255, 255, 255, 0.14);
+  --mt-border-gold: rgba(212, 163, 86, 0.3);
+
+  /* --- Radius --- */
+  --mt-radius-sm: 8px;
+  --mt-radius-md: 12px;
+  --mt-radius-lg: 16px;
+  --mt-radius-xl: 20px;
+  --mt-radius-full: 9999px;
+
+  /* --- Shadows --- */
+  --mt-shadow-card: 0 1px 0 rgba(255,255,255,0.04) inset, 0 12px 40px rgba(0,0,0,0.4);
+  --mt-shadow-elevated: 0 1px 0 rgba(255,255,255,0.06) inset, 0 20px 60px rgba(0,0,0,0.5);
+  --mt-shadow-gold: 0 0 24px rgba(212, 163, 86, 0.12);
+  --mt-shadow-btn: 0 4px 16px rgba(212, 163, 86, 0.2);
+
+  /* --- Typography --- */
+  --mt-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --mt-font-serif: "Noto Serif SC", "Songti SC", "STSong", serif;
+  --mt-font-mono: "SF Mono", "JetBrains Mono", "Fira Code", monospace;
+
+  /* --- Semantic Tailwind Theme Aliases --- */
+  --mt-background: var(--mt-bg-base);
+  --mt-foreground: var(--mt-text-primary);
+  --mt-card: var(--mt-bg-card);
+  --mt-card-foreground: var(--mt-text-primary);
+  --mt-popover: var(--mt-bg-elevated);
+  --mt-popover-foreground: var(--mt-text-primary);
+  --mt-primary: var(--mt-gold);
+  --mt-primary-foreground: var(--mt-text-inverse);
+  --mt-secondary: var(--mt-bg-card);
+  --mt-secondary-foreground: var(--mt-text-primary);
+  --mt-muted: var(--mt-text-tertiary);
+  --mt-muted-foreground: var(--mt-text-secondary);
+  --mt-accent: var(--mt-gold-glow);
+  --mt-accent-foreground: var(--mt-gold-bright);
+  --mt-destructive: var(--mt-error);
+  --mt-destructive-foreground: var(--mt-text-primary);
+  --mt-border: var(--mt-border-default);
+  --mt-input: var(--mt-bg-input);
+  --mt-ring: var(--mt-gold);
+}
+
+/* --- Font Imports --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@600;700;900&display=swap');
+
+/* --- Base --- */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--mt-font-sans);
+  background: var(--mt-bg-base);
+  color: var(--mt-text-primary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* --- Ambient Background --- */
+.mt-ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212, 163, 86, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 30%, rgba(212, 163, 86, 0.04), transparent),
+    radial-gradient(ellipse 50% 35% at 20% 60%, rgba(184, 134, 56, 0.03), transparent),
+    var(--mt-bg-base);
+}
+
+/* --- Typography Classes --- */
+.mt-font-display {
+  font-family: var(--mt-font-serif);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.mt-font-body {
+  font-family: var(--mt-font-sans);
+  font-weight: 400;
+}
+
+.mt-font-label {
+  font-family: var(--mt-font-sans);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+/* --- Glass Card --- */
+.mt-glass {
+  background: var(--mt-bg-card);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border: 1px solid var(--mt-border-subtle);
+  border-radius: var(--mt-radius-lg);
+  box-shadow: var(--mt-shadow-card);
+}
+
+.mt-glass-elevated {
+  background: var(--mt-bg-glass);
+  backdrop-filter: blur(24px) saturate(1.3);
+  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  border: 1px solid var(--mt-border-default);
+  border-radius: var(--mt-radius-xl);
+  box-shadow: var(--mt-shadow-elevated);
+}
+
+/* --- Gold Accent --- */
+.mt-gold-text {
+  color: var(--mt-gold);
+}
+
+.mt-gold-gradient {
+  background: linear-gradient(135deg, var(--mt-gold-bright), var(--mt-gold-deep));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mt-gold-border {
+  border: 1px solid var(--mt-border-gold);
+}
+
+/* --- Button --- */
+.mt-btn-gold {
+  background: linear-gradient(135deg, var(--mt-gold), var(--mt-gold-deep));
+  color: var(--mt-text-inverse);
+  font-weight: 700;
+  border: none;
+  border-radius: var(--mt-radius-md);
+  box-shadow: var(--mt-shadow-btn);
+  transition: all 0.2s ease;
+}
+
+.mt-btn-gold:hover,
+.mt-btn-gold:active {
+  background: linear-gradient(135deg, var(--mt-gold-bright), var(--mt-gold));
+  box-shadow: 0 6px 24px rgba(212, 163, 86, 0.3);
+}
+
+.mt-btn-ghost {
+  background: var(--mt-bg-card);
+  color: var(--mt-text-primary);
+  border: 1px solid var(--mt-border-default);
+  border-radius: var(--mt-radius-md);
+  transition: all 0.2s ease;
+}
+
+.mt-btn-ghost:hover,
+.mt-btn-ghost:active {
+  background: var(--mt-bg-card-hover);
+  border-color: var(--mt-border-strong);
+}
+
+/* --- Input --- */
+.mt-input {
+  background: var(--mt-bg-input);
+  border: 1px solid var(--mt-border-default);
+  border-radius: var(--mt-radius-md);
+  color: var(--mt-text-primary);
+  transition: all 0.2s ease;
+}
+
+.mt-input:focus {
+  outline: none;
+  border-color: var(--mt-border-gold);
+  box-shadow: 0 0 0 3px var(--mt-gold-glow);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.mt-input::placeholder {
+  color: var(--mt-text-tertiary);
+}
+
+/* --- Chip / Tag --- */
+.mt-chip {
+  background: var(--mt-bg-card);
+  border: 1px solid var(--mt-border-default);
+  border-radius: var(--mt-radius-full);
+  color: var(--mt-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mt-chip:hover {
+  border-color: var(--mt-border-strong);
+  color: var(--mt-text-primary);
+}
+
+.mt-chip.active {
+  background: var(--mt-gold-glow);
+  border-color: var(--mt-border-gold);
+  color: var(--mt-gold-bright);
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* --- Animations --- */
+@keyframes mt-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes mt-glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(212, 163, 86, 0.1); }
+  50% { box-shadow: 0 0 32px rgba(212, 163, 86, 0.2); }
+}
+
+@keyframes mt-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mt-animate-fade-up {
+  animation: mt-fade-up 0.5s ease-out both;
+}
+
+/* --- Mobile Container --- */
+.mt-mobile-frame {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--mt-background);
+    --color-foreground: var(--mt-foreground);
+    --color-card: var(--mt-card);
+    --color-card-foreground: var(--mt-card-foreground);
+    --color-popover: var(--mt-popover);
+    --color-popover-foreground: var(--mt-popover-foreground);
+    --color-primary: var(--mt-primary);
+    --color-primary-foreground: var(--mt-primary-foreground);
+    --color-secondary: var(--mt-secondary);
+    --color-secondary-foreground: var(--mt-secondary-foreground);
+    --color-muted: var(--mt-muted);
+    --color-muted-foreground: var(--mt-muted-foreground);
+    --color-accent: var(--mt-accent);
+    --color-accent-foreground: var(--mt-accent-foreground);
+    --color-destructive: var(--mt-destructive);
+    --color-destructive-foreground: var(--mt-destructive-foreground);
+    --color-border: var(--mt-border);
+    --color-input: var(--mt-input);
+    --color-ring: var(--mt-ring);
+    --radius-sm: var(--mt-radius-sm);
+    --radius-md: var(--mt-radius-md);
+    --radius-lg: var(--mt-radius-lg);
+    --radius-xl: var(--mt-radius-xl);
+  }
+  @layer base {
+    body { background: var(--mt-background); color: var(--mt-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--mt-background); }
+      .text-background { color: var(--mt-background); }
+      .border-background { border-color: var(--mt-background); }
+      .ring-background { --tw-ring-color: var(--mt-background); }
+      .bg-foreground { background-color: var(--mt-foreground); }
+      .text-foreground { color: var(--mt-foreground); }
+      .border-foreground { border-color: var(--mt-foreground); }
+      .ring-foreground { --tw-ring-color: var(--mt-foreground); }
+      .bg-card { background-color: var(--mt-card); }
+      .text-card { color: var(--mt-card); }
+      .border-card { border-color: var(--mt-card); }
+      .ring-card { --tw-ring-color: var(--mt-card); }
+      .bg-card-foreground { background-color: var(--mt-card-foreground); }
+      .text-card-foreground { color: var(--mt-card-foreground); }
+      .border-card-foreground { border-color: var(--mt-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--mt-card-foreground); }
+      .bg-popover { background-color: var(--mt-popover); }
+      .text-popover { color: var(--mt-popover); }
+      .border-popover { border-color: var(--mt-popover); }
+      .ring-popover { --tw-ring-color: var(--mt-popover); }
+      .bg-popover-foreground { background-color: var(--mt-popover-foreground); }
+      .text-popover-foreground { color: var(--mt-popover-foreground); }
+      .border-popover-foreground { border-color: var(--mt-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--mt-popover-foreground); }
+      .bg-primary { background-color: var(--mt-primary); }
+      .text-primary { color: var(--mt-primary); }
+      .border-primary { border-color: var(--mt-primary); }
+      .ring-primary { --tw-ring-color: var(--mt-primary); }
+      .bg-primary-foreground { background-color: var(--mt-primary-foreground); }
+      .text-primary-foreground { color: var(--mt-primary-foreground); }
+      .border-primary-foreground { border-color: var(--mt-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--mt-primary-foreground); }
+      .bg-secondary { background-color: var(--mt-secondary); }
+      .text-secondary { color: var(--mt-secondary); }
+      .border-secondary { border-color: var(--mt-secondary); }
+      .ring-secondary { --tw-ring-color: var(--mt-secondary); }
+      .bg-secondary-foreground { background-color: var(--mt-secondary-foreground); }
+      .text-secondary-foreground { color: var(--mt-secondary-foreground); }
+      .border-secondary-foreground { border-color: var(--mt-secondary-foreground); }
+      .ring-secondary-foreground { --tw-ring-color: var(--mt-secondary-foreground); }
+      .bg-muted { background-color: var(--mt-muted); }
+      .text-muted { color: var(--mt-muted); }
+      .border-muted { border-color: var(--mt-muted); }
+      .ring-muted { --tw-ring-color: var(--mt-muted); }
+      .bg-muted-foreground { background-color: var(--mt-muted-foreground); }
+      .text-muted-foreground { color: var(--mt-muted-foreground); }
+      .border-muted-foreground { border-color: var(--mt-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--mt-muted-foreground); }
+      .bg-accent { background-color: var(--mt-accent); }
+      .text-accent { color: var(--mt-accent); }
+      .border-accent { border-color: var(--mt-accent); }
+      .ring-accent { --tw-ring-color: var(--mt-accent); }
+      .bg-accent-foreground { background-color: var(--mt-accent-foreground); }
+      .text-accent-foreground { color: var(--mt-accent-foreground); }
+      .border-accent-foreground { border-color: var(--mt-accent-foreground); }
+      .ring-accent-foreground { --tw-ring-color: var(--mt-accent-foreground); }
+      .bg-destructive { background-color: var(--mt-destructive); }
+      .text-destructive { color: var(--mt-destructive); }
+      .border-destructive { border-color: var(--mt-destructive); }
+      .ring-destructive { --tw-ring-color: var(--mt-destructive); }
+      .bg-destructive-foreground { background-color: var(--mt-destructive-foreground); }
+      .text-destructive-foreground { color: var(--mt-destructive-foreground); }
+      .border-destructive-foreground { border-color: var(--mt-destructive-foreground); }
+      .ring-destructive-foreground { --tw-ring-color: var(--mt-destructive-foreground); }
+      .bg-border { background-color: var(--mt-border); }
+      .text-border { color: var(--mt-border); }
+      .border-border { border-color: var(--mt-border); }
+      .ring-border { --tw-ring-color: var(--mt-border); }
+      .bg-input { background-color: var(--mt-input); }
+      .text-input { color: var(--mt-input); }
+      .border-input { border-color: var(--mt-input); }
+      .ring-input { --tw-ring-color: var(--mt-input); }
+      .bg-ring { background-color: var(--mt-ring); }
+      .text-ring { color: var(--mt-ring); }
+      .border-ring { border-color: var(--mt-ring); }
+      .ring-ring { --tw-ring-color: var(--mt-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main>
+      <div class="mt-ambient-bg"></div>
+      <div class="mt-mobile-frame">
+
+        <!-- Top Bar -->
+        <header class="result-topbar w-full">
+          <div class="flex items-center justify-between px-4 h-14">
+            <button class="flex items-center justify-center w-9 h-9 rounded-lg transition-colors" style="color: var(--mt-text-secondary);" aria-label="返回">
+              <i data-lucide="arrow-left" class="w-5 h-5"></i>
+            </button>
+            <h1 class="mt-font-display text-base whitespace-nowrap" style="color: var(--mt-text-primary);">生成结果</h1>
+            <button class="flex items-center justify-center w-9 h-9 rounded-lg transition-colors" style="color: var(--mt-text-secondary);" aria-label="分享">
+              <i data-lucide="share-2" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="px-4 py-4 space-y-5">
+
+          <!-- Result Display Card -->
+          <section id="result-display" class="mt-glass-elevated" style="overflow:hidden">
+            <div data-dom-id="cta-view-image" class="relative cursor-pointer block">
+              <img id="result-image" src="../assets/result-ramen.jpg" class="w-full h-[280px] object-cover" alt="生成结果">
+              <div class="absolute inset-x-0 bottom-0 h-24 pointer-events-none" style="background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);"></div>
+              <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-2">
+                <span id="result-style-chip" class="mt-chip active">暗黑质感</span>
+                <span id="result-time" class="text-xs whitespace-nowrap" style="color: var(--mt-text-secondary);">生成于 2 秒前</span>
+              </div>
+            </div>
+            <div class="p-4">
+              <p id="result-prompt" class="text-sm leading-relaxed mb-3" style="color: var(--mt-text-secondary);">一碗热气腾腾的豚骨拉面，浓郁汤底配溏心蛋和叉烧，暗黑质感背景</p>
+              <div id="result-tags" class="flex flex-wrap gap-2">
+                <span class="mt-chip" style="font-size: 11px; padding: 4px 10px;">高清4K</span>
+                <span class="mt-chip" style="font-size: 11px; padding: 4px 10px;">美食摄影</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Action Bar -->
+          <div class="flex gap-2">
+            <button id="btn-download" class="mt-glass flex-1 flex flex-col items-center justify-center gap-1 p-3 rounded-lg transition-colors">
+              <i data-lucide="download" class="w-5 h-5" style="color: var(--mt-gold);"></i>
+              <span class="text-xs whitespace-nowrap" style="color: var(--mt-text-primary);">下载</span>
+            </button>
+            <button id="btn-regenerate" class="mt-glass flex-1 flex flex-col items-center justify-center gap-1 p-3 rounded-lg transition-colors">
+              <i data-lucide="refresh-cw" class="w-5 h-5" style="color: var(--mt-text-secondary);"></i>
+              <span class="text-xs whitespace-nowrap" style="color: var(--mt-text-secondary);">重新生成</span>
+            </button>
+            <button id="btn-edit" class="mt-glass flex-1 flex flex-col items-center justify-center gap-1 p-3 rounded-lg transition-colors">
+              <i data-lucide="pencil" class="w-5 h-5" style="color: var(--mt-text-secondary);"></i>
+              <span class="text-xs whitespace-nowrap" style="color: var(--mt-text-secondary);">编辑</span>
+            </button>
+            <button id="btn-favorite" class="mt-glass flex-1 flex flex-col items-center justify-center gap-1 p-3 rounded-lg transition-colors">
+              <i data-lucide="heart" class="w-5 h-5" style="color: var(--mt-text-secondary);"></i>
+              <span class="text-xs whitespace-nowrap" style="color: var(--mt-text-secondary);">收藏</span>
+            </button>
+          </div>
+
+          <!-- Variations Section -->
+          <section>
+            <div class="flex items-center justify-between mb-3">
+              <h2 class="mt-font-display text-base whitespace-nowrap" style="color: var(--mt-text-primary);">历史作品</h2>
+              <a class="text-xs whitespace-nowrap cursor-pointer mt-gold-text">查看全部</a>
+            </div>
+            <div id="history-scroll" class="variations-scroll flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4">
+              <div class="shrink-0 w-24 h-24 rounded-lg overflow-hidden mt-gold-border">
+                <img src="../assets/result-ramen.jpg" class="w-full h-full object-cover" alt="默认作品">
+              </div>
+              <div class="shrink-0 w-24 h-24 rounded-lg overflow-hidden" style="border: 1px solid var(--mt-border-subtle);">
+                <img src="../assets/history-boba.jpg" class="w-full h-full object-cover" alt="历史作品">
+              </div>
+              <div class="shrink-0 w-24 h-24 rounded-lg overflow-hidden" style="border: 1px solid var(--mt-border-subtle);">
+                <img src="../assets/history-rice.jpg" class="w-full h-full object-cover" alt="历史作品">
+              </div>
+              <div class="shrink-0 w-24 h-24 rounded-lg overflow-hidden" style="border: 1px solid var(--mt-border-subtle);">
+                <img src="../assets/history-noodle.jpg" class="w-full h-full object-cover" alt="历史作品">
+              </div>
+            </div>
+          </section>
+
+          <!-- History Grid Section -->
+          <section>
+            <h2 class="mt-font-display text-lg mb-3 whitespace-nowrap" style="color: var(--mt-text-primary);">历史作品</h2>
+            <div class="history-grid grid grid-cols-2 gap-3">
+              <!-- Card 1 -->
+              <div class="mt-glass p-2">
+                <div data-dom-id="cta-view-image" class="cursor-pointer block">
+                  <img src="../assets/history-boba.jpg" class="w-full h-32 object-cover rounded-lg" alt="珍珠奶茶海报">
+                </div>
+                <h3 class="text-sm font-medium mt-2 whitespace-nowrap" style="color: var(--mt-text-primary);">珍珠奶茶海报</h3>
+                <p class="text-xs mt-1" style="color: var(--mt-text-tertiary);">昨日</p>
+              </div>
+              <!-- Card 2 -->
+              <div class="mt-glass p-2">
+                <img src="../assets/history-rice.jpg" class="w-full h-32 object-cover rounded-lg" alt="招牌炒饭主图">
+                <h3 class="text-sm font-medium mt-2 whitespace-nowrap" style="color: var(--mt-text-primary);">招牌炒饭主图</h3>
+                <p class="text-xs mt-1" style="color: var(--mt-text-tertiary);">3天前</p>
+              </div>
+              <!-- Card 3 -->
+              <div class="mt-glass p-2">
+                <img src="../assets/history-noodle.jpg" class="w-full h-32 object-cover rounded-lg" alt="招牌面食Banner">
+                <h3 class="text-sm font-medium mt-2 whitespace-nowrap" style="color: var(--mt-text-primary);">招牌面食Banner</h3>
+                <p class="text-xs mt-1" style="color: var(--mt-text-tertiary);">1周前</p>
+              </div>
+              <!-- Card 4 -->
+              <div class="mt-glass p-2">
+                <img src="../assets/result-ramen.jpg" class="w-full h-32 object-cover rounded-lg" alt="豚骨拉面详情">
+                <h3 class="text-sm font-medium mt-2 whitespace-nowrap" style="color: var(--mt-text-primary);">豚骨拉面详情</h3>
+                <p class="text-xs mt-1" style="color: var(--mt-text-tertiary);">刚刚</p>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav data-mobile-nav="global" class="w-full h-[64px] border-t border-white/[0.06] bg-[rgba(10,10,12,0.95)] backdrop-blur-xl"><div class="w-full h-full grid grid-cols-3 max-w-[430px] mx-auto"><a data-nav-key="workspace" data-dom-id="nav-workspace" class="flex flex-col items-center justify-center gap-0.5 h-full cursor-pointer" style="color:var(--mt-text-tertiary)"><i data-lucide="layout-grid" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap">工作台</span></a><a data-nav-key="result" data-dom-id="nav-result" class="flex flex-col items-center justify-center gap-0.5 h-full cursor-pointer" data-active="true" style="color:var(--mt-gold)"><i data-lucide="image" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap font-semibold">作品</span></a><a data-nav-key="profile" data-dom-id="nav-profile" class="flex flex-col items-center justify-center gap-0.5 h-full cursor-pointer" style="color:var(--mt-text-tertiary)"><i data-lucide="user" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap">我的</span></a></div></nav>
+
+      </div>
+    </main>
+    <style id="critical-layout">
+      .mt-mobile-frame {
+        max-width: 430px;
+        margin: 0 auto;
+        min-height: 100vh;
+        min-height: 100dvh;
+        position: relative;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .result-topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(10, 10, 12, 0.85);
+        backdrop-filter: blur(20px) saturate(1.2);
+        -webkit-backdrop-filter: blur(20px) saturate(1.2);
+        border-bottom: 1px solid var(--mt-border-subtle);
+      }
+      .variations-scroll {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .history-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      @media (max-width: 380px) {
+        .history-grid {
+          gap: 8px;
+        }
+      }
+    </style>
+    <script>lucide.createIcons();</script>
+    <script>
+      // ========== 读取生成结果 ==========
+      var result = null;
+      try {
+        var stored = sessionStorage.getItem('mt_last_result');
+        if (stored) result = JSON.parse(stored);
+      } catch(e) {}
+
+      // 动态渲染结果
+      if (result && result.imageUrl) {
+        var imgEl = document.getElementById('result-image');
+        if (imgEl) {
+          imgEl.src = result.imageUrl;
+          imgEl.onerror = function() {
+            imgEl.src = '../assets/result-ramen.jpg';
+            showToast('图片加载失败，显示默认图', 'warning');
+          };
+        }
+        var promptEl = document.getElementById('result-prompt');
+        if (promptEl) promptEl.textContent = result.prompt || result.originalInput || '';
+
+        var timeEl = document.getElementById('result-time');
+        if (timeEl) timeEl.textContent = '生成于 ' + (result.time || '刚刚');
+
+        var styleChip = document.getElementById('result-style-chip');
+        if (styleChip && result.style) {
+          var styleName = result.style.split('，')[0];
+          styleChip.textContent = styleName;
+        }
+
+        // 渲染标签
+        var tagsEl = document.getElementById('result-tags');
+        if (tagsEl) {
+          var tags = ['高清4K', '美食摄影'];
+          if (result.ratio) tags.push(result.ratio);
+          if (result.key_features && result.key_features.length > 0) {
+            result.key_features.forEach(function(f) { tags.push(f); });
+          }
+          tagsEl.innerHTML = tags.map(function(t) {
+            return '<span class="mt-chip" style="font-size: 11px; padding: 4px 10px;">' + escapeHtml(t) + '</span>';
+          }).join('');
+        }
+      }
+
+      // 渲染历史作品
+      try {
+        var history = JSON.parse(localStorage.getItem('mt_history') || '[]');
+        if (history.length > 0) {
+          var historyScroll = document.getElementById('history-scroll');
+          if (historyScroll) {
+            historyScroll.innerHTML = history.slice(0, 10).map(function(h, i) {
+              var border = i === 0 ? 'mt-gold-border' : '';
+              var borderStyle = i === 0 ? '' : 'border: 1px solid var(--mt-border-subtle);';
+              return '<div class="shrink-0 w-24 h-24 rounded-lg overflow-hidden ' + border + '" style="' + borderStyle + '" data-history-url="' + escapeAttr(h.imageUrl) + '">' +
+                '<img src="' + escapeAttr(h.imageUrl) + '" class="w-full h-full object-cover" alt="历史作品' + (i+1) + '" loading="lazy">' +
+                '</div>';
+            }).join('');
+          }
+        }
+      } catch(e) {}
+
+      // ========== 工具函数 ==========
+      function escapeHtml(str) {
+        if (str == null) return '';
+        var div = document.createElement('div');
+        div.textContent = String(str);
+        return div.innerHTML;
+      }
+      function escapeAttr(str) {
+        if (str == null) return '';
+        return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      }
+      function showToast(message, type) {
+        var toast = document.createElement('div');
+        toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:8px;font-size:14px;z-index:9999;transition:opacity 0.3s;background:' + (type === 'error' ? 'rgba(199,92,92,0.95)' : type === 'warning' ? 'rgba(212,163,86,0.95)' : 'rgba(91,155,110,0.95)') + ';color:#fff;backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(function() { toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 300); }, 2800);
+      }
+
+      // ========== 底部导航跳转 ==========
+      document.querySelectorAll('[data-nav-key]').forEach(function(el) {
+        el.addEventListener('click', function() {
+          var key = el.getAttribute('data-nav-key');
+          var map = { workspace: 'workspace.html', result: 'result.html', profile: 'profile.html' };
+          if (map[key]) window.location.href = map[key];
+        });
+      });
+
+      // 返回按钮 → 工作台
+      var backBtn = document.querySelector('[aria-label="返回"]');
+      if (backBtn) backBtn.addEventListener('click', function() { window.location.href = 'workspace.html'; });
+
+      // 点击图片 → 全屏预览（传递图片URL）
+      document.querySelectorAll('[data-dom-id="cta-view-image"]').forEach(function(el) {
+        el.addEventListener('click', function() {
+          if (result && result.imageUrl) {
+            sessionStorage.setItem('mt_viewer_image', result.imageUrl);
+            sessionStorage.setItem('mt_viewer_prompt', result.prompt || '');
+          }
+          window.location.href = 'viewer.html';
+        });
+      });
+
+      // 历史缩略图 → 预览页
+      document.querySelectorAll('#history-scroll > div').forEach(function(item) {
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', function() {
+          var url = item.getAttribute('data-history-url');
+          if (url) {
+            sessionStorage.setItem('mt_viewer_image', url);
+            sessionStorage.setItem('mt_viewer_prompt', '');
+            window.location.href = 'viewer.html';
+          }
+        });
+      });
+
+      // 旧的历史网格也绑定
+      document.querySelectorAll('.history-grid > div, [data-history-item]').forEach(function(item) {
+        if (!item.hasAttribute('data-dom-id')) {
+          item.style.cursor = 'pointer';
+          item.addEventListener('click', function() { window.location.href = 'viewer.html'; });
+        }
+      });
+
+      // ========== 操作按钮 ==========
+      // 下载
+      var btnDownload = document.getElementById('btn-download');
+      if (btnDownload) btnDownload.addEventListener('click', function() {
+        if (result && result.imageUrl) {
+          var a = document.createElement('a');
+          a.href = result.imageUrl;
+          a.download = 'meituan-ai-' + Date.now() + '.png';
+          a.target = '_blank';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          showToast('图片下载已开始', 'success');
+        } else {
+          showToast('暂无图片可下载', 'warning');
+        }
+      });
+
+      // 重新生成 → 回到工作台
+      var btnRegen = document.getElementById('btn-regenerate');
+      if (btnRegen) btnRegen.addEventListener('click', function() {
+        if (result && result.originalInput) {
+          sessionStorage.setItem('mt_regen_prompt', result.originalInput);
+        }
+        window.location.href = 'workspace.html';
+      });
+
+      // 编辑 → 回到工作台
+      var btnEdit = document.getElementById('btn-edit');
+      if (btnEdit) btnEdit.addEventListener('click', function() {
+        if (result && result.originalInput) {
+          sessionStorage.setItem('mt_regen_prompt', result.originalInput);
+        }
+        window.location.href = 'workspace.html';
+      });
+
+      // 收藏
+      var btnFav = document.getElementById('btn-favorite');
+      if (btnFav) btnFav.addEventListener('click', function() {
+        var icon = btnFav.querySelector('svg');
+        var label = btnFav.querySelector('span');
+        var isFav = btnFav.getAttribute('data-fav') === 'true';
+        if (isFav) {
+          btnFav.setAttribute('data-fav', 'false');
+          if (icon) icon.style.color = 'var(--mt-text-secondary)';
+          if (label) label.style.color = 'var(--mt-text-secondary)';
+          showToast('已取消收藏', '');
+        } else {
+          btnFav.setAttribute('data-fav', 'true');
+          if (icon) icon.style.color = 'var(--mt-gold)';
+          if (label) label.style.color = 'var(--mt-text-primary)';
+          showToast('已收藏', 'success');
+        }
+      });
+
+      // 分享按钮
+      var shareBtn = document.querySelector('[aria-label="分享"]');
+      if (shareBtn) shareBtn.addEventListener('click', function() {
+        showToast('分享链接已复制', 'success');
+      });
+
+      // 查看全部历史作品 → 工作台
+      var viewAllLink = document.querySelector('a.mt-gold-text');
+      if (viewAllLink) viewAllLink.addEventListener('click', function() {
+        window.location.href = 'workspace.html';
+      });
+    </script>
+</body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>商图 AI · 入口</title>
+    <style id="theme-vars">
+/* ========================================
+   商图 Mobile — Dark Luxury Brand CSS
+   ======================================== */
+
+:root {
+  --mt-bg-base: #0a0a0c;
+  --mt-bg-elevated: #121216;
+  --mt-bg-card: rgba(255, 255, 255, 0.035);
+  --mt-bg-card-hover: rgba(255, 255, 255, 0.06);
+  --mt-bg-glass: rgba(255, 255, 255, 0.045);
+  --mt-bg-input: rgba(255, 255, 255, 0.025);
+  --mt-bg-overlay: rgba(0, 0, 0, 0.72);
+  --mt-text-primary: #f5f0e8;
+  --mt-text-secondary: #9a958d;
+  --mt-text-tertiary: #5c5a54;
+  --mt-text-inverse: #0a0a0c;
+  --mt-gold: #d4a356;
+  --mt-gold-bright: #e8bd6e;
+  --mt-gold-deep: #b88638;
+  --mt-gold-glow: rgba(212, 163, 86, 0.15);
+  --mt-gold-glow-strong: rgba(212, 163, 86, 0.28);
+  --mt-success: #5b9b6e;
+  --mt-error: #c75c5c;
+  --mt-warning: #d4a356;
+  --mt-info: #6b8db5;
+  --mt-border-subtle: rgba(255, 255, 255, 0.06);
+  --mt-border-default: rgba(255, 255, 255, 0.09);
+  --mt-border-strong: rgba(255, 255, 255, 0.14);
+  --mt-border-gold: rgba(212, 163, 86, 0.3);
+  --mt-radius-sm: 8px;
+  --mt-radius-md: 12px;
+  --mt-radius-lg: 16px;
+  --mt-radius-xl: 20px;
+  --mt-radius-full: 9999px;
+  --mt-shadow-card: 0 1px 0 rgba(255,255,255,0.04) inset, 0 12px 40px rgba(0,0,0,0.4);
+  --mt-shadow-elevated: 0 1px 0 rgba(255,255,255,0.06) inset, 0 20px 60px rgba(0,0,0,0.5);
+  --mt-shadow-gold: 0 0 24px rgba(212, 163, 86, 0.12);
+  --mt-shadow-btn: 0 4px 16px rgba(212, 163, 86, 0.2);
+  --mt-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --mt-font-serif: "Noto Serif SC", "Songti SC", "STSong", serif;
+  --mt-font-mono: "SF Mono", "JetBrains Mono", "Fira Code", monospace;
+  --mt-background: var(--mt-bg-base);
+  --mt-foreground: var(--mt-text-primary);
+  --mt-card: var(--mt-bg-card);
+  --mt-card-foreground: var(--mt-text-primary);
+  --mt-popover: var(--mt-bg-elevated);
+  --mt-popover-foreground: var(--mt-text-primary);
+  --mt-primary: var(--mt-gold);
+  --mt-primary-foreground: var(--mt-text-inverse);
+  --mt-secondary: var(--mt-bg-card);
+  --mt-secondary-foreground: var(--mt-text-secondary);
+  --mt-muted: var(--mt-bg-elevated);
+  --mt-muted-foreground: var(--mt-text-secondary);
+  --mt-accent: var(--mt-gold-glow);
+  --mt-accent-foreground: var(--mt-gold-bright);
+  --mt-destructive: var(--mt-error);
+  --mt-destructive-foreground: var(--mt-text-primary);
+  --mt-border: var(--mt-border-default);
+  --mt-input: var(--mt-bg-input);
+  --mt-ring: var(--mt-gold);
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@600;700;900&display=swap');
+
+* { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+body {
+  font-family: var(--mt-font-sans);
+  background: var(--mt-bg-base);
+  color: var(--mt-text-primary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.mt-ambient-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 30% 15%, rgba(212, 163, 86, 0.06), transparent 60%),
+    radial-gradient(ellipse 500px 500px at 70% 85%, rgba(212, 163, 86, 0.04), transparent 60%),
+    var(--mt-bg-base);
+}
+
+.mt-font-display { font-family: var(--mt-font-serif); letter-spacing: 0.02em; }
+
+.mt-glass {
+  background: var(--mt-bg-glass);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border: 1px solid var(--mt-border-subtle);
+  border-radius: var(--mt-radius-lg);
+}
+
+.mt-glass-elevated {
+  background: var(--mt-bg-glass);
+  backdrop-filter: blur(24px) saturate(1.3);
+  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  border: 1px solid var(--mt-border-default);
+  border-radius: var(--mt-radius-xl);
+  box-shadow: var(--mt-shadow-elevated);
+}
+
+.mt-input {
+  background: var(--mt-bg-input);
+  border: 1px solid var(--mt-border-subtle);
+  border-radius: var(--mt-radius-sm);
+  color: var(--mt-text-primary);
+  font-family: inherit;
+  font-size: 15px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.mt-input:focus {
+  outline: none;
+  border-color: var(--mt-gold);
+  box-shadow: 0 0 0 3px var(--mt-gold-glow);
+}
+
+.mt-input::placeholder { color: var(--mt-text-tertiary); }
+
+.mt-btn-gold {
+  background: linear-gradient(135deg, var(--mt-gold-bright), var(--mt-gold), var(--mt-gold-deep));
+  color: var(--mt-text-inverse);
+  border: none;
+  border-radius: var(--mt-radius-sm);
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.mt-btn-gold:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--mt-shadow-btn), var(--mt-shadow-gold);
+}
+
+.mt-btn-gold:active { transform: translateY(0); }
+
+.mt-btn-ghost {
+  background: var(--mt-bg-card);
+  color: var(--mt-text-primary);
+  border: 1px solid var(--mt-border-default);
+  border-radius: var(--mt-radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mt-btn-ghost:hover {
+  background: var(--mt-bg-card-hover);
+  border-color: var(--mt-border-strong);
+}
+
+.mt-mobile-frame {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes mt-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mt-animate-fade-up { animation: mt-fade-up 0.5s ease-out both; }
+
+.login-shake { animation: shake 0.4s ease-in-out; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* Tab Switcher */
+.portal-tab {
+  flex: 1;
+  padding: 12px 0;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--mt-text-tertiary);
+  cursor: pointer;
+  transition: all 0.25s;
+  border-bottom: 2px solid transparent;
+  position: relative;
+}
+
+.portal-tab.active {
+  color: var(--mt-gold-bright);
+  border-bottom-color: var(--mt-gold);
+}
+
+.portal-tab:hover:not(.active) {
+  color: var(--mt-text-secondary);
+}
+
+/* Role Card */
+.role-card {
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.role-card:hover {
+  border-color: var(--mt-border-gold) !important;
+  background: var(--mt-gold-glow) !important;
+}
+
+.role-card.selected {
+  border-color: var(--mt-gold) !important;
+  background: var(--mt-gold-glow) !important;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--mt-background);
+    --color-foreground: var(--mt-foreground);
+    --color-card: var(--mt-card);
+    --color-card-foreground: var(--mt-card-foreground);
+    --color-popover: var(--mt-popover);
+    --color-popover-foreground: var(--mt-popover-foreground);
+    --color-primary: var(--mt-primary);
+    --color-primary-foreground: var(--mt-primary-foreground);
+    --color-secondary: var(--mt-secondary);
+    --color-secondary-foreground: var(--mt-secondary-foreground);
+    --color-muted: var(--mt-muted);
+    --color-muted-foreground: var(--mt-muted-foreground);
+    --color-accent: var(--mt-accent);
+    --color-accent-foreground: var(--mt-accent-foreground);
+    --color-destructive: var(--mt-destructive);
+    --color-destructive-foreground: var(--mt-destructive-foreground);
+    --color-border: var(--mt-border);
+    --color-input: var(--mt-input);
+    --color-ring: var(--mt-ring);
+  }
+  @layer base {
+    body { background: var(--mt-background); color: var(--mt-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--mt-background); }
+      .text-background { color: var(--mt-background); }
+      .bg-foreground { background-color: var(--mt-foreground); }
+      .text-foreground { color: var(--mt-foreground); }
+      .bg-card { background-color: var(--mt-card); }
+      .text-card { color: var(--mt-card); }
+      .bg-card-foreground { background-color: var(--mt-card-foreground); }
+      .bg-popover { background-color: var(--mt-popover); }
+      .bg-primary { background-color: var(--mt-primary); }
+      .text-primary { color: var(--mt-primary); }
+      .bg-secondary { background-color: var(--mt-secondary); }
+      .bg-muted { background-color: var(--mt-muted); }
+      .bg-accent { background-color: var(--mt-accent); }
+      .bg-destructive { background-color: var(--mt-destructive); }
+      .bg-border { background-color: var(--mt-border); }
+      .bg-input { background-color: var(--mt-input); }
+      .bg-ring { background-color: var(--mt-ring); }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main>
+      <div class="mt-ambient-bg"></div>
+      <div class="mt-mobile-frame">
+
+        <!-- Login Content -->
+        <div class="flex-1 flex flex-col items-center justify-center px-6 py-10 relative z-10">
+
+          <!-- Brand Logo -->
+          <div class="flex flex-col items-center mb-8 mt-animate-fade-up">
+            <div class="w-20 h-20 rounded-2xl flex items-center justify-center mb-4" style="background: linear-gradient(135deg, var(--mt-gold-glow-strong), var(--mt-bg-elevated)); border: 1px solid var(--mt-border-gold); box-shadow: var(--mt-shadow-gold);">
+              <i data-lucide="sparkles" class="w-9 h-9" style="color: var(--mt-gold-bright);"></i>
+            </div>
+            <h1 class="mt-font-display text-2xl font-bold tracking-wide" style="color: var(--mt-text-primary);">商图 AI</h1>
+            <p class="text-sm mt-1" style="color: var(--mt-text-tertiary);">商家智能生图平台</p>
+          </div>
+
+          <!-- Portal Card -->
+          <div class="mt-glass-elevated w-full mt-animate-fade-up overflow-hidden" style="animation-delay: 0.1s;">
+
+            <!-- Tab Switcher -->
+            <div class="flex border-b" style="border-color: var(--mt-border-subtle);">
+              <div id="tab-merchant" class="portal-tab active" data-tab="merchant">
+                <div class="flex items-center justify-center gap-1.5">
+                  <i data-lucide="store" class="w-4 h-4"></i>
+                  <span>商家入口</span>
+                </div>
+              </div>
+              <div id="tab-admin" class="portal-tab" data-tab="admin">
+                <div class="flex items-center justify-center gap-1.5">
+                  <i data-lucide="settings" class="w-4 h-4"></i>
+                  <span>运营配置</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Merchant Panel -->
+            <div id="panel-merchant" class="p-7">
+              <div class="text-center mb-6">
+                <div class="w-14 h-14 rounded-xl mx-auto mb-3 flex items-center justify-center" style="background: var(--mt-gold-glow); border: 1px solid var(--mt-border-gold);">
+                  <i data-lucide="image-plus" class="w-7 h-7" style="color: var(--mt-gold-bright);"></i>
+                </div>
+                <h2 class="text-lg font-bold mb-1" style="color: var(--mt-text-primary);">商家创作工作台</h2>
+                <p class="text-sm" style="color: var(--mt-text-tertiary);">AI 驱动 · 一键生成专业级商品图</p>
+              </div>
+
+              <!-- Feature Pills -->
+              <div class="flex flex-wrap gap-2 justify-center mb-6">
+                <span class="text-xs px-3 py-1 rounded-full" style="background: var(--mt-bg-card); color: var(--mt-text-secondary); border: 1px solid var(--mt-border-subtle);">菜品图生成</span>
+                <span class="text-xs px-3 py-1 rounded-full" style="background: var(--mt-bg-card); color: var(--mt-text-secondary); border: 1px solid var(--mt-border-subtle);">营销海报</span>
+                <span class="text-xs px-3 py-1 rounded-full" style="background: var(--mt-bg-card); color: var(--mt-text-secondary); border: 1px solid var(--mt-border-subtle);">商品主图</span>
+                <span class="text-xs px-3 py-1 rounded-full" style="background: var(--mt-bg-card); color: var(--mt-text-secondary); border: 1px solid var(--mt-border-subtle);">多比例输出</span>
+              </div>
+
+              <!-- Direct Enter Button -->
+              <button id="merchant-enter" type="button" class="mt-btn-gold w-full py-3.5 text-base font-bold flex items-center justify-center gap-2">
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                <span>进入工作台</span>
+              </button>
+
+              <div class="flex items-center justify-center gap-1.5 mt-4">
+                <i data-lucide="zap" class="w-3 h-3" style="color: var(--mt-gold);"></i>
+                <span class="text-xs" style="color: var(--mt-text-tertiary);">免登录 · 直接体验 AI 生图</span>
+              </div>
+            </div>
+
+            <!-- Admin Panel (hidden by default) -->
+            <div id="panel-admin" class="p-7 hidden">
+              <div id="login-card">
+                <div class="flex items-center gap-2 mb-5">
+                  <i data-lucide="shield-check" class="w-4 h-4" style="color: var(--mt-gold);"></i>
+                  <span class="text-sm font-semibold" style="color: var(--mt-text-secondary);">运营管理员验证</span>
+                </div>
+
+                <!-- Username -->
+                <div class="flex flex-col gap-2 mb-4">
+                  <label class="text-xs font-medium" style="color: var(--mt-text-tertiary);">管理员账号</label>
+                  <div class="relative">
+                    <i data-lucide="user-cog" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style="color: var(--mt-text-tertiary);"></i>
+                    <input id="admin-user" type="text" class="mt-input w-full pl-10 pr-3 py-3" placeholder="请输入管理员账号" value="admin" />
+                  </div>
+                </div>
+
+                <!-- Password -->
+                <div class="flex flex-col gap-2 mb-4">
+                  <label class="text-xs font-medium" style="color: var(--mt-text-tertiary);">访问密码</label>
+                  <div class="relative">
+                    <i data-lucide="key-round" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2" style="color: var(--mt-text-tertiary);"></i>
+                    <input id="admin-pass" type="password" class="mt-input w-full pl-10 pr-10 py-3" placeholder="请输入访问密码" value="admin123" />
+                    <button id="toggle-pass" type="button" class="absolute right-3 top-1/2 -translate-y-1/2" style="color: var(--mt-text-tertiary);">
+                      <i data-lucide="eye-off" class="w-4 h-4"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="login-error" class="hidden items-center gap-1.5 mb-4 px-3 py-2 rounded-lg" style="background: rgba(199, 92, 92, 0.1); border: 1px solid rgba(199, 92, 92, 0.2);">
+                  <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0" style="color: var(--mt-error);"></i>
+                  <span class="text-xs" style="color: var(--mt-error);">账号或密码错误，请重试</span>
+                </div>
+
+                <!-- Login Button -->
+                <button id="login-btn" data-dom-id="login-btn" type="button" class="mt-btn-gold w-full py-3.5 text-base font-bold flex items-center justify-center gap-2 whitespace-nowrap">
+                  <i data-lucide="log-in" class="w-5 h-5"></i>
+                  <span>进入配置后台</span>
+                </button>
+              </div>
+
+              <!-- Demo Credentials Box -->
+              <div class="mt-4 p-3 rounded-lg flex items-start gap-2.5" style="background: var(--mt-gold-glow); border: 1px solid var(--mt-border-gold);">
+                <i data-lucide="info" class="w-4 h-4 shrink-0 mt-0.5" style="color: var(--mt-gold-bright);"></i>
+                <div class="flex-1">
+                  <div class="text-xs font-semibold mb-0.5" style="color: var(--mt-gold-bright);">演示账号</div>
+                  <div class="text-xs" style="color: var(--mt-text-secondary);">账号 <span style="color: var(--mt-text-primary); font-family: var(--mt-font-mono);">admin</span>　密码 <span style="color: var(--mt-text-primary); font-family: var(--mt-font-mono);">admin123</span></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Footer -->
+          <div class="mt-animate-fade-up flex flex-col items-center gap-2 mt-8" style="animation-delay: 0.2s;">
+            <div class="flex items-center gap-1.5 text-xs" style="color: var(--mt-text-tertiary);">
+              <i data-lucide="cpu" class="w-3 h-3"></i>
+              <span>Powered by Qwen + Wan2.7</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </main>
+    <script>lucide.createIcons();</script>
+    <script>
+      // ========== Tab 切换 ==========
+      var tabMerchant = document.getElementById('tab-merchant');
+      var tabAdmin = document.getElementById('tab-admin');
+      var panelMerchant = document.getElementById('panel-merchant');
+      var panelAdmin = document.getElementById('panel-admin');
+
+      function switchTab(tab) {
+        if (tab === 'merchant') {
+          tabMerchant.classList.add('active');
+          tabAdmin.classList.remove('active');
+          panelMerchant.classList.remove('hidden');
+          panelAdmin.classList.add('hidden');
+        } else {
+          tabAdmin.classList.add('active');
+          tabMerchant.classList.remove('active');
+          panelAdmin.classList.remove('hidden');
+          panelMerchant.classList.add('hidden');
+        }
+      }
+
+      tabMerchant.addEventListener('click', function() { switchTab('merchant'); });
+      tabAdmin.addEventListener('click', function() { switchTab('admin'); });
+
+      // ========== 商家入口 ==========
+      document.getElementById('merchant-enter').addEventListener('click', function() {
+        window.location.href = 'workspace.html';
+      });
+
+      // ========== 管理员登录 ==========
+      var loginBtn = document.getElementById('login-btn');
+      var userInput = document.getElementById('admin-user');
+      var passInput = document.getElementById('admin-pass');
+      var errorBox = document.getElementById('login-error');
+      var loginCard = document.getElementById('login-card');
+      var togglePass = document.getElementById('toggle-pass');
+
+      // 密码显示/隐藏
+      togglePass.addEventListener('click', function() {
+        if (passInput.type === 'password') {
+          passInput.type = 'text';
+          togglePass.innerHTML = '<i data-lucide="eye" class="w-4 h-4"></i>';
+        } else {
+          passInput.type = 'password';
+          togglePass.innerHTML = '<i data-lucide="eye-off" class="w-4 h-4"></i>';
+        }
+        lucide.createIcons();
+      });
+
+      // 回车提交
+      passInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') loginBtn.click();
+      });
+      userInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') passInput.focus();
+      });
+
+      // 登录按钮
+      loginBtn.addEventListener('click', function() {
+        var user = userInput.value.trim();
+        var pass = passInput.value.trim();
+
+        if (!user || !pass) {
+          showError();
+          return;
+        }
+
+        // 演示验证: admin / admin123
+        if (user === 'admin' && pass === 'admin123') {
+          sessionStorage.setItem('mt_admin_auth', 'true');
+          sessionStorage.setItem('mt_admin_user', user);
+          loginBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i><span>验证中...</span>';
+          lucide.createIcons();
+          setTimeout(function() {
+            window.location.href = 'admin.html';
+          }, 600);
+        } else {
+          showError();
+        }
+      });
+
+      function showError() {
+        errorBox.classList.remove('hidden');
+        errorBox.classList.add('flex');
+        loginCard.classList.add('login-shake');
+        setTimeout(function() { loginCard.classList.remove('login-shake'); }, 400);
+      }
+    </script>
+</body>
+</html>

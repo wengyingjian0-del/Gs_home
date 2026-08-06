@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工作台</title>
+    <style id="theme-vars">
+/* ========================================
+   商图 Mobile — Dark Luxury Brand CSS
+   ======================================== */
+
+:root {
+  /* --- Surface System (Dark) --- */
+  --mt-bg-base: #0a0a0c;
+  --mt-bg-elevated: #121216;
+  --mt-bg-card: rgba(255, 255, 255, 0.035);
+  --mt-bg-card-hover: rgba(255, 255, 255, 0.06);
+  --mt-bg-glass: rgba(255, 255, 255, 0.045);
+  --mt-bg-input: rgba(255, 255, 255, 0.025);
+  --mt-bg-overlay: rgba(0, 0, 0, 0.72);
+
+  /* --- Text System --- */
+  --mt-text-primary: #f5f0e8;
+  --mt-text-secondary: #9a958d;
+  --mt-text-tertiary: #5c5a54;
+  --mt-text-inverse: #0a0a0c;
+
+  /* --- Brand Accent (Warm Gold) --- */
+  --mt-gold: #d4a356;
+  --mt-gold-bright: #e8bd6e;
+  --mt-gold-deep: #b88638;
+  --mt-gold-glow: rgba(212, 163, 86, 0.15);
+  --mt-gold-glow-strong: rgba(212, 163, 86, 0.28);
+
+  /* --- Status Colors --- */
+  --mt-success: #5b9b6e;
+  --mt-error: #c75c5c;
+  --mt-warning: #d4a356;
+  --mt-info: #6b8db5;
+
+  /* --- Border System --- */
+  --mt-border-subtle: rgba(255, 255, 255, 0.06);
+  --mt-border-default: rgba(255, 255, 255, 0.09);
+  --mt-border-strong: rgba(255, 255, 255, 0.14);
+  --mt-border-gold: rgba(212, 163, 86, 0.3);
+
+  /* --- Radius --- */
+  --mt-radius-sm: 8px;
+  --mt-radius-md: 12px;
+  --mt-radius-lg: 16px;
+  --mt-radius-xl: 20px;
+  --mt-radius-full: 9999px;
+
+  /* --- Shadows --- */
+  --mt-shadow-card: 0 1px 0 rgba(255,255,255,0.04) inset, 0 12px 40px rgba(0,0,0,0.4);
+  --mt-shadow-elevated: 0 1px 0 rgba(255,255,255,0.06) inset, 0 20px 60px rgba(0,0,0,0.5);
+  --mt-shadow-gold: 0 0 24px rgba(212, 163, 86, 0.12);
+  --mt-shadow-btn: 0 4px 16px rgba(212, 163, 86, 0.2);
+
+  /* --- Typography --- */
+  --mt-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --mt-font-serif: "Noto Serif SC", "Songti SC", "STSong", serif;
+  --mt-font-mono: "SF Mono", "JetBrains Mono", "Fira Code", monospace;
+
+  /* --- Semantic Tailwind Theme Aliases --- */
+  --mt-background: var(--mt-bg-base);
+  --mt-foreground: var(--mt-text-primary);
+  --mt-card: var(--mt-bg-card);
+  --mt-card-foreground: var(--mt-text-primary);
+  --mt-popover: var(--mt-bg-elevated);
+  --mt-popover-foreground: var(--mt-text-primary);
+  --mt-primary: var(--mt-gold);
+  --mt-primary-foreground: var(--mt-text-inverse);
+  --mt-secondary: var(--mt-bg-card);
+  --mt-secondary-foreground: var(--mt-text-primary);
+  --mt-muted: var(--mt-text-tertiary);
+  --mt-muted-foreground: var(--mt-text-secondary);
+  --mt-accent: var(--mt-gold-glow);
+  --mt-accent-foreground: var(--mt-gold-bright);
+  --mt-destructive: var(--mt-error);
+  --mt-destructive-foreground: var(--mt-text-primary);
+  --mt-border: var(--mt-border-default);
+  --mt-input: var(--mt-bg-input);
+  --mt-ring: var(--mt-gold);
+}
+
+/* --- Font Imports --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@600;700;900&display=swap');
+
+/* --- Base --- */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--mt-font-sans);
+  background: var(--mt-bg-base);
+  color: var(--mt-text-primary);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* --- Ambient Background --- */
+.mt-ambient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212, 163, 86, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 80% 30%, rgba(212, 163, 86, 0.04), transparent),
+    radial-gradient(ellipse 50% 35% at 20% 60%, rgba(184, 134, 56, 0.03), transparent),
+    var(--mt-bg-base);
+}
+
+/* --- Typography Classes --- */
+.mt-font-display {
+  font-family: var(--mt-font-serif);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.mt-font-body {
+  font-family: var(--mt-font-sans);
+  font-weight: 400;
+}
+
+.mt-font-label {
+  font-family: var(--mt-font-sans);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+/* --- Glass Card --- */
+.mt-glass {
+  background: var(--mt-bg-card);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border: 1px solid var(--mt-border-subtle);
+  border-radius: var(--mt-radius-lg);
+  box-shadow: var(--mt-shadow-card);
+}
+
+.mt-glass-elevated {
+  background: var(--mt-bg-glass);
+  backdrop-filter: blur(24px) saturate(1.3);
+  -webkit-backdrop-filter: blur(24px) saturate(1.3);
+  border: 1px solid var(--mt-border-default);
+  border-radius: var(--mt-radius-xl);
+  box-shadow: var(--mt-shadow-elevated);
+}
+
+/* --- Gold Accent --- */
+.mt-gold-text {
+  color: var(--mt-gold);
+}
+
+.mt-gold-gradient {
+  background: linear-gradient(135deg, var(--mt-gold-bright), var(--mt-gold-deep));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mt-gold-border {
+  border: 1px solid var(--mt-border-gold);
+}
+
+/* --- Button --- */
+.mt-btn-gold {
+  background: linear-gradient(135deg, var(--mt-gold), var(--mt-gold-deep));
+  color: var(--mt-text-inverse);
+  font-weight: 700;
+  border: none;
+  border-radius: var(--mt-radius-md);
+  box-shadow: var(--mt-shadow-btn);
+  transition: all 0.2s ease;
+}
+
+.mt-btn-gold:hover,
+.mt-btn-gold:active {
+  background: linear-gradient(135deg, var(--mt-gold-bright), var(--mt-gold));
+  box-shadow: 0 6px 24px rgba(212, 163, 86, 0.3);
+}
+
+.mt-btn-ghost {
+  background: var(--mt-bg-card);
+  color: var(--mt-text-primary);
+  border: 1px solid var(--mt-border-default);
+  border-radius: var(--mt-radius-md);
+  transition: all 0.2s ease;
+}
+
+.mt-btn-ghost:hover,
+.mt-btn-ghost:active {
+  background: var(--mt-bg-card-hover);
+  border-color: var(--mt-border-strong);
+}
+
+/* --- Input --- */
+.mt-input {
+  background: var(--mt-bg-input);
+  border: 1px solid var(--mt-border-default);
+  border-radius: var(--mt-radius-md);
+  color: var(--mt-text-primary);
+  transition: all 0.2s ease;
+}
+
+.mt-input:focus {
+  outline: none;
+  border-color: var(--mt-border-gold);
+  box-shadow: 0 0 0 3px var(--mt-gold-glow);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.mt-input::placeholder {
+  color: var(--mt-text-tertiary);
+}
+
+/* --- Chip / Tag --- */
+.mt-chip {
+  background: var(--mt-bg-card);
+  border: 1px solid var(--mt-border-default);
+  border-radius: var(--mt-radius-full);
+  color: var(--mt-text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 14px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mt-chip:hover {
+  border-color: var(--mt-border-strong);
+  color: var(--mt-text-primary);
+}
+
+.mt-chip.active {
+  background: var(--mt-gold-glow);
+  border-color: var(--mt-border-gold);
+  color: var(--mt-gold-bright);
+}
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* --- Animations --- */
+@keyframes mt-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes mt-glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(212, 163, 86, 0.1); }
+  50% { box-shadow: 0 0 32px rgba(212, 163, 86, 0.2); }
+}
+
+@keyframes mt-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mt-animate-fade-up {
+  animation: mt-fade-up 0.5s ease-out both;
+}
+
+/* --- Mobile Container --- */
+.mt-mobile-frame {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--mt-background);
+    --color-foreground: var(--mt-foreground);
+    --color-card: var(--mt-card);
+    --color-card-foreground: var(--mt-card-foreground);
+    --color-popover: var(--mt-popover);
+    --color-popover-foreground: var(--mt-popover-foreground);
+    --color-primary: var(--mt-primary);
+    --color-primary-foreground: var(--mt-primary-foreground);
+    --color-secondary: var(--mt-secondary);
+    --color-secondary-foreground: var(--mt-secondary-foreground);
+    --color-muted: var(--mt-muted);
+    --color-muted-foreground: var(--mt-muted-foreground);
+    --color-accent: var(--mt-accent);
+    --color-accent-foreground: var(--mt-accent-foreground);
+    --color-destructive: var(--mt-destructive);
+    --color-destructive-foreground: var(--mt-destructive-foreground);
+    --color-border: var(--mt-border);
+    --color-input: var(--mt-input);
+    --color-ring: var(--mt-ring);
+    --radius-sm: var(--mt-radius-sm);
+    --radius-md: var(--mt-radius-md);
+    --radius-lg: var(--mt-radius-lg);
+    --radius-xl: var(--mt-radius-xl);
+  }
+  @layer base {
+    body { background: var(--mt-background); color: var(--mt-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--mt-background); }
+      .text-background { color: var(--mt-background); }
+      .border-background { border-color: var(--mt-background); }
+      .ring-background { --tw-ring-color: var(--mt-background); }
+      .bg-foreground { background-color: var(--mt-foreground); }
+      .text-foreground { color: var(--mt-foreground); }
+      .border-foreground { border-color: var(--mt-foreground); }
+      .ring-foreground { --tw-ring-color: var(--mt-foreground); }
+      .bg-card { background-color: var(--mt-card); }
+      .text-card { color: var(--mt-card); }
+      .border-card { border-color: var(--mt-card); }
+      .ring-card { --tw-ring-color: var(--mt-card); }
+      .bg-card-foreground { background-color: var(--mt-card-foreground); }
+      .text-card-foreground { color: var(--mt-card-foreground); }
+      .border-card-foreground { border-color: var(--mt-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--mt-card-foreground); }
+      .bg-popover { background-color: var(--mt-popover); }
+      .text-popover { color: var(--mt-popover); }
+      .border-popover { border-color: var(--mt-popover); }
+      .ring-popover { --tw-ring-color: var(--mt-popover); }
+      .bg-popover-foreground { background-color: var(--mt-popover-foreground); }
+      .text-popover-foreground { color: var(--mt-popover-foreground); }
+      .border-popover-foreground { border-color: var(--mt-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--mt-popover-foreground); }
+      .bg-primary { background-color: var(--mt-primary); }
+      .text-primary { color: var(--mt-primary); }
+      .border-primary { border-color: var(--mt-primary); }
+      .ring-primary { --tw-ring-color: var(--mt-primary); }
+      .bg-primary-foreground { background-color: var(--mt-primary-foreground); }
+      .text-primary-foreground { color: var(--mt-primary-foreground); }
+      .border-primary-foreground { border-color: var(--mt-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--mt-primary-foreground); }
+      .bg-secondary { background-color: var(--mt-secondary); }
+      .text-secondary { color: var(--mt-secondary); }
+      .border-secondary { border-color: var(--mt-secondary); }
+      .ring-secondary { --tw-ring-color: var(--mt-secondary); }
+      .bg-secondary-foreground { background-color: var(--mt-secondary-foreground); }
+      .text-secondary-foreground { color: var(--mt-secondary-foreground); }
+      .border-secondary-foreground { border-color: var(--mt-secondary-foreground); }
+      .ring-secondary-foreground { --tw-ring-color: var(--mt-secondary-foreground); }
+      .bg-muted { background-color: var(--mt-muted); }
+      .text-muted { color: var(--mt-muted); }
+      .border-muted { border-color: var(--mt-muted); }
+      .ring-muted { --tw-ring-color: var(--mt-muted); }
+      .bg-muted-foreground { background-color: var(--mt-muted-foreground); }
+      .text-muted-foreground { color: var(--mt-muted-foreground); }
+      .border-muted-foreground { border-color: var(--mt-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--mt-muted-foreground); }
+      .bg-accent { background-color: var(--mt-accent); }
+      .text-accent { color: var(--mt-accent); }
+      .border-accent { border-color: var(--mt-accent); }
+      .ring-accent { --tw-ring-color: var(--mt-accent); }
+      .bg-accent-foreground { background-color: var(--mt-accent-foreground); }
+      .text-accent-foreground { color: var(--mt-accent-foreground); }
+      .border-accent-foreground { border-color: var(--mt-accent-foreground); }
+      .ring-accent-foreground { --tw-ring-color: var(--mt-accent-foreground); }
+      .bg-destructive { background-color: var(--mt-destructive); }
+      .text-destructive { color: var(--mt-destructive); }
+      .border-destructive { border-color: var(--mt-destructive); }
+      .ring-destructive { --tw-ring-color: var(--mt-destructive); }
+      .bg-destructive-foreground { background-color: var(--mt-destructive-foreground); }
+      .text-destructive-foreground { color: var(--mt-destructive-foreground); }
+      .border-destructive-foreground { border-color: var(--mt-destructive-foreground); }
+      .ring-destructive-foreground { --tw-ring-color: var(--mt-destructive-foreground); }
+      .bg-border { background-color: var(--mt-border); }
+      .text-border { color: var(--mt-border); }
+      .border-border { border-color: var(--mt-border); }
+      .ring-border { --tw-ring-color: var(--mt-border); }
+      .bg-input { background-color: var(--mt-input); }
+      .text-input { color: var(--mt-input); }
+      .border-input { border-color: var(--mt-input); }
+      .ring-input { --tw-ring-color: var(--mt-input); }
+      .bg-ring { background-color: var(--mt-ring); }
+      .text-ring { color: var(--mt-ring); }
+      .border-ring { border-color: var(--mt-ring); }
+      .ring-ring { --tw-ring-color: var(--mt-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main>
+        <style id="critical-layout">
+            .mt-mobile-frame { width: 100%; max-width: 430px; margin: 0 auto; min-height: 100vh; position: relative; }
+            .mt-top-bar { position: sticky; top: 0; z-index: 50; }
+            .mt-hero-card { position: relative; overflow: hidden; }
+            .mt-hero-card > img { display: block; width: 100%; height: 200px; object-fit: cover; }
+            .mt-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,12,0.95) 0%, rgba(10,10,12,0.5) 55%, transparent 100%); pointer-events: none; }
+            .mt-hero-content { position: absolute; left: 0; right: 0; bottom: 0; padding: 16px 18px; }
+            .mt-pro-badge { position: absolute; top: 12px; right: 12px; z-index: 2; }
+            .mt-chip-row { display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; -ms-overflow-style: none; scrollbar-width: none; }
+            .mt-chip-row::-webkit-scrollbar { display: none; }
+            .mt-chip-row .mt-chip { flex-shrink: 0; }
+            .mt-action-card { transition: border-color 0.2s ease, transform 0.15s ease, background 0.2s ease; }
+            .mt-action-card:hover { border-color: var(--mt-border-gold); }
+            .mt-action-card:active { transform: scale(0.97); }
+            .mt-action-card.scene-active { border-color: var(--mt-gold) !important; background: var(--mt-gold-glow) !important; }
+            .mt-action-card.scene-active .mt-scene-icon { color: var(--mt-gold-bright) !important; }
+            .mt-action-card.scene-active .mt-scene-label { color: var(--mt-gold-bright) !important; }
+            .mt-thumb-card { overflow: hidden; }
+            [data-mobile-nav="global"] { position: sticky; bottom: 0; z-index: 50; }
+            @keyframes mt-cta-glow {
+                0%, 100% { box-shadow: var(--mt-shadow-btn), 0 0 20px rgba(212,163,86,0.12); }
+                50% { box-shadow: var(--mt-shadow-btn), 0 0 32px rgba(212,163,86,0.28); }
+            }
+            .mt-cta-glow { animation: mt-cta-glow 2.8s ease-in-out infinite; }
+            @media (max-width: 430px) { .mt-mobile-frame { max-width: 100%; } }
+        </style>
+
+        <div class="mt-ambient-bg"></div>
+
+        <div class="mt-mobile-frame">
+            <!-- 顶部栏 -->
+            <header class="mt-top-bar w-full flex items-center justify-between px-4 py-3" style="background: rgba(10,10,12,0.82); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--mt-border-subtle);">
+                <div class="mt-font-display mt-gold-gradient text-2xl leading-none">商图</div>
+                <div class="flex items-center gap-3">
+                    <button type="button" class="flex items-center justify-center w-9 h-9 rounded-full" style="border: 1px solid var(--mt-border-subtle); color: var(--mt-text-secondary); background: var(--mt-bg-card);" aria-label="通知">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                    </button>
+                    <div class="w-8 h-8 rounded-full flex items-center justify-center" style="border: 1.5px solid var(--mt-border-gold); background: var(--mt-bg-card);">
+                        <span class="mt-font-display text-xs" style="color: var(--mt-gold);">商</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 主内容 -->
+            <div class="px-4 pt-4 pb-20 flex flex-col gap-4">
+
+                <!-- 英雄展示卡 -->
+                <section class="mt-glass-elevated mt-hero-card mt-animate-fade-up">
+                    <img src="../assets/hero-food.jpg" alt="精美菜品">
+                    <div class="mt-hero-overlay"></div>
+                    <div class="mt-pro-badge inline-flex items-center justify-center px-2 py-0.5 text-[10px] font-bold rounded-md whitespace-nowrap" style="background: linear-gradient(135deg, var(--mt-gold), var(--mt-gold-deep)); color: var(--mt-text-inverse); letter-spacing: 0.08em;">PRO</div>
+                    <div class="mt-hero-content">
+                        <h1 class="mt-font-display text-xl leading-tight" style="color: var(--mt-text-primary);">AI 驱动的商家视觉创作</h1>
+                        <p class="text-sm mt-1" style="color: var(--mt-text-secondary);">一键生成专业级商品图</p>
+                    </div>
+                </section>
+
+                <!-- 快捷操作网格 -->
+                <section class="mt-animate-fade-up">
+                    <div class="grid grid-cols-2 gap-3">
+                        <button type="button" class="mt-glass mt-action-card p-4 flex flex-col items-center justify-center text-center gap-2" data-scene="dish">
+                            <i data-lucide="utensils-crossed" class="w-6 h-6 mt-scene-icon" style="color: var(--mt-gold);"></i>
+                            <div>
+                                <div class="text-sm font-semibold whitespace-nowrap mt-scene-label" style="color: var(--mt-text-primary);">菜品图生成</div>
+                                <div class="text-xs mt-0.5 whitespace-nowrap" style="color: var(--mt-text-secondary);">高清美食呈现</div>
+                            </div>
+                        </button>
+                        <button type="button" class="mt-glass mt-action-card p-4 flex flex-col items-center justify-center text-center gap-2" data-scene="poster">
+                            <i data-lucide="megaphone" class="w-6 h-6 mt-scene-icon" style="color: var(--mt-gold);"></i>
+                            <div>
+                                <div class="text-sm font-semibold whitespace-nowrap mt-scene-label" style="color: var(--mt-text-primary);">营销海报</div>
+                                <div class="text-xs mt-0.5 whitespace-nowrap" style="color: var(--mt-text-secondary);">节日促销物料</div>
+                            </div>
+                        </button>
+                        <button type="button" class="mt-glass mt-action-card p-4 flex flex-col items-center justify-center text-center gap-2" data-scene="product">
+                            <i data-lucide="package" class="w-6 h-6 mt-scene-icon" style="color: var(--mt-gold);"></i>
+                            <div>
+                                <div class="text-sm font-semibold whitespace-nowrap mt-scene-label" style="color: var(--mt-text-primary);">商品主图</div>
+                                <div class="text-xs mt-0.5 whitespace-nowrap" style="color: var(--mt-text-secondary);">电商详情页</div>
+                            </div>
+                        </button>
+                        <button type="button" class="mt-glass mt-action-card p-4 flex flex-col items-center justify-center text-center gap-2" data-scene="banner">
+                            <i data-lucide="image" class="w-6 h-6 mt-scene-icon" style="color: var(--mt-gold);"></i>
+                            <div>
+                                <div class="text-sm font-semibold whitespace-nowrap mt-scene-label" style="color: var(--mt-text-primary);">门店Banner</div>
+                                <div class="text-xs mt-0.5 whitespace-nowrap" style="color: var(--mt-text-secondary);">店铺氛围图</div>
+                            </div>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 创作面板 -->
+                <section id="creation-panel" class="mt-animate-fade-up">
+                    <div class="mt-font-label mb-3" style="color: var(--mt-text-secondary);">创作面板</div>
+
+                    <!-- 比例选择 -->
+                    <div class="mb-2 text-sm" style="color: var(--mt-text-secondary);">画面比例</div>
+                    <div class="mt-chip-row mb-4" id="ratio-chips">
+                        <span class="mt-chip active whitespace-nowrap" data-ratio="1:1">1:1</span>
+                        <span class="mt-chip whitespace-nowrap" data-ratio="16:9">16:9</span>
+                        <span class="mt-chip whitespace-nowrap" data-ratio="9:16">9:16</span>
+                        <span class="mt-chip whitespace-nowrap" data-ratio="3:4">3:4</span>
+                        <span class="mt-chip whitespace-nowrap" data-ratio="4:3">4:3</span>
+                    </div>
+
+                    <!-- 风格选择 -->
+                    <div class="mb-2 text-sm" style="color: var(--mt-text-secondary);">画面风格</div>
+                    <div class="mt-chip-row mb-4" id="style-chips">
+                        <span class="mt-chip whitespace-nowrap" data-style="简约白底，纯白色背景，高亮度打光">简约白底</span>
+                        <span class="mt-chip active whitespace-nowrap" data-style="暗黑质感，深色背景，戏剧性光线，质感突出">暗黑质感</span>
+                        <span class="mt-chip whitespace-nowrap" data-style="日式暖调，暖色光线，木质桌面，温馨氛围">日式暖调</span>
+                        <span class="mt-chip whitespace-nowrap" data-style="中式国潮，中国风元素，红色暖调，传统纹样">中式国潮</span>
+                        <span class="mt-chip whitespace-nowrap" data-style="现代轻奢，简约构图，金属质感，高级灰调">现代轻奢</span>
+                    </div>
+
+                    <!-- 提示词输入 -->
+                    <div class="mb-2 text-sm" style="color: var(--mt-text-secondary);">描述你的画面</div>
+                    <textarea id="prompt-input" class="mt-input w-full p-3 text-sm" style="min-height: 100px; resize: none;" placeholder="描述你想要的画面效果，如：一碗热气腾腾的豚骨拉面，浓郁汤底配溏心蛋..."></textarea>
+
+                    <!-- AI 优化 -->
+                    <div class="mt-2 flex items-center justify-start">
+                        <button type="button" class="mt-btn-ghost inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs whitespace-nowrap" style="color: var(--mt-text-primary);">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5" style="color: var(--mt-gold);"></i>
+                            AI 优化
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 生成按钮 -->
+                <button type="button" data-dom-id="cta-generate" class="mt-btn-gold mt-cta-glow w-full py-3.5 text-base font-bold inline-flex items-center justify-center gap-2 whitespace-nowrap">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    开始生成
+                </button>
+
+                <!-- 最近作品 -->
+                <section class="mt-animate-fade-up">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="mt-font-display text-lg" style="color: var(--mt-text-primary);">最近作品</h2>
+                        <a data-dom-id="cta-view-history" class="text-sm cursor-pointer whitespace-nowrap inline-flex items-center gap-1" style="color: var(--mt-gold);">查看全部</a>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="mt-glass mt-thumb-card p-1">
+                            <img src="../assets/history-boba.jpg" class="w-full h-20 object-cover rounded-lg" alt="珍珠奶茶">
+                        </div>
+                        <div class="mt-glass mt-thumb-card p-1">
+                            <img src="../assets/history-rice.jpg" class="w-full h-20 object-cover rounded-lg" alt="招牌炒饭">
+                        </div>
+                        <div class="mt-glass mt-thumb-card p-1">
+                            <img src="../assets/history-noodle.jpg" class="w-full h-20 object-cover rounded-lg" alt="招牌面食">
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- 底部导航 -->
+            <nav data-mobile-nav="global" class="w-full h-[64px] border-t border-white/[0.06] bg-[rgba(10,10,12,0.95)] backdrop-blur-xl"><div class="w-full h-full grid grid-cols-3 max-w-[430px] mx-auto"><a data-nav-key="workspace" data-dom-id="nav-workspace" class="flex flex-col items-center justify-center gap-0.5 h-full cursor-pointer" data-active="true" style="color:var(--mt-gold)"><i data-lucide="layout-grid" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap font-semibold">工作台</span></a><a data-nav-key="result" data-dom-id="nav-result" class="flex flex-col items-center justify-center gap-0.5 h-full cursor-pointer" style="color:var(--mt-text-tertiary)"><i data-lucide="image" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap">作品</span></a><a data-nav-key="profile" data-dom-id="nav-profile" class="flex flex-col items-center justify-center gap-0.5 h-full cursor-pointer" style="color:var(--mt-text-tertiary)"><i data-lucide="user" class="w-5 h-5 shrink-0"></i><span class="text-[11px] leading-none whitespace-nowrap">我的</span></a></div></nav>
+        </div>
+    </main>
+    <script>lucide.createIcons();</script>
+    <script>
+      // ========== 后端 API 配置 ==========
+      var API_BASE = '';
+      var CHAT_API_URL = API_BASE + '/api/chat';
+      var GEN_API_URL = API_BASE + '/api/generate';
+
+      // ========== 状态管理 ==========
+      var selectedRatio = '1:1';
+      var selectedStyle = '暗黑质感，深色背景，戏剧性光线，质感突出';
+      var selectedScene = 'dish';
+      var isGenerating = false;
+
+      // ========== 场景模式配置（后台自动优化，前端不显示提示词） ==========
+      var SCENE_CONFIG = {
+        'dish': {
+          label: '菜品图',
+          systemOverlay: '\n\n## 当前场景：菜品图生成\n针对菜品图场景优化：\n1. 重点突出食物的色泽、质感、温度感\n2. 构图以菜品为主体，俯拍或45度特写\n3. 强调诱人光泽和新鲜感\n4. 背景简洁不喧宾夺主',
+          imageSuffix: '美食摄影，俯拍视角，诱人光泽，热气腾腾，细节丰富，色彩饱满，专业布光',
+          placeholder: '描述你要生成的菜品，如：一碗红烧牛肉面，上面有牛肉片和葱花'
+        },
+        'poster': {
+          label: '营销海报',
+          systemOverlay: '\n\n## 当前场景：营销海报\n针对营销海报场景优化：\n1. 画面需留出文字排版空间\n2. 强调节日氛围和促销感\n3. 食材丰盛、色彩热烈\n4. 构图适合添加标题和促销信息',
+          imageSuffix: '营销海报构图，留白区域用于文字，节日氛围，丰盛摆盘，暖色调，促销感，广角构图',
+          placeholder: '描述海报主题和内容，如：春节年夜饭促销，满桌丰盛菜肴，红色暖调'
+        },
+        'product': {
+          label: '商品主图',
+          systemOverlay: '\n\n## 当前场景：商品主图\n针对电商商品主图场景优化：\n1. 商品居中，背景纯净\n2. 突出商品本身特征和包装细节\n3. 适合电商详情页展示\n4. 高亮度、高清晰度',
+          imageSuffix: '商品主图，居中构图，纯净背景，高亮度打光，产品细节清晰，电商风格',
+          placeholder: '描述你的商品，如：一杯珍珠奶茶，透明杯身，展示珍珠层次'
+        },
+        'banner': {
+          label: '门店Banner',
+          systemOverlay: '\n\n## 当前场景：门店Banner\n针对门店Banner场景优化：\n1. 展现店铺整体氛围和空间感\n2. 宽幅构图适合横幅展示\n3. 强调环境格调与品牌调性\n4. 光线自然、空间通透',
+          imageSuffix: '门店空间摄影，广角横幅构图，氛围感灯光，环境格调，通透空间，品牌调性',
+          placeholder: '描述门店场景，如：温馨咖啡店内景，暖色灯光，木质桌椅'
+        }
+      };
+
+      // 从 localStorage 读取运营配置
+      function loadAdminConfig() {
+        try {
+          var stored = localStorage.getItem('meituan_ai_config');
+          if (stored) return JSON.parse(stored);
+        } catch(e) {}
+        return {
+          parseModel: 'qwen-plus',
+          imageModel: 'wan2.7-image',
+          temperature: 0.1,
+          watermarkEnabled: false,
+          negativePrompt: '低分辨率，低画质，AI感，画面过饱和，蜡像感，过度光滑'
+        };
+      }
+
+      // 从 localStorage 读取商家信息
+      function loadMerchantProfile() {
+        try {
+          var stored = localStorage.getItem('meituan_merchant_profile');
+          if (stored) return JSON.parse(stored);
+        } catch(e) {}
+        return null;
+      }
+
+      // ========== 比例转换 ==========
+      function ratioToApiSize(ratio) {
+        var map = {
+          '1:1': '1280*1280',
+          '16:9': '1280*720',
+          '9:16': '720*1280',
+          '3:4': '960*1280',
+          '4:3': '1280*960'
+        };
+        return map[ratio] || '1280*1280';
+      }
+
+      // ========== 系统提示词（基础版，运行时根据场景动态拼接） ==========
+      var BASE_SYSTEM_PROMPT = '你是一款智能的食品生图解析模型，负责理解用户需求、优化生图提示词、校验内容合规性。\n\n## 角色定位\n从用户的食品生图需求中，提取并优化画面描述，进行内容合规校验，评估信息完整度。\n\n## 能力边界\n只能处理食品相关生图需求。其他敏感、非食品内容直接拒绝。\n\n## 内容约束\n1. 严格提取画面元素，不增删用户需求里的食品物体、数量、位置\n2. 禁止出现品牌侵权文字\n3. 比例严格匹配用户描述\n4. 保留食品的关键特征不丢失\n\n## 输出格式\n返回JSON：\n{\n  "status": "ok",\n  "prompt": "优化后的生图提示词（中文，详细描述画面）",\n  "ratio": "1:1",\n  "completeness": "sufficient",\n  "brand_removed": "",\n  "colloquial_converted": [],\n  "key_features": [],\n  "negative_constraints": []\n}\n\n如果信息不足，completeness设为"insufficient"，并添加followup_questions数组。\n如果非食品相关，status设为"error"。';
+
+      function getSystemPrompt() {
+        var scene = SCENE_CONFIG[selectedScene] || SCENE_CONFIG['dish'];
+        return BASE_SYSTEM_PROMPT + (scene.systemOverlay || '');
+      }
+
+      // ========== 构建用户消息 ==========
+      function buildUserMessage(userInput) {
+        var msg = '';
+        var profile = loadMerchantProfile();
+        if (profile && profile.hasProfile) {
+          msg += '【商家风格参考】\n';
+          msg += '商家品类：' + (profile.shopCategoryName || '') + '\n';
+          msg += '风格偏好：' + (profile.stylePreference || '') + '\n\n';
+        }
+        msg += '【用户输入】\n' + userInput;
+        msg += '\n\n【已确定比例】' + selectedRatio;
+        msg += '\n【画面风格】' + selectedStyle;
+        return msg;
+      }
+
+      // ========== 构建生图提示词（根据场景自动优化） ==========
+      function buildImagePrompt(parsedPrompt) {
+        var scene = SCENE_CONFIG[selectedScene] || SCENE_CONFIG['dish'];
+        var prompt = parsedPrompt;
+        prompt += '，' + selectedStyle;
+        prompt += '，' + scene.imageSuffix;
+        return prompt;
+      }
+
+      // ========== Chip 选择逻辑 ==========
+      document.querySelectorAll('#ratio-chips .mt-chip').forEach(function(chip) {
+        chip.addEventListener('click', function() {
+          document.querySelectorAll('#ratio-chips .mt-chip').forEach(function(c) { c.classList.remove('active'); });
+          chip.classList.add('active');
+          selectedRatio = chip.getAttribute('data-ratio');
+        });
+      });
+
+      document.querySelectorAll('#style-chips .mt-chip').forEach(function(chip) {
+        chip.addEventListener('click', function() {
+          document.querySelectorAll('#style-chips .mt-chip').forEach(function(c) { c.classList.remove('active'); });
+          chip.classList.add('active');
+          selectedStyle = chip.getAttribute('data-style');
+        });
+      });
+
+      // 页面加载时检查是否有"重新生成"的提示词
+      var regenPrompt = sessionStorage.getItem('mt_regen_prompt');
+      if (regenPrompt) {
+        var inputEl = document.getElementById('prompt-input');
+        if (inputEl) inputEl.value = regenPrompt;
+        sessionStorage.removeItem('mt_regen_prompt');
+      }
+
+      // ========== 底部导航跳转 ==========
+      document.querySelectorAll('[data-nav-key]').forEach(function(el) {
+        el.addEventListener('click', function() {
+          var key = el.getAttribute('data-nav-key');
+          var map = { workspace: 'workspace.html', result: 'result.html', profile: 'profile.html' };
+          if (map[key]) window.location.href = map[key];
+        });
+      });
+
+      // 查看全部 → 结果页
+      var ctaHist = document.querySelector('[data-dom-id="cta-view-history"]');
+      if (ctaHist) ctaHist.addEventListener('click', function() { window.location.href = 'result.html'; });
+
+      // 快捷操作卡片 → 切换场景模式（后台自动优化提示词，前端不显示）
+      function selectScene(scene) {
+        selectedScene = scene;
+        document.querySelectorAll('.mt-action-card').forEach(function(c) {
+          c.classList.toggle('scene-active', c.getAttribute('data-scene') === scene);
+        });
+        var input = document.getElementById('prompt-input');
+        var config = SCENE_CONFIG[scene] || SCENE_CONFIG['dish'];
+        if (input) {
+          input.setAttribute('placeholder', config.placeholder);
+          input.focus();
+        }
+      }
+
+      document.querySelectorAll('.mt-action-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+          var scene = card.getAttribute('data-scene');
+          if (scene) selectScene(scene);
+        });
+      });
+
+      // 页面加载时默认选中菜品图场景
+      selectScene('dish');
+
+      // 历史记录缩略图 → 预览页
+      document.querySelectorAll('.mt-thumb-card').forEach(function(item) {
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', function() { window.location.href = 'viewer.html'; });
+      });
+
+      // 通知按钮
+      var notifyBtn = document.querySelector('[aria-label="通知"]');
+      if (notifyBtn) notifyBtn.addEventListener('click', function() { showToast('暂无新通知', ''); });
+
+      // AI 优化按钮
+      var aiOptBtn = document.querySelector('#creation-panel .mt-btn-ghost');
+      if (aiOptBtn) aiOptBtn.addEventListener('click', async function() {
+        var input = document.getElementById('prompt-input');
+        var val = input ? input.value.trim() : '';
+        if (!val) { showToast('请先输入提示词', 'warning'); return; }
+        var original = aiOptBtn.innerHTML;
+        aiOptBtn.innerHTML = '<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin" style="color: var(--mt-gold);"></i> 优化中...';
+        lucide.createIcons();
+        try {
+          var config = loadAdminConfig();
+          var resp = await fetch(CHAT_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: config.parseModel || 'qwen-plus',
+              messages: [
+                { role: 'system', content: '你是提示词优化助手。请将用户的简短描述优化为更详细、更具画面感的生图提示词。直接输出优化后的提示词，不要解释，不要加引号。' },
+                { role: 'user', content: val }
+              ],
+              temperature: 0.7
+            })
+          });
+          if (resp.ok) {
+            var data = await resp.json();
+            var content = '';
+            if (data.choices && data.choices[0] && data.choices[0].message) {
+              content = (data.choices[0].message.content || '').trim();
+            }
+            if (content) {
+              input.value = content;
+              showToast('提示词已优化', 'success');
+            } else {
+              showToast('优化失败，请重试', 'warning');
+            }
+          } else {
+            showToast('优化服务异常', 'error');
+          }
+        } catch(e) {
+          showToast('优化失败，请重试', 'error');
+        }
+        aiOptBtn.innerHTML = original;
+        lucide.createIcons();
+      });
+
+      // ========== 生成流程 ==========
+      var ctaGen = document.querySelector('[data-dom-id="cta-generate"]');
+      if (ctaGen) ctaGen.addEventListener('click', generateImage);
+
+      async function generateImage() {
+        var input = document.getElementById('prompt-input');
+        var userInput = input ? input.value.trim() : '';
+
+        if (!userInput) {
+          showToast('请输入提示词', 'warning');
+          return;
+        }
+        if (isGenerating) return;
+
+        isGenerating = true;
+        var btnText = ctaGen.querySelector('span') || ctaGen;
+        var btnIcon = ctaGen.querySelector('i');
+        var originalText = btnText.textContent;
+        ctaGen.disabled = true;
+        ctaGen.style.opacity = '0.7';
+        btnText.textContent = '解析中...';
+        if (btnIcon) { btnIcon.setAttribute('data-lucide', 'loader-2'); btnIcon.classList.add('animate-spin'); }
+
+        try {
+          // Step 1: 调用解析 API
+          var config = loadAdminConfig();
+          var userMessage = buildUserMessage(userInput);
+
+          var parseResp = await fetch(CHAT_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: config.parseModel || 'qwen-plus',
+              messages: [
+                { role: 'system', content: getSystemPrompt() },
+                { role: 'user', content: userMessage }
+              ],
+              temperature: config.temperature ?? 0.1,
+              response_format: { type: 'json_object' }
+            })
+          });
+
+          if (!parseResp.ok) {
+            throw new Error('解析服务异常 (HTTP ' + parseResp.status + ')');
+          }
+
+          var parseData = await parseResp.json();
+          var content = '';
+          if (parseData.choices && parseData.choices[0] && parseData.choices[0].message) {
+            content = (parseData.choices[0].message.content || '').trim();
+          }
+
+          // 提取 JSON
+          var jsonStr = content;
+          var codeBlockMatch = content.match(/```(?:json)?\s*([\s\S]*?)```/);
+          if (codeBlockMatch) {
+            jsonStr = codeBlockMatch[1].trim();
+          } else {
+            var jsonMatch = content.match(/\{[\s\S]*\}/);
+            if (jsonMatch) jsonStr = jsonMatch[0];
+          }
+
+          var parsed;
+          try {
+            parsed = JSON.parse(jsonStr);
+          } catch(e) {
+            parsed = { status: 'ok', prompt: content || userInput, ratio: selectedRatio, completeness: 'sufficient' };
+          }
+
+          if (parsed.status === 'error') {
+            showToast(parsed.message || '输入内容不合规', 'error');
+            resetBtn();
+            return;
+          }
+
+          if (parsed.completeness === 'insufficient') {
+            showToast('信息不足，请补充更多描述', 'warning');
+            resetBtn();
+            return;
+          }
+
+          // Step 2: 调用生图 API
+          btnText.textContent = '生成中...';
+          var finalPrompt = buildImagePrompt(parsed.prompt || userInput);
+          var ratio = parsed.ratio || selectedRatio;
+          var apiSize = ratioToApiSize(ratio);
+
+          var negativePrompt = (config.negativePrompt || '低分辨率，低画质，AI感') + '，文字，汉字，字母，数字，水印，真实人物，人脸，人体，手';
+
+          var genResp = await fetch(GEN_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: config.imageModel || 'wan2.7-image',
+              input: {
+                messages: [{ role: 'user', content: [{ text: finalPrompt }] }]
+              },
+              parameters: {
+                size: apiSize,
+                watermark: config.watermarkEnabled === true,
+                n: 1,
+                negative_prompt: negativePrompt
+              }
+            })
+          });
+
+          if (!genResp.ok) {
+            throw new Error('生图服务异常 (HTTP ' + genResp.status + ')');
+          }
+
+          var genData = await genResp.json();
+          var imageUrl = '';
+
+          if (genData.output && genData.output.choices && genData.output.choices.length > 0) {
+            var msgContent = genData.output.choices[0].message.content;
+            if (Array.isArray(msgContent)) {
+              var imageItem = msgContent.find(function(item) { return item.type === 'image'; });
+              if (imageItem && imageItem.image) imageUrl = imageItem.image;
+            }
+          }
+
+          if (!imageUrl) {
+            throw new Error('未能获取生成的图片');
+          }
+
+          // 保存结果到 sessionStorage
+          var result = {
+            imageUrl: imageUrl,
+            prompt: parsed.prompt || userInput,
+            originalInput: userInput,
+            ratio: ratio,
+            style: selectedStyle,
+            time: new Date().toLocaleString('zh-CN'),
+            colloquial_converted: parsed.colloquial_converted || [],
+            key_features: parsed.key_features || []
+          };
+          sessionStorage.setItem('mt_last_result', JSON.stringify(result));
+
+          // 保存到历史
+          try {
+            var history = JSON.parse(localStorage.getItem('mt_history') || '[]');
+            history.unshift(result);
+            if (history.length > 50) history = history.slice(0, 50);
+            localStorage.setItem('mt_history', JSON.stringify(history));
+          } catch(e) {}
+
+          // 跳转到结果页
+          window.location.href = 'result.html';
+
+        } catch(error) {
+          console.error('生成失败:', error);
+          showToast(error.message || '生成失败，请重试', 'error');
+          resetBtn();
+        }
+      }
+
+      function resetBtn() {
+        isGenerating = false;
+        ctaGen.disabled = false;
+        ctaGen.style.opacity = '';
+        var btnText = ctaGen.querySelector('span') || ctaGen;
+        var btnIcon = ctaGen.querySelector('i');
+        btnText.textContent = '开始生成';
+        if (btnIcon) { btnIcon.setAttribute('data-lucide', 'sparkles'); btnIcon.classList.remove('animate-spin'); }
+        lucide.createIcons();
+      }
+
+      function showToast(message, type) {
+        var toast = document.createElement('div');
+        toast.style.cssText = 'position:fixed;top:80px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:8px;font-size:14px;z-index:9999;transition:opacity 0.3s;background:' + (type === 'error' ? 'rgba(199,92,92,0.95)' : type === 'warning' ? 'rgba(212,163,86,0.95)' : 'rgba(91,155,110,0.95)') + ';color:#fff;backdrop-filter:blur(10px);box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(function() { toast.style.opacity = '0'; setTimeout(function() { toast.remove(); }, 300); }, 2800);
+      }
+    </script>
+</body>
+</html>

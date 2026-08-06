@@ -351,6 +351,176 @@ h1 em {
     #ffdd35;
 }
 
+.merchant-main {
+  min-height: 760px;
+  color: #f5f0e8;
+  background:
+    radial-gradient(circle at 76% 16%, rgba(212, 163, 86, 0.16), transparent 23rem),
+    radial-gradient(circle at 18% 92%, rgba(184, 134, 56, 0.09), transparent 24rem),
+    #0a0a0c;
+}
+
+.merchant-main::before {
+  content: "商图";
+  top: 2%;
+  right: 3%;
+  color: rgba(212, 163, 86, 0.055);
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: clamp(120px, 20vw, 260px);
+  letter-spacing: -0.12em;
+  transform: none;
+}
+
+.merchant-main:hover {
+  background:
+    radial-gradient(circle at 74% 14%, rgba(232, 189, 110, 0.22), transparent 25rem),
+    radial-gradient(circle at 18% 92%, rgba(184, 134, 56, 0.12), transparent 24rem),
+    #0d0d10;
+}
+
+.merchant-main .product-status {
+  border-color: rgba(212, 163, 86, 0.36);
+  color: #d4a356;
+}
+
+.merchant-main .product-status i {
+  background: #d4a356;
+  box-shadow: 0 0 12px rgba(212, 163, 86, 0.75);
+}
+
+.merchant-main .product-content {
+  min-height: 330px;
+  padding-bottom: 34px;
+}
+
+.merchant-main .product-label,
+.merchant-card .admin-label {
+  color: #d4a356;
+}
+
+.merchant-main .product-content h3 {
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: clamp(60px, 8vw, 102px);
+}
+
+.merchant-main .product-content h3 span {
+  display: block;
+  margin-top: 16px;
+  color: #d4a356;
+  font-family: Inter, "PingFang SC", sans-serif;
+  font-size: 0.22em;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+}
+
+.merchant-main .product-description {
+  color: #c2bdb5;
+}
+
+.merchant-main .product-description li {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f5f0e8;
+}
+
+.merchant-showcase {
+  position: relative;
+  display: grid;
+  grid-template-columns: 0.82fr 1.5fr 0.82fr;
+  gap: 16px;
+  align-items: end;
+  height: 230px;
+  margin: 0 0 44px;
+}
+
+.merchant-shot {
+  position: relative;
+  overflow: hidden;
+  height: 190px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.44), inset 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.merchant-shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.72;
+  transition: transform 500ms ease, opacity 300ms ease;
+}
+
+.merchant-main:hover .merchant-shot img {
+  transform: scale(1.04);
+  opacity: 0.88;
+}
+
+.merchant-shot-primary {
+  height: 230px;
+  border-color: rgba(212, 163, 86, 0.34);
+}
+
+.merchant-shot-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(10, 10, 12, 0.88), rgba(10, 10, 12, 0.08));
+}
+
+.merchant-shot-primary div {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 28px;
+  transform: translateY(-50%);
+}
+
+.merchant-shot-primary small {
+  display: block;
+  margin-bottom: 12px;
+  color: #d4a356;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+}
+
+.merchant-shot-primary strong {
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: clamp(20px, 2.4vw, 32px);
+  line-height: 1.35;
+}
+
+.merchant-shot > span {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 6px 9px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(10, 10, 12, 0.72);
+  backdrop-filter: blur(10px);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.merchant-shot-secondary { transform: rotate(-2deg); }
+.merchant-shot-tertiary { transform: rotate(2deg); }
+
+.merchant-main .enter-product b {
+  color: #0a0a0c;
+  background: linear-gradient(135deg, #e8bd6e, #b88638);
+}
+
+.merchant-card .admin-entry {
+  background: linear-gradient(90deg, rgba(212, 163, 86, 0.1), transparent 38%), #fffdf8;
+}
+
+.merchant-card .admin-entry a:hover,
+.merchant-card .admin-entry a:focus-visible {
+  border-color: #b88638;
+  background: #b88638;
+}
+
 .product-topline,
 .product-footer {
   display: flex;
@@ -722,6 +892,33 @@ a:focus-visible {
   .product-main {
     min-height: auto;
     padding: 28px 24px;
+  }
+
+  .merchant-main {
+    min-height: auto;
+  }
+
+  .merchant-main .product-content {
+    padding-bottom: 44px;
+  }
+
+  .merchant-showcase {
+    grid-template-columns: 0.6fr 1.8fr;
+    height: 190px;
+    margin-bottom: 38px;
+  }
+
+  .merchant-shot,
+  .merchant-shot-primary {
+    height: 190px;
+  }
+
+  .merchant-shot-tertiary {
+    display: none;
+  }
+
+  .merchant-shot-primary div {
+    left: 18px;
   }
 
   .product-content {
